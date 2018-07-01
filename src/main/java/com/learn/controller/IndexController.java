@@ -1,12 +1,11 @@
 package com.learn.controller;
 
 import com.learn.bean.AuthorSettings;
+import com.learn.bean.HttpResponse;
 import com.learn.bean.User;
 import com.learn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class IndexController {
@@ -23,5 +22,11 @@ public class IndexController {
     @RequestMapping("user/{id}")
     public User getUserById(@PathVariable("id") long id) throws Exception{
         return userService.getUserById(id);
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.PUT)
+    public HttpResponse updateUser(@RequestBody User user) throws Exception {
+        userService.updateUser(user);
+        return new HttpResponse();
     }
 }
