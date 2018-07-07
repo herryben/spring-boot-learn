@@ -5,39 +5,63 @@ import java.io.Serializable;
 public class User implements Serializable{
     private Long id;
     private Long userId;
-    private String userName;
+    private String name;
     private Long addedTime;
-    private Long modefiedTime;
+    private Long modifiedTime;
     private static final long serialVersionUID = 1L;
     public User() {
     }
 
-    public User(Long id, Long userId, String userName, Long addedTime, Long modefiedTime) {
+    public User(Long id, Long userId, String name, Long addedTime, Long modifiedTime) {
         this.id = id;
         this.userId = userId;
-        this.userName = userName;
+        this.name = name;
         this.addedTime = addedTime;
-        this.modefiedTime = modefiedTime;
+        this.modifiedTime = modifiedTime;
     }
 
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getUserId() {
         return userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getAddedTime() {
         return addedTime;
     }
 
-    public Long getModefiedTime() {
-        return modefiedTime;
+    public void setAddedTime(Long addedTime) {
+        this.addedTime = addedTime;
+    }
+
+    public Long getmodifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setmodifiedTime(Long modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     @Override
@@ -45,9 +69,9 @@ public class User implements Serializable{
         return "User{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", userName='" + userName + '\'' +
+                ", name='" + name + '\'' +
                 ", addedTime=" + addedTime +
-                ", modefiedTime=" + modefiedTime +
+                ", modifiedTime=" + modifiedTime +
                 '}';
     }
 }
