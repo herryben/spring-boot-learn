@@ -11,7 +11,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
-//@CacheConfig(cacheNames = "userService")
 public class UserService {
     @Autowired
     private UserBiz userBiz;
