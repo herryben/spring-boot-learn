@@ -1,10 +1,7 @@
 package com.learn.bean;
 
 
-import com.baomidou.mybatisplus.annotation.TableName;
-
 import java.io.Serializable;
-@TableName("user")
 public class User implements Serializable{
     private Long id;
     private Long userId;

@@ -2,6 +2,7 @@ package com.learn.config;
 
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.MybatisXMLLanguageDriver;
+import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor;
@@ -9,7 +10,6 @@ import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
-import org.mockito.internal.configuration.GlobalConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
@@ -32,17 +32,6 @@ public class MybatisConfigMetaObjOptLockConfig {
                 new PerformanceInterceptor(),
                 new OptimisticLockerInterceptor()
         });
-//        sqlSessionFactory.setGlobalConfig(globalConfiguration);
         return sqlSessionFactory.getObject();
     }
-
-//    @Bean
-//    public GlobalCxonfiguration globalConfiguration() {
-//        GlobalConfiguration conf = new GlobalConfiguration(new LogicSqlInjector());
-//        conf.setLogicDeleteValue("-1");
-//        conf.setLogicNotDeleteValue("1");
-//        conf.setIdType(2);
-//        conf.setMetaObjectHandler(new H2MetaObjectHandler());
-//        return conf;
-//    }
 }
