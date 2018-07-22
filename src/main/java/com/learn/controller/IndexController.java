@@ -20,13 +20,30 @@ public class IndexController {
     }
 
     @RequestMapping("user/{id}")
-    public User getUserById(@PathVariable("id") long id) throws Exception{
-        return userService.getUserById(id);
+    public HttpResponse getUserById(@PathVariable("id") long id) {
+        return new HttpResponse(userService.getUserById(id));
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
-    public HttpResponse updateUser(@RequestBody User user) throws Exception {
+    public HttpResponse updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return new HttpResponse();
+    }
+
+    @PostMapping("user")
+    public HttpResponse addUser(@RequestBody User user){
+        userService.addUser(user);
+        return new HttpResponse();
+    }
+
+    @DeleteMapping("user/{id}")
+    public HttpResponse delUser(@PathVariable long id) {
+        userService.delUser(id);
+        return new HttpResponse();
+    }
+
+    @GetMapping("users")
+    public HttpResponse getAllUsers() {
+        return new HttpResponse(userService.getAllUsers());
     }
 }

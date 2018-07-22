@@ -1,39 +1,48 @@
 package com.learn.bean;
 
-public class HttpResponse {
-    private int code;
-    private String desc;
+import java.io.Serializable;
+
+public class HttpResponse<T> implements Serializable{
+    private HeaderStatus header = HeaderStatus.SUCCESS;
+    private T body;
+
     public HttpResponse() {
-        this.code = 200;
-        this.desc = "ok";
     }
 
-    public HttpResponse(int code, String desc) {
-        this.code = code;
-        this.desc = desc;
+    public HttpResponse(T body) {
+        this.body = body;
     }
 
-    public int getCode() {
-        return code;
+    public HttpResponse(HeaderStatus header) {
+        this.header = header;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public HttpResponse(HeaderStatus header, T body) {
+        this.header = header;
+        this.body = body;
     }
 
-    public String getDesc() {
-        return desc;
+    public HeaderStatus getHeader() {
+        return header;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setHeader(HeaderStatus header) {
+        this.header = header;
+    }
+
+    public T getBody() {
+        return body;
+    }
+
+    public void setBody(T body) {
+        this.body = body;
     }
 
     @Override
     public String toString() {
         return "HttpResponse{" +
-                "code=" + code +
-                ", desc='" + desc + '\'' +
+                "header=" + header +
+                ", body=" + body +
                 '}';
     }
 }
