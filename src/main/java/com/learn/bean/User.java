@@ -6,6 +6,8 @@ public class User implements Serializable{
     private Long id;
     private Long userId;
     private String name;
+    private String password;
+    private String role;
     private Long addedTime;
     private Long modifiedTime;
     private static final long serialVersionUID = 1L;
@@ -52,16 +54,32 @@ public class User implements Serializable{
         this.addedTime = addedTime;
     }
 
-    public Long getmodifiedTime() {
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Long getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setmodifiedTime(Long modifiedTime) {
+    public void setModifiedTime(Long modifiedTime) {
         this.modifiedTime = modifiedTime;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     @Override
@@ -70,6 +88,8 @@ public class User implements Serializable{
                 "id=" + id +
                 ", userId=" + userId +
                 ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 ", addedTime=" + addedTime +
                 ", modifiedTime=" + modifiedTime +
                 '}';

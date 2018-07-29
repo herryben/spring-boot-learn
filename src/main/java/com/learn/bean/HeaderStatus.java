@@ -13,6 +13,7 @@ public class HeaderStatus implements Serializable {
     public static final HeaderStatus SUCCESS = new HeaderStatus(200, "OK");
     public static final HeaderStatus ERROR = new HeaderStatus(500, "服务端异常");
     public static final HeaderStatus NO_RESULT = new HeaderStatus(404, "没有结果");
+    public static final HeaderStatus UNAUTHORIZED = new HeaderStatus(401, "Unauthorized");
 
     public int getCode() {
         return code;
