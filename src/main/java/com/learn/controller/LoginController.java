@@ -2,8 +2,11 @@ package com.learn.controller;
 
 import com.learn.bean.HeaderStatus;
 import com.learn.bean.HttpResponse;
+import com.learn.bean.SystemPermission;
 import com.learn.bean.User;
+import com.learn.biz.SystemPermissionBiz;
 import com.learn.biz.UserBiz;
+import com.learn.service.ShiroService;
 import com.learn.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -19,6 +22,10 @@ public class LoginController {
 
     @Autowired
     UserBiz userBiz;
+    @Autowired
+    private SystemPermissionBiz systemPermissionBiz;
+    @Autowired
+    private ShiroService shiroService;
 
     @GetMapping("/not_login")
     public HttpResponse notLogin() {
@@ -52,5 +59,15 @@ public class LoginController {
             return new HttpResponse("欢迎来到管理员用户");
         }
         return new HttpResponse(HeaderStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping("/permission")
+    public HttpResponse addPermission(@RequestParam("url") String url,
+                                      @RequestParam("role") String role,
+                                      @RequestParam("sort") int sort) {
+        SystemPermission systemPermission = new SystemPermission(url, role, sort, System.currentTimeMillis());
+        systemPermissionBiz.insertSystemPermission(systemPermission);
+        shiroService.updatePermission();
+        return new HttpResponse();
     }
 }
