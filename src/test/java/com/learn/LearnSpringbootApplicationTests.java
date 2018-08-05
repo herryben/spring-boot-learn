@@ -12,11 +12,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class LearnSpringbootApplicationTests {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LearnSpringbootApplicationTests.class);
+
 	@Test
 	public void contextLoads() {
 	}
