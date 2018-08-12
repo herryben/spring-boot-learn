@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -36,6 +37,20 @@ public class TestThreadPool {
                 executorService.shutdown();
             }
         }
+    }
+
+    @Test
+    public void testCompletableFuture() throws Exception {
+        String res = CompletableFuture.supplyAsync(() -> {
+            return "s1";
+        }).whenComplete((s, t) -> {
+            LOGGER.info("11111111 {}", s);
+            LOGGER.info("22222222 {}", t.getMessage());
+        }).exceptionally(e ->{
+            LOGGER.info("3333333 {}", e.getMessage());
+            return "hello world";
+        }).join();
+        LOGGER.info("444444 {}", res);
     }
 }
 
