@@ -4,8 +4,6 @@ import com.google.common.collect.Sets;
 import com.learn.bean.User;
 import com.learn.biz.RoleBiz;
 import com.learn.biz.UserBiz;
-import com.learn.service.RoleService;
-import com.learn.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

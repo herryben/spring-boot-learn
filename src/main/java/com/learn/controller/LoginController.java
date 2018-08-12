@@ -7,8 +7,6 @@ import com.learn.bean.User;
 import com.learn.biz.SystemPermissionBiz;
 import com.learn.biz.UserBiz;
 import com.learn.service.ShiroService;
-import com.learn.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
