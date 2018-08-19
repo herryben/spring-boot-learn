@@ -3,6 +3,7 @@ package com.learn;
 import com.learn.command.GetUserServiceCommand;
 import com.learn.service.UserService;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
+import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,5 +36,15 @@ public class TestHystrix {
         } finally {
             context.shutdown();
         }
+    }
+
+    @Test
+    public void testBatchRequest() throws ExecutionException, InterruptedException {
+        List<CompletableFuture<String>> futures = Lists.newArrayList();
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+            futures.add(CompletableFuture.supplyAsync(() -> "" + finalI));
+        }
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
     }
 }
