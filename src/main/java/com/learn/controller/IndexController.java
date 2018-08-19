@@ -5,9 +5,13 @@ import com.learn.bean.HttpResponse;
 import com.learn.bean.User;
 import com.learn.command.GetUserServiceCommand;
 import com.learn.service.UserService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class IndexController {
@@ -60,5 +64,26 @@ public class IndexController {
         command3.execute();
         context.shutdown();
         return new HttpResponse();
+    }
+
+    @GetMapping("test")
+    @HystrixCommand(fallbackMethod = "fallBack",
+            threadPoolProperties = {
+                @HystrixProperty(name = "coreSize", value = "10"),
+                @HystrixProperty(name = "maxQueueSize", value = "100"),
+                @HystrixProperty(name = "queueSizeRejectionThreshold", value = "20")
+            },
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "100"), //命令执行超时时间
+                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2"), //若干10s一个窗口内失败三次, 则达到触发熔断的最少请求量
+                    @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "30000") //断路30s后尝试执行, 默认为5s
+            })
+    public HttpResponse getTest() throws Exception {
+        TimeUnit.SECONDS.sleep(3);
+        return new HttpResponse();
+    }
+
+    public HttpResponse fallBack() throws Exception {
+        return new HttpResponse("fallback");
     }
 }
