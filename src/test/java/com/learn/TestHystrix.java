@@ -2,6 +2,7 @@ package com.learn;
 
 import com.learn.command.GetUserServiceCommand;
 import com.learn.command.HelloWorldCommand;
+import com.learn.command.HystrixThreadPoolCommand;
 import com.learn.service.UserService;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.assertj.core.util.Lists;
@@ -18,6 +19,7 @@ import rx.Observer;
 import rx.functions.Action1;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -87,5 +89,32 @@ public class TestHystrix {
             }
         });
         TimeUnit.SECONDS.sleep(5);
+    }
+
+    @Test
+    public void tsetThreadPool() throws Exception{
+        for (int i = 0; i < 10; i++) {
+            try {
+                LOGGER.info("======= {}", new HystrixThreadPoolCommand("Hlx").execute());
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
+
+        for (int i = 0; i < 20; i++) {
+            try {
+                LOGGER.info("======= {}", new HystrixThreadPoolCommand("Blx").execute());
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
+
+        TimeUnit.MILLISECONDS.sleep(2000);
+        LOGGER.info("===========print thead stacks ==============");
+        Map<Thread, StackTraceElement[]> map = Thread.getAllStackTraces();
+        for (Thread thread: map.keySet()) {
+            LOGGER.info("****************** {}", thread.getName());
+        }
+        LOGGER.info("{} {}", map, map.size());
     }
 }
