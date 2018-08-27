@@ -18,54 +18,54 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
 
-    @Autowired
-    UserBiz userBiz;
-    @Autowired
-    private SystemPermissionBiz systemPermissionBiz;
-    @Autowired
-    private ShiroService shiroService;
-
-    @GetMapping("/not_login")
-    public HttpResponse notLogin() {
-        return new HttpResponse("您尚未登陆");
-    }
-
-    @GetMapping("/not_role")
-    public HttpResponse notRole() {
-        return new HttpResponse("您没有权限");
-    }
-
-    @GetMapping("/logout")
-    public HttpResponse logout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        return new HttpResponse("成功注销");
-    }
-
-    @PostMapping("/login")
-    public HttpResponse login(@RequestParam("user_name") String userName,
-                              @RequestParam("password") String password) {
-        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
-        subject.login(token);
-        User user = userBiz.getUserByName(userName);
-        String role = user != null ? user.getRole() : "";
-        if ("user".equals(role)) {
-            return new HttpResponse("欢迎登陆普通用户");
-        }
-        if ("admin".equals(role)) {
-            return new HttpResponse("欢迎来到管理员用户");
-        }
-        return new HttpResponse(HeaderStatus.UNAUTHORIZED);
-    }
-
-    @PostMapping("/permission")
-    public HttpResponse addPermission(@RequestParam("url") String url,
-                                      @RequestParam("role") String role,
-                                      @RequestParam("sort") int sort) {
-        SystemPermission systemPermission = new SystemPermission(url, role, sort, System.currentTimeMillis());
-        systemPermissionBiz.insertSystemPermission(systemPermission);
-        shiroService.updatePermission();
-        return new HttpResponse();
-    }
+//    @Autowired
+//    UserBiz userBiz;
+//    @Autowired
+//    private SystemPermissionBiz systemPermissionBiz;
+//    @Autowired
+//    private ShiroService shiroService;
+//
+//    @GetMapping("/not_login")
+//    public HttpResponse notLogin() {
+//        return new HttpResponse("您尚未登陆");
+//    }
+//
+//    @GetMapping("/not_role")
+//    public HttpResponse notRole() {
+//        return new HttpResponse("您没有权限");
+//    }
+//
+//    @GetMapping("/logout")
+//    public HttpResponse logout() {
+//        Subject subject = SecurityUtils.getSubject();
+//        subject.logout();
+//        return new HttpResponse("成功注销");
+//    }
+//
+//    @PostMapping("/login")
+//    public HttpResponse login(@RequestParam("user_name") String userName,
+//                              @RequestParam("password") String password) {
+//        Subject subject = SecurityUtils.getSubject();
+//        UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
+//        subject.login(token);
+//        User user = userBiz.getUserByName(userName);
+//        String role = user != null ? user.getRole() : "";
+//        if ("user".equals(role)) {
+//            return new HttpResponse("欢迎登陆普通用户");
+//        }
+//        if ("admin".equals(role)) {
+//            return new HttpResponse("欢迎来到管理员用户");
+//        }
+//        return new HttpResponse(HeaderStatus.UNAUTHORIZED);
+//    }
+//
+//    @PostMapping("/permission")
+//    public HttpResponse addPermission(@RequestParam("url") String url,
+//                                      @RequestParam("role") String role,
+//                                      @RequestParam("sort") int sort) {
+//        SystemPermission systemPermission = new SystemPermission(url, role, sort, System.currentTimeMillis());
+//        systemPermissionBiz.insertSystemPermission(systemPermission);
+//        shiroService.updatePermission();
+//        return new HttpResponse();
+//    }
 }

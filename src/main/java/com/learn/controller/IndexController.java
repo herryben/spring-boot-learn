@@ -86,4 +86,10 @@ public class IndexController {
     public HttpResponse fallBack() throws Exception {
         return new HttpResponse("fallback");
     }
+
+    @GetMapping("test/thread")
+    public HttpResponse testThread() throws Exception{
+        TimeUnit.SECONDS.sleep(10);
+        return new HttpResponse("test thread");
+    }
 }
