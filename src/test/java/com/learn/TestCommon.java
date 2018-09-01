@@ -1,9 +1,6 @@
 package com.learn;
 
-import com.github.rholder.retry.AttemptTimeLimiters;
-import com.github.rholder.retry.Retryer;
-import com.github.rholder.retry.RetryerBuilder;
-import com.github.rholder.retry.StopStrategies;
+import com.github.rholder.retry.*;
 import com.google.common.base.Predicates;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
@@ -35,6 +32,7 @@ public class TestCommon {
                 .retryIfResult(Predicates.equalTo(false))
                 .withAttemptTimeLimiter(AttemptTimeLimiters.fixedTimeLimit(1, TimeUnit.SECONDS))
                 .withStopStrategy(StopStrategies.stopAfterAttempt(5))
+                .withWaitStrategy(WaitStrategies.incrementingWait(1, TimeUnit.SECONDS, 3, TimeUnit.SECONDS))
                 .build();
         LOGGER.info("=========start==========");
         LOGGER.info("========result======= {}", retryer.call(() -> {
