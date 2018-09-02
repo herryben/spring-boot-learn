@@ -92,4 +92,9 @@ public class IndexController {
         TimeUnit.SECONDS.sleep(10);
         return new HttpResponse("test thread");
     }
+
+    @GetMapping("retry")
+    public HttpResponse testRetry() throws Exception{
+        return new HttpResponse(userService.getTryString());
+    }
 }

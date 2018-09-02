@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,5 +52,16 @@ public class UserService  {
         LOGGER.info("getAllUsers ");
         return userBiz.selectList(new EntityWrapper<>());
     }
-
+    @Retryable(value = {RuntimeException.class}, maxAttempts = 3, backoff = @Backoff(delay = 2000, multiplier = 1.1))
+    public String getTryString(){
+        LOGGER.info("=============== retry");
+        if (1 == 1){
+            throw new RuntimeException("error");
+        }
+        return "retry string";
+    }
+    @Recover
+    public String getRecoverString(){
+        return "recover string";
+    }
 }
