@@ -26,5 +26,4 @@ hs_err_pid*
 learn-springboot.iml
 mvnw
 mvnw.cmd
-pom.xml
 target/
