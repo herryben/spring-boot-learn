@@ -84,4 +84,42 @@ public class TestSort {
         }
         LOGGER.info("sorted data {} ", array);
     }
+
+    @Test
+    public void testQSort() {
+        int array[] = new int[10];
+        int tmp, j;
+        for (int i = 0; i < array.length - 1; i++) {
+            array[i] = (int)(1+Math.random()*100);
+        }
+        LOGGER.info("raw data {} ", array);
+        LOGGER.info("====================");
+        Qsort(array, 0, array.length - 1);
+        LOGGER.info("sorted data {} ", array);
+    }
+
+    public void Qsort(int[] data, int left, int right) {
+        if (left < right) {
+            int idx = partition(data, left, right);
+            Qsort(data, left, idx - 1);
+            Qsort(data, idx + 1, right);
+        }
+    }
+
+    public int partition(int[] data, int low, int high) {
+        int pivot = data[low];
+        int i = low, j = high;
+        while (i < j) {
+            while (i < j && data[j] >= pivot) {
+                --j;
+            }
+            data[i] = data[j];
+            while (i < j && data[i] < pivot) {
+                ++i;
+            }
+            data[j] = data[i];
+        }
+        data[i] = pivot;
+        return i;
+    }
 }
