@@ -15,7 +15,7 @@ public class TestSort {
     public void testSelect() {
         int array[] = new int[10];
         int tmp;
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < array.length; i++) {//直选最简单
             array[i] = (int)(1+Math.random()*100);
         }
         LOGGER.info("raw data {} ", array);
@@ -66,17 +66,10 @@ public class TestSort {
         }
         LOGGER.info("raw data {} ", array);
         LOGGER.info("====================");
-//        for (int i = 0; i < array.length ; i++) {
-//            tmp = array[i];
-//            for (j = i; j > 0 && tmp > array[j-1] ; j++) {
-//                array[j] = array[j - 1];
-//            }
-//            array[j] = tmp;
-//        }
-        for (int i = 1; i < array.length; i++) {
+        for (int i = 1; i < array.length; i++) {//由于要往后减 所以从1开始
             if (array[i] < array[i - 1]) {
                 tmp = array[i];
-                for (j = i-1; j>=0 && tmp < array[j]; j--) {
+                for (j = i-1; j>=0 && tmp < array[j]; j--) {//最后j会减到-1
                     array[j +1] = array[j];
                 }
                 array[j+1] = tmp;
