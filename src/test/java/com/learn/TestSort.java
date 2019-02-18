@@ -92,26 +92,29 @@ public class TestSort {
     }
 
     public void Qsort(int[] data, int left, int right) {
-        if (left < right) {
+        if (left < right) {//递归终止条件
             int idx = partition(data, left, right);
             Qsort(data, left, idx - 1);
             Qsort(data, idx + 1, right);
         }
     }
-
+    //分区函数
     public int partition(int[] data, int low, int high) {
         int pivot = data[low];
         int i = low, j = high;
         while (i < j) {
+            //交换左边
             while (i < j && data[j] >= pivot) {
                 --j;
             }
             data[i] = data[j];
+            //交换右边
             while (i < j && data[i] < pivot) {
                 ++i;
             }
             data[j] = data[i];
         }
+        //确定哨兵位置
         data[i] = pivot;
         return i;
     }
