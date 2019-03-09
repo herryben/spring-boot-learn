@@ -16,9 +16,9 @@ public class TestThreadPool {
 //        ExecutorService executorService = Executors.newCachedThreadPool();
 //        ExecutorService executorService = Executors.newFixedThreadPool(3);
 //        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        ExecutorService executorService = new ThreadPoolExecutor(0, 5,
+        ExecutorService executorService = new ThreadPoolExecutor(5, 10,
                 60L, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(), new ThreadPoolExecutor.CallerRunsPolicy());
+                new LinkedBlockingQueue<>(), new ThreadPoolExecutor.CallerRunsPolicy());
         List<Future<String>> featureList = Lists.newArrayList();
 
         for (int i = 0; i < 20; i++) {
@@ -33,10 +33,9 @@ public class TestThreadPool {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
-            }finally {
-                executorService.shutdown();
             }
         }
+        executorService.shutdown();
     }
 
     @Test
@@ -51,6 +50,14 @@ public class TestThreadPool {
             return "hello world";
         }).join();
         LOGGER.info("444444 {}", res);
+    }
+
+    @Test
+    public void testWhile() throws InterruptedException {
+        do {
+            System.out.println("haha");
+            Thread.sleep(1000);
+        }while (false);
     }
 }
 

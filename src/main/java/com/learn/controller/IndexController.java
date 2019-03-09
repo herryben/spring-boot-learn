@@ -9,11 +9,13 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
 
-@RestController
+//@RestController
+@Controller
 public class IndexController {
 
     @Autowired
@@ -96,5 +98,15 @@ public class IndexController {
     @GetMapping("retry")
     public HttpResponse testRetry() throws Exception{
         return new HttpResponse(userService.getTryString());
+    }
+
+    @GetMapping("r")
+    public String redirect() {
+        return "redirect:/t/";
+    }
+
+    @GetMapping("t")
+    public String target() {
+        return "target";
     }
 }

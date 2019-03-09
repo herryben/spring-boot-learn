@@ -53,6 +53,7 @@ public class TestRedis {
 //        LOGGER.info("Jedis Zset zadd {} ", conn.zadd("zset", 2.1, "xiaoming"));
         conn.set("user_name_1", "tom");
         conn.set("user_name_2", "jerry");
+//        conn.debug();
     }
 
     @Test
@@ -75,5 +76,23 @@ public class TestRedis {
         con.zAdd("bzset".getBytes(), 2, "xiaoming".getBytes());
         con.zAdd("bzset".getBytes(), 2, "xiaoli".getBytes());
         con.closePipeline();
+    }
+
+    @Test
+    public void testAutoBox() throws Exception {
+        Integer a = 1;
+        Integer b = 2;
+        Integer c = 3;
+        Integer d = 3;
+        Integer e = 321;
+        Integer f  = 321;
+        Long g = 3L;
+
+        System.out.println(c == d);//true
+        System.out.println(e == f);//false
+        System.out.println(c == (a + b));//true
+        System.out.println(c.equals(a + b));//true
+        System.out.println(g == (a + b));//true
+        System.out.println(g.equals((long) (a + b)));//false
     }
 }
