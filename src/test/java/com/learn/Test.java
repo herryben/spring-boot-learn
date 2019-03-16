@@ -1,7 +1,10 @@
 package com.learn;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class Test {
     private int N = 5;
@@ -268,5 +271,27 @@ public class Test {
         }
         datas[k] = data;
         print();
+    }
+
+    @org.junit.Test
+    public void testList(){
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(0, 10);
+        list.remove(3);
+        for (Integer i: list) {
+            System.out.println("data " + i);
+        }
+    }
+
+    @org.junit.Test
+    public void testRandom(){
+        int max = 30, min = 21;
+        Random random = new Random();
+        for(int i = 0; i < 100; i++){
+            System.out.println(random.nextInt(max) % (max - min + 1) + min);
+        }
     }
 }

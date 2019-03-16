@@ -1,5 +1,6 @@
 package com.learn.controller;
 
+import com.learn.annotation.Login;
 import com.learn.bean.AuthorSettings;
 import com.learn.bean.HttpResponse;
 import com.learn.bean.User;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
 
-//@RestController
 @Controller
 public class IndexController {
 
@@ -108,5 +108,18 @@ public class IndexController {
     @GetMapping("t")
     public String target() {
         return "target";
+    }
+
+    @RequestMapping("request1")
+    @ResponseBody
+    public HttpResponse request1(){
+        return new HttpResponse();
+    }
+
+    @RequestMapping("request2")
+    @ResponseBody
+    @Login
+    public HttpResponse request2(){
+        return new HttpResponse();
     }
 }
