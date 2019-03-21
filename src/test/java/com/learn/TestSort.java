@@ -209,4 +209,43 @@ public class TestSort {
         datas[k] = data;
         print();
     }
+
+    @org.junit.Test
+    public void testMerge(){
+        init();
+        print();
+        mergeSort(datas, 0, datas.length - 1);
+        print();
+    }
+
+    public void mergeSort(int[] datas, int low, int high){
+        int mid = (low + high) / 2;
+        if (low < high) {
+            mergeSort(datas, low, mid);
+            mergeSort(datas, mid + 1, high);
+            merge(datas, low, mid, high);
+        }
+    }
+
+    public void merge(int[] datas, int low, int mid, int high){
+        int[] tmp = new int[high - low + 1];
+        int i = low, j = mid + 1;
+        int k = 0;
+        while (i <= mid && j <= high) {
+            if (datas[i] <= datas[j]) {
+                tmp[k++] = datas[i++];
+            } else {
+                tmp[k++] = datas[j++];
+            }
+        }
+        while (i<=mid) {
+            tmp[k++] = datas[i++];
+        }
+        while (j <= high) {
+            tmp[k++] = datas[j++];
+        }
+        for (int x = 0; x < tmp.length; x++) {
+            datas[low + x] = tmp[x];
+        }
+    }
 }
