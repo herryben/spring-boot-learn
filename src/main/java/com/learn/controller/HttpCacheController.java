@@ -1,5 +1,7 @@
 package com.learn.controller;
 
+import com.learn.bean.User;
+import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class HttpCacheController {
     private Map<String, Long> timeCache = new HashMap<>();
+
     @RequestMapping("cache")
-    public ResponseEntity<String> cahce(@RequestHeader(value = "If-Modified-Since", required = false) Date ifModifiedSince){
+    public ResponseEntity<String> cahce(@RequestHeader(value = "If-Modified-Since", required = false) Date ifModifiedSince) {
         DateFormat gmtDateFormat = new SimpleDateFormat("EEE, d MMM yyy HH:mm:ss 'GMT'", Locale.US);
         long now = System.currentTimeMillis() / 1000 * 1000;
         long lastModifiedMills = timeCache.get("cache") != null ? timeCache.get("cache") : now;
@@ -39,5 +39,10 @@ public class HttpCacheController {
         headers.add("Cache-Control", "max-age=" + maxAge);
         timeCache.put("cache", now);
         return new ResponseEntity<>(body, headers, HttpStatus.OK);
+    }
+
+    public static void main(String[] args) {
+        User user = new User();
+        Long id = user.getId();
     }
 }
