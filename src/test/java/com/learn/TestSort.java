@@ -73,10 +73,30 @@ public class TestSort {
         for (int i = 1; i < array.length; i++) {
             if (array[i] < array[i - 1]) {
                 tmp = array[i];
-                for (j = i-1; j>=0 && tmp < array[j]; j--) {
+                for (j = i-1; j>=0 && tmp < array[j]; j--) {//j--会执行到-1
                     array[j +1] = array[j];
                 }
                 array[j+1] = tmp;
+            }
+        }
+        LOGGER.info("sorted data {} ", array);
+    }
+
+    @Test
+    public void testShell() {
+        int array[] = new int[10];
+        int tmp, j;
+        for (int i = 0; i < array.length - 1; i++) {
+            array[i] = (int)(1+Math.random()*100);
+        }
+        LOGGER.info("raw data {} ", array);
+        for (int jmp = array.length; jmp != 0; jmp = jmp / 2) {
+            for (int i = jmp; i < array.length; i++) {
+                tmp = array[i];
+                for (j = i - jmp; j >= 0 && tmp < array[j]; j = j - jmp) {
+                    array[j + jmp] = array[j];
+                }
+                array[j + jmp] = tmp;
             }
         }
         LOGGER.info("sorted data {} ", array);
