@@ -102,6 +102,10 @@ public class TestSort {
         LOGGER.info("sorted data {} ", array);
     }
 
+    /**
+     * 挖坑填坑法
+     * https://blog.csdn.net/qq_45608306/article/details/112714681
+     */
     @Test
     public void testQSort() {
         int array[] = new int[10];
@@ -121,6 +125,47 @@ public class TestSort {
             qsort(data, left, idx - 1);
             qsort(data, idx + 1, right);
         }
+    }
+
+    @Test
+    public void testQsortTwentyLines() {
+        int array[] = new int[5];
+        int tmp, j;
+        for (int i = 0; i < array.length - 1; i++) {
+            array[i] = (int)(1+Math.random()*100);
+        }
+        LOGGER.info("raw data {} ", array);
+        LOGGER.info("====================");
+        qsortTwentyLines(array, 0, array.length - 1);
+        LOGGER.info("sorted data {} ", array);
+    }
+
+    /**
+     * 10行递归法
+     * @param data
+     * @param low
+     * @param high
+     * @return
+     */
+    public void qsortTwentyLines(int[] data, int low, int high) {
+        if (low >= high) {
+            return;
+        }
+        int i = low, j = high;
+        int pivot = data[low];
+        while (i < j) {
+            while (i < j && data[j] >= pivot) {
+                j--;
+            }
+            data[i] = data[j];
+            while (i < j && data[i] < pivot) {
+                i++;
+            }
+            data[j] = data[i];;
+        }
+        data[i] = pivot;
+        qsortTwentyLines(data, low, i - 1);
+        qsortTwentyLines(data, i + 1, high);
     }
 
     public int partition(int[] data, int low, int high) {
