@@ -85,18 +85,18 @@ public class TestSort {
     @Test
     public void testShell() {
         int array[] = new int[10];
-        int tmp, j;
+        int j;
         for (int i = 0; i < array.length - 1; i++) {
             array[i] = (int)(1+Math.random()*100);
         }
         LOGGER.info("raw data {} ", array);
-        for (int jmp = array.length; jmp != 0; jmp = jmp / 2) {
-            for (int i = jmp; i < array.length; i++) {
-                tmp = array[i];
-                for (j = i - jmp; j >= 0 && tmp < array[j]; j = j - jmp) {
-                    array[j + jmp] = array[j];
+        for (int gap = array.length / 2; gap != 0; gap = gap / 2) {
+            for (int i = gap; i < array.length; i++) {
+                int tmp = array[i];
+                for (j = i - gap; j >= 0 && tmp < array[j]; j = j - gap) {
+                    array[j + gap] = array[j];
                 }
-                array[j + jmp] = tmp;
+                array[j + gap] = tmp;
             }
         }
         LOGGER.info("sorted data {} ", array);
