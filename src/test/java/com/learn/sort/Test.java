@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.sort;
 
 import java.lang.reflect.Array;
 import java.util.*;
