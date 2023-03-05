@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Random;
+
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class TestSort {
@@ -303,7 +305,7 @@ public class TestSort {
                 tmp[k++] = datas[j++];
             }
         }
-        while (i<=mid) {
+        while (i <= mid) {
             tmp[k++] = datas[i++];
         }
         while (j <= high) {
@@ -312,5 +314,20 @@ public class TestSort {
         for (int x = 0; x < tmp.length; x++) {
             datas[low + x] = tmp[x];
         }
+    }
+
+    @Test
+    public void shuffle() {
+        init();
+        print();
+        Random random = new Random();
+        for (int i = datas.length; i > 0; i--) {
+            // nextInt范围是[0, i)所以是倒序迭代
+            int j = random.nextInt(i);
+            int tmp = datas[j];
+            datas[j] = datas[i - 1];
+            datas[i - 1] = tmp;
+        }
+        print();
     }
 }
