@@ -295,9 +295,11 @@ public class TestSort {
     }
 
     public void merge(int[] datas, int low, int mid, int high){
+        // 这里总共有多少个
         int[] tmp = new int[high - low + 1];
         int i = low, j = mid + 1;
         int k = 0;
+        // 谁小选谁
         while (i <= mid && j <= high) {
             if (datas[i] <= datas[j]) {
                 tmp[k++] = datas[i++];
@@ -305,12 +307,14 @@ public class TestSort {
                 tmp[k++] = datas[j++];
             }
         }
+        // 谁没选完走完剩余
         while (i <= mid) {
             tmp[k++] = datas[i++];
         }
         while (j <= high) {
             tmp[k++] = datas[j++];
         }
+        // 排好的数据写会数据里面
         for (int x = 0; x < tmp.length; x++) {
             datas[low + x] = tmp[x];
         }
