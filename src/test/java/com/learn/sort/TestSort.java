@@ -189,6 +189,7 @@ public class TestSort {
         qsortTwentyLines(data, low, i - 1);
         qsortTwentyLines(data, i + 1, high);
     }
+
     public void init(){
         for (int i = 0; i < datas.length; i++) {
             datas[i] = (int)(Math.random() * 100 + 1);

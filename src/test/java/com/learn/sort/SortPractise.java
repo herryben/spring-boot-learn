@@ -8,7 +8,7 @@ import org.junit.Test;
  * @date 2023/3/3 10:14 下午
  */
 public class SortPractise {
-    private final int N = 10;
+    private final int N = 5;
     private final int[] datas = new int[N];
 
     public void init() {
@@ -48,6 +48,19 @@ public class SortPractise {
 
     @Test
     public void testQsort() {
+        init();
+        print();
+        print();
+    }
+
+    @Test
+    public void testMerge() {
+        init();
+        print();
+        print();
+    }
+
+    public void testHeapsort() {
         init();
         print();
         print();
