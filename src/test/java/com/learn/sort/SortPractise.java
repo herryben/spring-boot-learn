@@ -71,7 +71,29 @@ public class SortPractise {
     public void testDeleteTop() {
         init();
         print();
+        for (int i = (datas.length - 2) / 2; i >= 0; i--) {
+            adjust(datas, i, datas.length);
+        }
         print();
+        datas[0] = datas[datas.length - 1];
+        datas[datas.length - 1] = Integer.MIN_VALUE;
+        adjust(datas, 0, datas.length - 1);
+        print();
+    }
+
+    public void adjust(int[] datas, int k, int length) {
+        int tmp = datas[k];
+        for (int i = 2*k+1; i < length; i=2*i+1) {
+            if (i + 1 < length && datas[i] < datas[i+1]) {
+                i++;
+            }
+            if (tmp > datas[i]) {
+                break;
+            } else {
+                datas[k] = datas[k=i];
+            }
+        }
+        datas[k] = tmp;
     }
 
     @Test
