@@ -212,7 +212,7 @@ public class TestSort {
     }
 
     public void heapSort(int[] datas) {
-        // (k-1)/2是父节点 从所有父节点开始调整 把最大的冒在堆顶
+        // (k-1)/2是父节点 从第一个父节点开始调整 把最大的冒在堆顶
         for (int i = (datas.length - 2) / 2; i >= 0 ; i--) {
             adjust(datas, i, datas.length);
         }
@@ -229,7 +229,7 @@ public class TestSort {
         int tmp = datas[k];
         // 2k => 父节点 2k+1 => 左孩子 2k+2=> 右孩子
         for (int i = 2 * k + 1; i < length; i = 2 * i + 1) {
-            // 右孩子没有超出范围并且左孩子小于右孩子
+            // 右孩子没有超出范围(此时才有比较的意义，否则只有左孩子一个)并且左孩子小于右孩子
             if (i + 1 < length && datas[i] < datas[i + 1]) {
                 i++;
             }
@@ -273,6 +273,7 @@ public class TestSort {
         datas[datas.length - 1] = data;
         int k = datas.length - 1;
         int parent = (k - 1) / 2;
+        // 这个是从下往上遍历
         while (parent >= 0 && data > datas[parent]) {
             datas[k] = datas[k = parent];
             if (parent != 0) {

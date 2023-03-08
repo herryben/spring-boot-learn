@@ -67,6 +67,20 @@ public class SortPractise {
         print();
     }
 
+    @Test
+    public void testDeleteTop() {
+        init();
+        print();
+        print();
+    }
+
+    @Test
+    public void testHeapInsert() {
+        init();
+        print();
+        print();
+    }
+
     public void print() {
         for (int data : datas) {
             System.out.print(data + " ");
