@@ -60,6 +60,7 @@ public class SortPractise {
         print();
     }
 
+    @Test
     public void testHeapsort() {
         init();
         print();

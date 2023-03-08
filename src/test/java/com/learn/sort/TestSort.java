@@ -226,16 +226,22 @@ public class TestSort {
 
     public void adjust(int[] datas, int k, int length){
         int tmp = datas[k];
+        // 2k+1 => 左孩子 2k+2=> 右孩子
         for (int i = 2 * k + 1; i < length; i = 2 * i + 1) {
+            // 右孩子没有超出范围并且左孩子小于右孩子
             if (i + 1 < length && datas[i] < datas[i + 1]) {
                 i++;
             }
             if (tmp >= datas[i]) {
+                // 父节点大于等于两个孩子中最大的，增调整完毕
                 break;
-            }else {
+            } else {
+                // 否则，从当前节点开始继续调整
+                // 父节点等于当前最大的子节点
                 datas[k] = datas[k = i];
             }
         }
+        // 最后剩下的就是父节点的位置
         datas[k] = tmp;
     }
 
