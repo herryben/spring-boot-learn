@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.concurrent;
 
 public class SyncClass {
     public static synchronized void sleep1(int second) {

@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.other;
 
 import com.learn.bean.Order;
 import lombok.extern.slf4j.Slf4j;

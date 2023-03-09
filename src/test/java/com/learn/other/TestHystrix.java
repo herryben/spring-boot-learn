@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.other;
 
 import com.learn.command.GetUserServiceCommand;
 import com.learn.command.HelloWorldCommand;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import rx.Observable;
 import rx.Observer;
-import rx.functions.Action1;
 
 import java.util.List;
 import java.util.Map;

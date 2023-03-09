@@ -1,19 +1,16 @@
-package com.learn;
+package com.learn.redis;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.test.context.junit4.SpringRunner;
 import redis.clients.jedis.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
 public class TestRedis {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestRedis.class);
     @Autowired

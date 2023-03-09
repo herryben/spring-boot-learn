@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.other;
 
 import com.github.rholder.retry.*;
 import com.google.common.base.Predicates;

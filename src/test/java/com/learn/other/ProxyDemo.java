@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.other;
 
 import org.junit.Test;
 import org.springframework.cglib.proxy.Enhancer;
