@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.concurrent;
 
 import org.junit.Test;
 
@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class CompletionServiceDemo {
+    /**
+     * ExecutorCompletionService 内部使用子类QueueingFuture调用FutureTask.done回调把完成的任务放入内部阻塞队列completionQueue里
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     @Test
     public void testCompletionService() throws InterruptedException, ExecutionException {
         ExecutorService service = Executors.newFixedThreadPool(5);
