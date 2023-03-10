@@ -1,5 +1,6 @@
 package com.learn.sort;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import java.util.Random;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
+@Slf4j
 public class TestSort {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestSort.class);
     private final int N = 7;
@@ -342,5 +344,26 @@ public class TestSort {
             datas[i - 1] = tmp;
         }
         print();
+    }
+
+    @Test
+    public void testBinarySearch () {
+        int[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        log.info("testBinarySearch index={}", binarySearch(data, 9));
+    }
+
+    public int binarySearch(int[] datas, int target) {
+        int low = 0, high = datas.length - 1;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (target > datas[mid]) {
+                low = mid;
+            } else if (target < datas[mid]) {
+                high = mid;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
     }
 }
