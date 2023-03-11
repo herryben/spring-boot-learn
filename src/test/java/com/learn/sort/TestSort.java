@@ -349,21 +349,50 @@ public class TestSort {
     @Test
     public void testBinarySearch () {
         int[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        log.info("testBinarySearch index={}", binarySearch(data, 9));
+        for (int i = 0; i < 15; i++) {
+            log.info("testBinarySearch i={} index={}", i, binarySearch(data, i));
+        }
     }
 
     public int binarySearch(int[] datas, int target) {
         int low = 0, high = datas.length - 1;
-        while (low < high) {
+        while (low <= high) {
             int mid = (low + high) / 2;
             if (target > datas[mid]) {
-                low = mid;
+                low = mid + 1;
             } else if (target < datas[mid]) {
-                high = mid;
+                high = mid - 1;
             } else {
                 return mid;
             }
         }
         return -1;
     }
+
+    @Test
+    public void testLeftBound() {
+        int[] data = {1, 2, 3, 5, 5, 5, 5, 8, 9};
+        for (int i = 0; i < 10; i++) {
+            log.info("leftBound index={}", leftBound(data, i));
+        }
+    }
+
+    public int leftBound(int[] datas, int target) {
+        int low = 0, high = datas.length;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (datas[mid] > target) {
+                high = mid;
+            } else if (datas[mid] < target) {
+                low = mid;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+
+//    public int rightBound(int[] datas, int target) {
+//
+//    }
 }
