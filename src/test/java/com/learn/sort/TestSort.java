@@ -355,6 +355,7 @@ public class TestSort {
     }
 
     public int binarySearch(int[] datas, int target) {
+        // 这里使用闭区间[2,3]
         int low = 0, high = datas.length - 1;
         while (low <= high) {
             int mid = (low + high) / 2;
@@ -372,27 +373,57 @@ public class TestSort {
     @Test
     public void testLeftBound() {
         int[] data = {1, 2, 3, 5, 5, 5, 5, 8, 9};
-        for (int i = 0; i < 10; i++) {
-            log.info("leftBound index={}", leftBound(data, i));
+        for (int i = 0; i < 20; i++) {
+            log.info("leftBound i={} index={}", i, leftBound(data, i));
         }
     }
 
+    /**
+     * 含义是小于target的数据有几个
+     */
     public int leftBound(int[] datas, int target) {
+        // 这里使用左开右闭区间[2,3)
         int low = 0, high = datas.length;
         while (low < high) {
             int mid = (low + high) / 2;
             if (datas[mid] > target) {
+                // 缩小右边界，开区间
                 high = mid;
             } else if (datas[mid] < target) {
-                low = mid;
+                // 缩小左边界，闭区间
+                low = mid + 1;
             } else {
+                // 缩小右边界，开区间
                 high = mid;
             }
         }
         return low;
     }
 
-//    public int rightBound(int[] datas, int target) {
-//
-//    }
+    @Test
+    public void testRightBound() {
+        int[] data = {1, 2, 3, 5, 5, 5, 5, 8, 9};
+        for (int i = 0; i < 20; i++) {
+            log.info("rightBound i={} index={}", i, rightBound(data, i));
+        }
+    }
+
+    public int rightBound(int[] datas, int target) {
+        // 这里使用左开右闭区间[2,3)
+        int low = 0, high = datas.length;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (datas[mid] > target) {
+                // 缩小右边界，开区间
+                high = mid;
+            } else if (datas[mid] < target) {
+                // 缩小左边界，闭区间
+                low = mid + 1;
+            } else {
+                // 缩小左边界，闭区间
+                low = mid + 1;
+            }
+        }
+        return low - 1;
+    }
 }
