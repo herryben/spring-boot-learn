@@ -3,6 +3,8 @@ package com.learn.dp;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class DpSolution {
     /**
      * 70. 爬楼梯
@@ -22,7 +24,10 @@ public class DpSolution {
      * 1. 1 阶 + 1 阶 + 1 阶
      * 2. 1 阶 + 2 阶
      * 3. 2 阶 + 1 阶
-     *
+     * 解题思路：
+     *  dp[i]:爬到第i层的方法
+     *  dp[i] = dp[i -1] + dp[i -2]
+     *  爬到第i层的方法=爬到第i-1层的方法 + 爬到第i-2层的方法
      * @param n
      * @return
      */
@@ -68,7 +73,10 @@ public class DpSolution {
      * 5=2+2+1
      * 5=2+1+1+1
      * 5=1+1+1+1+1
-     *
+     * 解题方法：
+     *  dp[i][j]:用i种硬币凑成j的方法组合数
+     *  d[i][j] = dp[i-1][j] + dp[i][j-coins[i-1]]
+     *  i-1枚硬币凑成j的方法 + i枚硬币凑成j-去除这枚硬币的方法
      * @param amount
      * @param coins
      * @return
@@ -107,5 +115,87 @@ public class DpSolution {
     public void testChange() {
         Assert.assertEquals(change(5, new int[]{1, 2, 5}), 4);
         Assert.assertEquals(changeCompress(5, new int[]{1, 2, 5}), 4);
+    }
+
+    /**
+     * 322. 零钱兑换
+     * https://leetcode.cn/problems/coin-change/description/
+     * 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
+     * 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
+     * 你可以认为每种硬币的数量是无限的。
+     * 示例 1：
+     * 输入：coins = [1, 2, 5], amount = 11
+     * 输出：3
+     * 解释：11 = 5 + 5 + 1
+     * 示例 2：
+     * 输入：coins = [2], amount = 3
+     * 输出：-1
+     * 示例 3：
+     * 输入：coins = [1], amount = 0
+     * 输出：0
+     */
+    public int coinChange(int[] coins, int amount) {
+        // dp[i][j]：使用i中硬币,凑成j的最小个数
+        int[][] dp = new int[coins.length + 1][amount + 1];
+        // 因为是 初始化为amount + 1即可
+        for (int i = 0; i <= coins.length; i++) {
+            for (int j = 0; j <= amount; j++) {
+                dp[i][j] = amount + 1;
+            }
+        }
+        // 初始状态用任意枚硬币凑成0的个数都是0
+        for (int i = 0; i <= coins.length; i++) {
+            dp[i][0] = 0;
+        }
+
+        for (int j = 0; j <= amount; j++) {
+            for (int i = 1; i <= coins.length; i++) {
+                if (j - coins[i - 1] >= 0) {
+                    // 如果余额还能大于等于0，则选用i-1枚硬币凑够j和i枚硬币凑够余额的2者最小（因为是无限硬币）
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - coins[i - 1]] + 1);
+                } else {
+                    // 如果余额不够了，只能集成上一个状态
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[coins.length][amount] == amount + 1 ? -1 : dp[coins.length][amount];
+    }
+
+    @Test
+    public void testCoinChange() {
+        Assert.assertEquals(coinChange(new int[]{1, 2, 5}, 11), 3);
+        Assert.assertEquals(coinChange(new int[]{2}, 3), -1);
+        Assert.assertEquals(coinChange(new int[]{1}, 0), 0);
+    }
+
+    /**
+     * 解题思路：
+     * dp[i]=Math.min(dp[i], dp[i-coin]+1);
+     * 当前硬币最小和之前硬币最小+1取最小值
+     *
+     * @param coins
+     * @param amount
+     * @return
+     */
+    public int coinChangeOfficial(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (i - coin >= 0) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        return dp[amount] == amount + 1 ? -1 : dp[amount];
+    }
+
+    @Test
+    public void testCoinChangeOfficial() {
+        Assert.assertEquals(coinChangeOfficial(new int[]{1, 2, 5}, 11), 3);
+        Assert.assertEquals(coinChangeOfficial(new int[]{2}, 3), -1);
+        Assert.assertEquals(coinChangeOfficial(new int[]{1}, 0), 0);
     }
 }
