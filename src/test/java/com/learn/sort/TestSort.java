@@ -347,13 +347,20 @@ public class TestSort {
     }
 
     @Test
-    public void testBinarySearch () {
+    public void testBinarySearch() {
         int[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         for (int i = 0; i < 15; i++) {
             log.info("testBinarySearch i={} index={}", i, binarySearch(data, i));
         }
     }
 
+    /**
+     * https://mp.weixin.qq.com/s/JgJ0jh2SJd6grQSPnN6Jww
+     *
+     * @param datas
+     * @param target
+     * @return
+     */
     public int binarySearch(int[] datas, int target) {
         // 这里使用闭区间[2,3]
         int low = 0, high = datas.length - 1;
