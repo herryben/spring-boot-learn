@@ -241,4 +241,38 @@ public class DpSolution {
         Assert.assertEquals(4, lengthOfLIS(new int[]{0, 1, 0, 3, 2, 3}));
         Assert.assertEquals(1, lengthOfLIS(new int[]{7, 7, 7, 7, 7, 7, 7}));
     }
+
+    @Test
+    public void testLis() {
+        Assert.assertEquals( 3, lis(new int[] {1,3,2,4,5}));
+    }
+
+    public int lis(int[] datas) {
+        int[] queue = new int[datas.length];
+        int max = 0;
+        queue[max] = datas[max];
+        for (int i = 1; i < datas.length; i++) {
+            if (datas[i] > queue[max]) {
+                queue[++max] = datas[i];
+            } else {
+                queue[lowerBound(queue, datas[i], max)] = datas[i];
+            }
+        }
+        return max;
+    }
+
+    public int lowerBound(int[] datas, int target, int length) {
+        int low = 0, high = length;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (datas[mid] > target) {
+                high = mid;
+            } else if (datas[mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
 }
