@@ -89,8 +89,10 @@ public class DpSolution {
         for (int i = 1; i <= coins.length; i++) {
             for (int j = 1; j <= amount; j++) {
                 if (j - coins[i - 1] < 0) {
+                    // 硬币不够用了
                     dp[i][j] = dp[i - 1][j];
                 } else {
+                    // 硬币够用
                     dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]];
                 }
             }
@@ -225,7 +227,7 @@ public class DpSolution {
         Arrays.fill(dp, 1);
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < i; j++) {
-                // 当前元素比之前的元素大才更新
+                // 当前元素比之前的元素大才更新（这样才能递增）
                 if (nums[i] > nums[j]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
@@ -307,5 +309,40 @@ public class DpSolution {
     @Test
     public void testKnapsack() {
         Assert.assertEquals(6, knapsack(4, 3, new int[]{2, 1, 3}, new int[]{4, 2, 3}));
+    }
+
+    /**
+     * 有⼀个背包，最⼤容量为 amount ，有⼀系列物品 coins ，每个物品的重
+     * 量为 coins[i] ，每个物品的数量⽆限。请问有多少种⽅法，能够把背包恰
+     * 好装满？
+     * 结题思路：就是换硬币
+     * dp[i][j] 的定义如下：
+     * 若只使⽤前 i 个物品，当背包容量为 j 时，有 dp[i][j] 种⽅法可以装满背包。
+     *
+     * @return
+     */
+    public int completeNapsack(int amount, int[] wt) {
+        int N = wt.length;
+        int[][] dp = new int[N+1][amount+1];
+        // i个物品容量为0时，只有1种凑法就是啥也不用
+        for (int i = 0; i <= N; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j<=amount;j++) {
+                if(j > wt[i-1]) {
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j-wt[i-1]];
+                } else {
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        return dp[N][amount];
+    }
+
+    @Test
+    public void testCompleteNapsack() {
+        Assert.assertEquals(4, completeNapsack(5, new int[]{1,2,5});
+        Assert.assertEquals(0, completeNapsack(3, new int[]{2}));
     }
 }
