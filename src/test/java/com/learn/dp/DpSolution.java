@@ -330,10 +330,10 @@ public class DpSolution {
         }
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j<=amount;j++) {
-                if(j > wt[i-1]) {
-                    dp[i][j] = dp[i-1][j] + dp[i-1][j-wt[i-1]];
+                if (j >= wt[i - 1]) {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - wt[i - 1]];
                 } else {
-                    dp[i][j] = dp[i-1][j];
+                    dp[i][j] = dp[i - 1][j];
                 }
             }
         }
@@ -342,7 +342,7 @@ public class DpSolution {
 
     @Test
     public void testCompleteNapsack() {
-        Assert.assertEquals(4, completeNapsack(5, new int[]{1,2,5});
+        Assert.assertEquals(4, completeNapsack(5, new int[]{1, 2, 5}));
         Assert.assertEquals(0, completeNapsack(3, new int[]{2}));
     }
 }
