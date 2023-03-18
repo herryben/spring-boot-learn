@@ -390,5 +390,4 @@ public class DpSolution {
         Assert.assertEquals(true, canPartition(new int[] {1,5,11,5}));
         Assert.assertEquals(false, canPartition(new int[] {1,2,3,5}));
     }
-
 }
