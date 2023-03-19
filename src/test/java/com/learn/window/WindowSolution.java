@@ -42,6 +42,7 @@ public class WindowSolution {
 
     /**
      * 76. 最小覆盖子串
+     * https://leetcode.cn/problems/minimum-window-substring/description/
      * 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
      * 注意：
      * 对于 t 中重复字符，我们寻找的子字符串中该字符数量必须不少于 t 中该字符数量。
@@ -108,5 +109,51 @@ public class WindowSolution {
         Assert.assertEquals("BANC", minWindow("ADOBECODEBANC", "ABC"));
         Assert.assertEquals("a", minWindow("a", "a"));
         Assert.assertEquals("", minWindow("a", "aa"));
+    }
+
+    /**
+     * 剑指 Offer 38. 字符串的排列
+     * https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/
+     * 示例:
+     * 输入：s = "abc"
+     * 输出：["abc","acb","bac","bca","cab","cba"]
+     *
+     * @param s
+     * @return
+     */
+    public String[] permutation(String s) {
+        return new String[]{};
+    }
+
+    @Test
+    public void testPermutation() {
+        Assert.assertEquals(new String[]{"abc", "acb", "bac", "bca", "cab", "cba"}, permutation("abc"));
+    }
+
+    /**
+     * 567. 字符串的排列
+     * https://leetcode.cn/problems/permutation-in-string/
+     * 给你两个字符串 s1 和 s2 ，写一个函数来判断 s2 是否包含 s1 的排列。如果是，返回 true ；否则，返回 false 。
+     * 换句话说，s1 的排列之一是 s2 的 子串 。
+     * 示例 1：
+     * 输入：s1 = "ab" s2 = "eidbaooo"
+     * 输出：true
+     * 解释：s2 包含 s1 的排列之一 ("ba").
+     * 示例 2：
+     * 输入：s1= "ab" s2 = "eidboaoo"
+     * 输出：false
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public boolean checkInclusion(String s1, String s2) {
+        return true;
+    }
+
+    @Test
+    public void testCheckInclusion() {
+        Assert.assertEquals(true, checkInclusion("ab", "eidbaooo"));
+        Assert.assertEquals(false, checkInclusion("ab", "eidboaoo"));
     }
 }
