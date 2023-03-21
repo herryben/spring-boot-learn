@@ -71,6 +71,7 @@ public class WindowSolution {
         for (char ch : t.toCharArray()) {
             need.compute(ch, (key, val) -> val == null ? 1 : ++val);
         }
+        // valid是符合条件的个数
         int valid = 0, left = 0, right = 0, start = 0, len = Integer.MAX_VALUE;
         while (right < s.length()) {
             char ch = s.charAt(right);
@@ -142,13 +143,43 @@ public class WindowSolution {
      * 示例 2：
      * 输入：s1= "ab" s2 = "eidboaoo"
      * 输出：false
-     *
+     * 解题思路：
      * @param s1
      * @param s2
      * @return
      */
     public boolean checkInclusion(String s1, String s2) {
-        return true;
+        Map<Character, Integer> window = new HashMap<>();
+        Map<Character, Integer> need = new HashMap<>();
+        for (char ch : s1.toCharArray()) {
+            need.compute(ch, (key, val) -> val == null ? 1 : ++val);
+        }
+        int left = 0, right = 0, valid = 0;
+        while (right < s2.length()) {
+            char ch = s2.charAt(right);
+            right++;
+            if (need.containsKey(ch)) {
+                window.compute(ch , (key, val) -> val == null ? 1 : ++val);
+                if (need.get(ch).equals(window.get(ch))) {
+                    valid++;
+                }
+            }
+
+            while (right - left > s1.length()) {
+                if (valid == need.size()) {
+                    return true;
+                }
+                char del = s2.charAt(left);
+                left++;
+                if (need.containsKey(del)) {
+                    if (need.get(del).equals(window.get(del))) {
+                        valid--;
+                    }
+                    window.compute(del, (key, val) -> --val);
+                }
+            }
+        }
+        return false;
     }
 
     @Test
