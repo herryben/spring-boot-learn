@@ -164,8 +164,8 @@ public class WindowSolution {
                     valid++;
                 }
             }
-
-            while (right - left > s1.length()) {
+            // 此时right已经是+1后的结果，所以right - left就是窗口字符串的长度
+            while (right - left >= s1.length()) {
                 if (valid == need.size()) {
                     return true;
                 }
@@ -184,6 +184,7 @@ public class WindowSolution {
 
     @Test
     public void testCheckInclusion() {
+        Assert.assertEquals(true, checkInclusion("ab", "ab"));
         Assert.assertEquals(true, checkInclusion("ab", "eidbaooo"));
         Assert.assertEquals(false, checkInclusion("ab", "eidboaoo"));
     }
