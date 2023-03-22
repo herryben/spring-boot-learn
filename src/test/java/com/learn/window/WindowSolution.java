@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -187,5 +189,61 @@ public class WindowSolution {
         Assert.assertEquals(true, checkInclusion("ab", "ab"));
         Assert.assertEquals(true, checkInclusion("ab", "eidbaooo"));
         Assert.assertEquals(false, checkInclusion("ab", "eidboaoo"));
+    }
+
+    /**
+     * 438.找所有字母异位词
+     * 给定一个字符串s和一个非空字符串p，找到s中所有是p的字母异位词的子串，返回这些子串的起始索引。
+     * 字符串只包含小写英文字母，并且字符串s和p的长度都不超过20100。
+     * 说明：
+     *  字母异位词指字母相同，但排列不同的字符串
+     *  不考虑答案的输出顺序
+     * 示例1：
+     *  输入：
+     *  s："cbaebabacd" p："abc"
+     *  输出：
+     *  [0, 6]
+     * @param s
+     * @param t
+     * @return
+     */
+    public int[] findAnagrams(String s, String t) {
+        Map<Character, Integer> need = new HashMap<>();
+        Map<Character, Integer> window = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+        int left = 0, right = 0, valid = 0;
+        for (char ch : t.toCharArray()) {
+            need.compute(ch, (key, val) -> null == val ? 1 : ++val);
+        }
+
+        while (right < s.length()) {
+            char ch = s.charAt(right);
+            right++;
+            if (need.containsKey(ch)) {
+                window.compute(ch, (key, val) -> null == val ? 1 : ++val);
+                if (need.get(ch).equals(window.get(ch))) {
+                    valid++;
+                }
+            }
+            while (right - left >= t.length()) {
+                if (valid == need.size()) {
+                    list.add(left);
+                }
+                char del = s.charAt(left);
+                left++;
+                if (need.containsKey(del)) {
+                    if (need.get(del).equals(window.get(del))) {
+                        valid--;
+                    }
+                    window.compute(del, (key, val) -> --val)
+                }
+            }
+        }
+        return list.stream().toArray(item -> item);
+    }
+
+    @Test
+    public void testFindAnagrams() {
+        Assert.assertEquals(new int[]{0, 6}, findAnagrams("cbaebabacd", "abc"));
     }
 }
