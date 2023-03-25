@@ -329,7 +329,7 @@ public class DpSolution {
             dp[i][0] = 1;
         }
         for (int i = 1; i <= N; i++) {
-            for (int j = 1; j<=amount;j++) {
+            for (int j = 1; j<=amount; j++) {
                 if (j >= wt[i - 1]) {
                     dp[i][j] = dp[i - 1][j] + dp[i][j - wt[i - 1]];
                 } else {
@@ -387,7 +387,135 @@ public class DpSolution {
 
     @Test
     public void testCanPartition() {
-        Assert.assertEquals(true, canPartition(new int[] {1,5,11,5}));
-        Assert.assertEquals(false, canPartition(new int[] {1,2,3,5}));
+        Assert.assertEquals(true, canPartition(new int[]{1, 5, 11, 5}));
+        Assert.assertEquals(false, canPartition(new int[]{1, 2, 3, 5}));
+    }
+
+    /**
+     * 1143. 最长公共子序列
+     * https://leetcode.cn/problems/longest-common-subsequence/
+     * 给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
+     * 一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+     * 例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
+     * 两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。
+     * 示例 1：
+     * 输入：text1 = "abcde", text2 = "ace"
+     * 输出：3
+     * 解释：最长公共子序列是 "ace" ，它的长度为 3 。
+     * 示例 2：
+     * 输入：text1 = "abc", text2 = "abc"
+     * 输出：3
+     * 解释：最长公共子序列是 "abc" ，它的长度为 3 。
+     * 示例 3：
+     * 输入：text1 = "abc", text2 = "def"
+     * 输出：0
+     * 解释：两个字符串没有公共子序列，返回 0 。
+     * 解题思路：
+     * dp[i][j]:s1[0..i-1] s2[0..j-1]它们的LCS的长度是dp[i][j]
+     * s1[i] == s2[j]=
+     * dp[i][j] = dp[i-1][j-1] + 1
+     * s1 s2都前进一步
+     * s1[i] != s2[j]
+     * dp[i][j] = Math.math(dp[i-1][j], dp[i][j-1]);
+     * s1退后一步或者s2退后一步
+     *
+     * @param text1
+     * @param text2
+     * @return
+     */
+    public int longestCommonSubsequence(String text1, String text2) {
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        for (int i = 1; i <= text1.length(); i++) {
+            for (int j = 1; j <= text2.length(); j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[text1.length()][text2.length()];
+    }
+
+    @Test
+    public void testLongestCommonSubsequence() {
+        Assert.assertEquals(3, longestCommonSubsequence("abcde", "ace"));
+        Assert.assertEquals(3, longestCommonSubsequence("abc", "abc"));
+        Assert.assertEquals(0, longestCommonSubsequence("abc", "def"));
+    }
+
+    /**
+     * 516. 最长回文子序列
+     * 给你一个字符串 s ，找出其中最长的回文子序列，并返回该序列的长度。
+     * 子序列定义为：不改变剩余字符顺序的情况下，删除某些字符或者不删除任何字符形成的一个序列。
+     * 示例 1：
+     * 输入：s = "bbbab"
+     * 输出：4
+     * 解释：一个可能的最长回文子序列为 "bbbb" 。
+     * 示例 2：
+     * 输入：s = "cbbd"
+     * 输出：2
+     * 解释：一个可能的最长回文子序列为 "bb" 。
+     * 解题思路：dp[i][j]:s[i..j]的最长回文长度
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindromeSubseq(String s) {
+        int len = s.length();
+        int[][] dp = new int[len + 1][len + 1];
+        for (int i = 0; i <= len; i++) {
+            dp[i][i] = 1;
+        }
+        // 倒着算
+        for (int i = len; i > 0; i--) {
+            for (int j = i + 1; j <= len; j++) {
+                if (s.charAt(i - 1) == s.charAt(j - 1)) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[1][len];
+    }
+
+    @Test
+    public void testLongestPalindromeSubseq() {
+        Assert.assertEquals(4, longestPalindromeSubseq("bbbab"));
+        Assert.assertEquals(2, longestPalindromeSubseq("cbbd"));
+    }
+
+    /**
+     * 解题思路：
+     * dp[i]: s[0..i-1]的最长回文长度
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindromeSubseq2(String s) {
+        int len = s.length();
+        int[] dp = new int[len + 1];
+        dp[1] = 1;
+        Arrays.fill(dp, 1);
+        for (int i = len; i > 0; i--) {
+            int pre = 0;
+            for (int j = i + 1; j <= len; j++) {
+                int tmp = dp[j];
+                if (s.charAt(i - 1) == s.charAt(j - 1)) {
+                    dp[j] = pre + 2;
+                } else {
+                    dp[j] = Math.max(dp[j], dp[j - 1]);
+                }
+                pre = tmp;
+            }
+        }
+        return dp[len];
+    }
+
+    @Test
+    public void testLongestPalindromeSubseq2() {
+        Assert.assertEquals(4, longestPalindromeSubseq2("bbbab"));
+        Assert.assertEquals(2, longestPalindromeSubseq2("cbbd"));
     }
 }
