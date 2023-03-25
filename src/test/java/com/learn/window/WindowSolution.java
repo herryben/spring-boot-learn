@@ -290,4 +290,94 @@ public class WindowSolution {
         Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 6}, findAnagrams2("cbaebabacd", "abc").toArray(new Integer[0])));
         Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 1, 2}, findAnagrams2("abab", "ab").toArray(new Integer[0])));
     }
+
+    /**
+     * 3. 无重复字符的最长子串
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+     * https://leetcode.cn/problems/longest-substring-without-repeating-characters/
+     * https://leetcode.cn/problems/longest-substring-without-repeating-characters/solutions/3982/hua-dong-chuang-kou-by-powcai/
+     * 示例 1:
+     * 输入: s = "abcabcbb"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     * 示例 2:
+     * 输入: s = "bbbbb"
+     * 输出: 1
+     * 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+     * 示例 3:
+     * 输入: s = "pwwkew"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     * 请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> window = new HashMap<>();
+        int left = 0, right = 0, len = 0;
+        while (right < s.length()) {
+            char ch = s.charAt(right);
+            right++;
+            window.compute(ch, (key, val) -> val == null ? 1 : ++val);
+            while (window.get(ch) > 1) {
+                char del = s.charAt(left);
+                left++;
+                window.compute(del, (key, val) -> --val);
+            }
+            // 这里的才是没有重复的字符串
+            len = Math.max(len, right - left);
+        }
+        return len;
+    }
+
+    @Test
+    public void testLengthOfLongestSubstring() {
+        Assert.assertEquals(3, lengthOfLongestSubstring("abcabcbb"));
+        Assert.assertEquals(1, lengthOfLongestSubstring("bbbbb"));
+        Assert.assertEquals(3, lengthOfLongestSubstring("pwwkew"));
+    }
+
+    /**
+     * 数组法
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstringArray(String s) {
+        int[] window = new int[256];
+        int left = 0, right = 0, len = 0;
+        while (right < s.length()) {
+            char ch = s.charAt(right);
+            right++;
+            window[ch]++;
+            while (window[ch] > 1) {
+                char del = s.charAt(left);
+                left++;
+                window[del]--;
+            }
+            len = Math.max(len, right - left);
+        }
+        return len;
+    }
+
+    @Test
+    public void testLengthOfLongestSubstringArray() {
+        Assert.assertEquals(3, lengthOfLongestSubstringArray("abcabcbb"));
+        Assert.assertEquals(1, lengthOfLongestSubstringArray("bbbbb"));
+        Assert.assertEquals(3, lengthOfLongestSubstringArray("pwwkew"));
+    }
+
+    public int lengthOfLongestSubstringDp(String s) {
+        int[][] dp = new int[s.length() + 1][s.length() + 1];
+
+        return dp[1][s.length()];
+    }
+
+    @Test
+    public void testLengthOfLongestSubstringDp() {
+        Assert.assertEquals(3, lengthOfLongestSubstringDp("abcabcbb"));
+        Assert.assertEquals(1, lengthOfLongestSubstringDp("bbbbb"));
+        Assert.assertEquals(3, lengthOfLongestSubstringDp("pwwkew"));
+    }
 }
