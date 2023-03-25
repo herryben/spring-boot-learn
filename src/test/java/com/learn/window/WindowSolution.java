@@ -1,6 +1,7 @@
 package com.learn.window;
 
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -460,5 +461,42 @@ public class WindowSolution {
     public void testMaxSlidingWindow() {
         Assert.assertEquals(true, Arrays.equals(new int[]{3, 3, 5, 5, 6, 7}, maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3)));
         Assert.assertEquals(true, Arrays.equals(new int[]{1}, maxSlidingWindow(new int[]{1}, 1)));
+    }
+
+    /**
+     * 632. 最小区间
+     * https://leetcode.cn/problems/smallest-range-covering-elements-from-k-lists/description/
+     * 你有 k 个 非递减排列 的整数列表。找到一个 最小 区间，使得 k 个列表中的每个列表至少有一个数包含在其中。
+     * 我们定义如果 b-a < d-c 或者在 b-a == d-c 时 a < c，则区间 [a,b] 比 [c,d] 小。
+     * 示例 1：
+     * 输入：nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]
+     * 输出：[20,24]
+     * 解释：
+     * 列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。
+     * 列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。
+     * 列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。
+     * 示例 2：
+     * 输入：nums = [[1,2,3],[1,2,3],[1,2,3]]
+     * 输出：[1,1]
+     *
+     * @param nums
+     * @return
+     */
+    public int[] smallestRange(List<List<Integer>> nums) {
+        return new int[]{};
+    }
+
+    @Test
+    public void testSmallestRange() {
+        List<List<Integer>> list1 = new ArrayList<>();
+        list1.add(Lists.newArrayList(4, 10, 15, 24, 26));
+        list1.add(Lists.newArrayList(0, 9, 12, 20));
+        list1.add(Lists.newArrayList(5, 18, 22, 30));
+        Assert.assertEquals(true, Arrays.equals(new int[]{20, 24}, smallestRange(list1)));
+        List<List<Integer>> list2 = new ArrayList<>();
+        list2.add(Lists.newArrayList(1, 2, 3));
+        list2.add(Lists.newArrayList(1, 2, 3));
+        list2.add(Lists.newArrayList(1, 2, 3));
+        Assert.assertEquals(true, Arrays.equals(new int[]{1, 1}, smallestRange(list2)));
     }
 }
