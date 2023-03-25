@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public class WindowSolution {
@@ -193,26 +190,32 @@ public class WindowSolution {
 
     /**
      * 438.找所有字母异位词
-     * 给定一个字符串s和一个非空字符串p，找到s中所有是p的字母异位词的子串，返回这些子串的起始索引。
-     * 字符串只包含小写英文字母，并且字符串s和p的长度都不超过20100。
-     * 说明：
-     *  字母异位词指字母相同，但排列不同的字符串
-     *  不考虑答案的输出顺序
+     * 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+     * 异位词 指由相同字母重排列形成的字符串（包括相同的字符串）。
      * 示例1：
-     *  输入：
-     *  s："cbaebabacd" p："abc"
-     *  输出：
-     *  [0, 6]
+     * 输入: s = "cbaebabacd", p = "abc"
+     * 输出: [0,6]
+     * 解释:
+     * 起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
+     * 起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
+     * 示例 2:
+     * 输入: s = "abab", p = "ab"
+     * 输出: [0,1,2]
+     * 解释:
+     * 起始索引等于 0 的子串是 "ab", 它是 "ab" 的异位词。
+     * 起始索引等于 1 的子串是 "ba", 它是 "ab" 的异位词。
+     * 起始索引等于 2 的子串是 "ab", 它是 "ab" 的异位词。
+     *
      * @param s
-     * @param t
+     * @param p
      * @return
      */
-    public int[] findAnagrams(String s, String t) {
+    public List<Integer> findAnagrams(String s, String p) {
         Map<Character, Integer> need = new HashMap<>();
         Map<Character, Integer> window = new HashMap<>();
         List<Integer> list = new ArrayList<>();
         int left = 0, right = 0, valid = 0;
-        for (char ch : t.toCharArray()) {
+        for (char ch : p.toCharArray()) {
             need.compute(ch, (key, val) -> null == val ? 1 : ++val);
         }
 
@@ -225,7 +228,7 @@ public class WindowSolution {
                     valid++;
                 }
             }
-            while (right - left >= t.length()) {
+            while (right - left >= p.length()) {
                 if (valid == need.size()) {
                     list.add(left);
                 }
@@ -235,15 +238,16 @@ public class WindowSolution {
                     if (need.get(del).equals(window.get(del))) {
                         valid--;
                     }
-                    window.compute(del, (key, val) -> --val)
+                    window.compute(del, (key, val) -> --val);
                 }
             }
         }
-        return list.stream().toArray(item -> item);
+        return list;
     }
 
     @Test
     public void testFindAnagrams() {
-        Assert.assertEquals(new int[]{0, 6}, findAnagrams("cbaebabacd", "abc"));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 6}, findAnagrams("cbaebabacd", "abc").toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 1, 2}, findAnagrams("abab", "ab").toArray(new Integer[0])));
     }
 }
