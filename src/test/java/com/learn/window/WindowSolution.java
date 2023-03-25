@@ -250,4 +250,44 @@ public class WindowSolution {
         Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 6}, findAnagrams("cbaebabacd", "abc").toArray(new Integer[0])));
         Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 1, 2}, findAnagrams("abab", "ab").toArray(new Integer[0])));
     }
+
+    /**
+     * 解题思路：
+     * 滑动窗口的另一种写法（还可以用dffi计算做优化）
+     *
+     * @param s
+     * @param p
+     * @return
+     */
+    public List<Integer> findAnagrams2(String s, String p) {
+        List<Integer> ans = new ArrayList<>();
+        int sLen = s.length(), pLen = p.length();
+        if (sLen < pLen) {
+            return ans;
+        }
+        int[] sCount = new int[26];
+        int[] pCount = new int[26];
+        for (int i = 0; i < pLen; i++) {
+            ++sCount[s.charAt(i) - 'a'];
+            ++pCount[p.charAt(i) - 'a'];
+        }
+        if (Arrays.equals(sCount, pCount)) {
+            ans.add(0);
+        }
+
+        for (int i = 0; i < sLen - pLen; i++) {
+            ++sCount[s.charAt(i + pLen) - 'a'];
+            --sCount[s.charAt(i) - 'a'];
+            if (Arrays.equals(sCount, pCount)) {
+                ans.add(i + 1);
+            }
+        }
+        return ans;
+    }
+
+    @Test
+    public void testFindAnagrams2() {
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 6}, findAnagrams2("cbaebabacd", "abc").toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 1, 2}, findAnagrams2("abab", "ab").toArray(new Integer[0])));
+    }
 }
