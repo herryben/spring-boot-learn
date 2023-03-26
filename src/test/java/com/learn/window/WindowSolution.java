@@ -369,14 +369,30 @@ public class WindowSolution {
         Assert.assertEquals(3, lengthOfLongestSubstringArray("pwwkew"));
     }
 
+    /**
+     * dp[i][]: s[0..i]的无重复字符的最长子串长度
+     *
+     * @param s
+     * @return
+     */
     public int lengthOfLongestSubstringDp(String s) {
-        int[][] dp = new int[s.length() + 1][s.length() + 1];
-
-        return dp[1][s.length()];
+        int[] dp = new int[s.length()];
+        int len = s.length();
+        dp[0] = 1;
+        for (int i = 1; i < len; i++) {
+            int idx = s.indexOf(s.charAt(i), i - dp[i - 1]);
+            if (idx < i) {
+                dp[i] = i - idx;
+            } else {
+                dp[i] = dp[i - 1] + 1;
+            }
+        }
+        return Arrays.stream(dp).max().getAsInt();
     }
 
     @Test
     public void testLengthOfLongestSubstringDp() {
+        Assert.assertEquals(3, lengthOfLongestSubstringDp("abcab"));
         Assert.assertEquals(3, lengthOfLongestSubstringDp("abcabcbb"));
         Assert.assertEquals(1, lengthOfLongestSubstringDp("bbbbb"));
         Assert.assertEquals(3, lengthOfLongestSubstringDp("pwwkew"));
