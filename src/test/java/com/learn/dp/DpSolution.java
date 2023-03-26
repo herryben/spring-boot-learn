@@ -518,4 +518,159 @@ public class DpSolution {
         Assert.assertEquals(4, longestPalindromeSubseq2("bbbab"));
         Assert.assertEquals(2, longestPalindromeSubseq2("cbbd"));
     }
+
+    /**
+     * 647. 回文子串
+     * https://leetcode.cn/problems/palindromic-substrings/description/
+     * 给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。
+     * 回文字符串 是正着读和倒过来读一样的字符串。
+     * 子字符串 是字符串中的由连续字符组成的一个序列。
+     * 具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串。
+     * 示例 1：
+     * 输入：s = "abc"
+     * 输出：3
+     * 解释：三个回文子串: "a", "b", "c"
+     * 示例 2：
+     * 输入：s = "aaa"
+     * 输出：6
+     * 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
+     * 解题思路：
+     * 中心扩展法，分奇数、偶数扩展
+     *
+     * @param s
+     * @return
+     */
+    public int countSubstrings(String s) {
+        int ans = 0;
+        for (int center = 0; center < s.length(); center++) {
+            ans += expend(s, center, center) + expend(s, center, center + 1);
+        }
+        return ans;
+    }
+
+    private int expend(String s, int left, int right) {
+        int ans = 0;
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+            ans++;
+        }
+        return ans;
+    }
+
+    @Test
+    public void testCountSubstrings() {
+        Assert.assertEquals(3, countSubstrings("abc"));
+        Assert.assertEquals(6, countSubstrings("aaa"));
+    }
+
+    /**
+     * 解题思路
+     * 中心扩展法 枚举所有中心点
+     * 由此我们可以看出长度为 n 的字符串会生成 2n−1 组回文中心
+     * 其中l=i/2, r=l+ i mod 2
+     *
+     * @param s
+     * @return
+     */
+    public int countSubstrings2(String s) {
+        int ans = 0;
+        for (int center = 0; center < 2 * s.length() - 1; center++) {
+            int left = center / 2, right = left + center % 2;
+            while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+                left--;
+                right++;
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    @Test
+    public void testCountSubstrings2() {
+        Assert.assertEquals(3, countSubstrings2("abc"));
+        Assert.assertEquals(6, countSubstrings2("aaa"));
+    }
+
+    /**
+     * dp法
+     * dp[i][j] = s[i..j]的回文子串个数
+     *
+     * @param s
+     * @return
+     */
+    public int countSubstringsDp(String s) {
+        int len = s.length(), ans = 0;
+        int[][] dp = new int[len][len];
+        for (int i = len - 1; i >= 0; i--) {
+            // 中心分奇偶数 所以从i开始
+            for (int j = i; j < len; j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    if (j <= i + 1) {
+                        // "a" 和 "aa" 的情况
+                        dp[i][j] = 1;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1];
+                    }
+                }
+                ans += dp[i][j];
+            }
+        }
+        return Arrays.stream(dp).flatMapToInt(Arrays::stream).sum();
+    }
+
+    @Test
+    public void testCountSubstringsDp() {
+        Assert.assertEquals(3, countSubstringsDp("abc"));
+        Assert.assertEquals(6, countSubstringsDp("aaa"));
+    }
+
+    /**
+     * 解题思路：
+     * Manacher马拉车
+     * f[i] 我们用 f(i) 来表示以 s 的第 i 位为回文中心，可以拓展出的最大回文半径，那么 f(i)−1就是以 i 为中心的最大回文串长度
+     *
+     * @param s
+     * @return
+     */
+    public int countSubstringsManacher(String s) {
+        int len = s.length();
+        StringBuilder sb = new StringBuilder("$#");
+        for (int i = 0; i < len; ++i) {
+            sb.append(s.charAt(i));
+            sb.append('#');
+        }
+        len = sb.length();
+        sb.append('!');
+
+        int[] f = new int[len];
+        int iMax = 0, rMax = 0, ans = 0;
+        for (int i = 1; i < len; i++) {
+            // 初始化f[i]
+            if (i <= rMax) {
+                // 对称位置和rMax-i取最小
+                f[i] = Math.min(f[2 * iMax - i], rMax - i);
+            } else {
+                f[i] = 1;
+            }
+            // 中心拓展
+            while (sb.charAt(i + f[i]) == sb.charAt(i - f[i])) {
+                ++f[i];
+            }
+            // 动态维护 iMax 和 rMax
+            if (i + f[i] > rMax) {
+                iMax = i;
+                rMax = i + f[i];
+            }
+            // 统计答案, 当前贡献为 (f[i] - 1) / 2 上取整,f[i] - 1即是回文字符串长度
+            ans += f[i] / 2;
+        }
+        return ans;
+    }
+
+    @Test
+    public void testCountSubstringsManacher() {
+//        Assert.assertEquals(3, countSubstringsManacher("abc"));
+        Assert.assertEquals(6, countSubstringsManacher("aaa"));
+    }
 }
