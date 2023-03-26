@@ -1,10 +1,13 @@
 package com.learn.dp;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 
+@Slf4j
 public class DpSolution {
     /**
      * 70. 爬楼梯
@@ -543,12 +546,12 @@ public class DpSolution {
     public int countSubstrings(String s) {
         int ans = 0;
         for (int center = 0; center < s.length(); center++) {
-            ans += expend(s, center, center) + expend(s, center, center + 1);
+            ans += expendCountSubstrings(s, center, center) + expendCountSubstrings(s, center, center + 1);
         }
         return ans;
     }
 
-    private int expend(String s, int left, int right) {
+    private int expendCountSubstrings(String s, int left, int right) {
         int ans = 0;
         while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
             left--;
@@ -673,5 +676,130 @@ public class DpSolution {
     public void testCountSubstringsManacher() {
         Assert.assertEquals(3, countSubstringsManacher("abc"));
         Assert.assertEquals(6, countSubstringsManacher("aaa"));
+    }
+
+    /**
+     * 5. 最长回文子串
+     * 给你一个字符串 s，找到 s 中最长的回文子串。
+     * 如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+     * 示例 1：
+     * 输入：s = "babad"
+     * 输出："bab"
+     * 解释："aba" 同样是符合题意的答案。
+     * 示例 2：
+     * 输入：s = "cbbd"
+     * 输出："bb"
+     * 解题思路：中心扩展法
+     *
+     * @param s
+     * @return
+     */
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len = Math.max(expendLongestPalindrome(s, i, i), expendLongestPalindrome(s, i, i + 1));
+            if (end - start < len) {
+                // 兼容bb 和 aba2种情况
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        // substring左闭右开
+        return s.substring(start, end + 1);
+    }
+
+    private int expendLongestPalindrome(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        // 符合条件后又向两边扩扩了，所以(right - left + 1) - 2 = right - left - 1
+        return right - left - 1;
+    }
+
+    @Test
+    public void testLongestPalindrome() {
+        String res = longestPalindrome("babad");
+        Assert.assertEquals(true, StringUtils.equals("bab", res) || StringUtils.equals("aba", res));
+        Assert.assertEquals(true, StringUtils.equals("bb", longestPalindrome("cbbd")));
+    }
+
+    public String longestPalindromeDp(String s) {
+        int len = s.length();
+        boolean[][] dp = new boolean[len][len];
+        int start = 0, maxLen = 0;
+        for (int i = len - 1; i >= 0; i--) {
+            for (int j = i; j < len; j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    if (j <= i + 1) {
+                        dp[i][j] = true;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1];
+                    }
+                }
+                if (dp[i][j] && j - i + 1 > maxLen) {
+                    maxLen = j - i + 1;
+                    start = i;
+                }
+            }
+        }
+        return s.substring(start, start + maxLen);
+    }
+
+    @Test
+    public void testLongestPalindromeDp() {
+        String res = longestPalindromeDp("babad");
+        Assert.assertEquals(true, StringUtils.equals("bab", res) || StringUtils.equals("aba", res));
+        Assert.assertEquals(true, StringUtils.equals("bb", longestPalindromeDp("cbbd")));
+    }
+
+    public String longestPalindromeManacher(String s) {
+        int len = s.length();
+        StringBuilder sb = new StringBuilder("$#");
+        for (int i = 0; i < len; i++) {
+            sb.append(s.charAt(i)).append("#");
+        }
+        len = sb.length();
+        sb.append("!");
+        int[] f = new int[len];
+        int rMax = 0, iMax = 0, start = 0, end = 0;
+        for (int i = 1; i < len; i++) {
+            // 都是通过i推理出来的 所以肯定和i有关系
+            f[i] = i <= rMax ? Math.min(rMax - i, f[2 * iMax - i]) : 1;
+            // 中心扩展
+            while (sb.charAt(i + f[i]) == sb.charAt(i - f[i])) {
+                f[i]++;
+            }
+            // 最右端又往远了，更新中心和半径
+            if (i + f[i] > rMax) {
+                iMax = i;
+                rMax = i + f[i];
+            }
+
+            // 回文子串长度
+            if (2 * f[i] - 1 > end - start) {
+                // (f[i] - 1) 计算出的间隔
+                start = i - (f[i] - 1);
+                end = i + (f[i] - 1);
+            }
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i = start; i <= end; i++) {
+            if (sb.charAt(i) != '#') {
+                ans.append(sb.charAt(i));
+            }
+        }
+        return ans.toString();
+    }
+
+    @Test
+    public void testLongestPalindromeManacher() {
+        String res = longestPalindromeManacher("babad");
+        log.info("testLongestPalindromeManacher res={}", res);
+        Assert.assertEquals(true, StringUtils.equals("bab", res) || StringUtils.equals("aba", res));
+        Assert.assertEquals(true, StringUtils.equals("bb", longestPalindromeManacher("cbbd")));
     }
 }
