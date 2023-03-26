@@ -670,7 +670,7 @@ public class DpSolution {
 
     @Test
     public void testCountSubstringsManacher() {
-//        Assert.assertEquals(3, countSubstringsManacher("abc"));
+        Assert.assertEquals(3, countSubstringsManacher("abc"));
         Assert.assertEquals(6, countSubstringsManacher("aaa"));
     }
 }

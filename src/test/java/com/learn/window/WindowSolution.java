@@ -380,6 +380,7 @@ public class WindowSolution {
         int len = s.length();
         dp[0] = 1;
         for (int i = 1; i < len; i++) {
+            // 看重复的字符在i前面还是后面
             int idx = s.indexOf(s.charAt(i), i - dp[i - 1]);
             if (idx < i) {
                 dp[i] = i - idx;
