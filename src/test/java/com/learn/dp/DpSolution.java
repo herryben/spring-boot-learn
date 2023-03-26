@@ -663,6 +663,7 @@ public class DpSolution {
                 rMax = i + f[i];
             }
             // 统计答案, 当前贡献为 (f[i] - 1) / 2 上取整,f[i] - 1即是回文字符串长度
+            // 左一半加上有一半
             ans += f[i] / 2;
         }
         return ans;
