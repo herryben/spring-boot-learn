@@ -209,7 +209,38 @@ public class SortSolution {
      * @return
      */
     public int findKthLargest(int[] nums, int k) {
-        return nums[k];
+        return quickSort(nums, nums.length - k, 0, nums.length - 1);
+    }
+
+    public int quickSort(int[] nums, int kTh, int left, int right) {
+        if (left == right) {
+            return nums[left];
+        } else {
+            int idx = partition(nums, left, right);
+            if (idx == kTh) {
+                return nums[kTh];
+            } else if (idx > kTh) {
+                return quickSort(nums, kTh, left, idx - 1);
+            } else {
+                return quickSort(nums, kTh, idx + 1, right);
+            }
+        }
+    }
+
+    public int partition(int[] nums, int left, int right) {
+        int pivot = nums[left], i = left, j = right;
+        while (i < j) {
+            while (i < j && pivot <= nums[j]) {
+                j--;
+            }
+            nums[i] = nums[j];
+            while (i < j && pivot > nums[i]) {
+                i++;
+            }
+            nums[j] = nums[i];
+        }
+        nums[i] = pivot;
+        return i;
     }
 
     @Test
