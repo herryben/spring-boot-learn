@@ -331,6 +331,9 @@ public class TestSort {
         }
     }
 
+    /**
+     * 本质是从尾到头，随机交换
+     */
     @Test
     public void shuffle() {
         init();

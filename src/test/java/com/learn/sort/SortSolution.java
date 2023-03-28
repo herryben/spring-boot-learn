@@ -1,10 +1,13 @@
 package com.learn.sort;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Random;
 
+@Slf4j
 public class SortSolution {
     /**
      * 875. 爱吃香蕉的珂珂
@@ -216,7 +219,7 @@ public class SortSolution {
         if (left == right) {
             return nums[left];
         } else {
-            int idx = partition(nums, left, right);
+            int idx = partition(nums, kTh, left, right);
             if (idx == kTh) {
                 return nums[kTh];
             } else if (idx > kTh) {
@@ -227,8 +230,13 @@ public class SortSolution {
         }
     }
 
-    public int partition(int[] nums, int left, int right) {
-        int pivot = nums[left], i = left, j = right;
+    public int partition(int[] nums, int kTh, int left, int right) {
+        Random random = new Random();
+        // nextInt[0, bound)
+        int idx = left + random.nextInt(right - left + 1), i = left, j = right;
+        int pivot = nums[idx];
+        nums[idx] = nums[left];
+        nums[left] = pivot;
         while (i < j) {
             while (i < j && pivot <= nums[j]) {
                 j--;
@@ -243,9 +251,19 @@ public class SortSolution {
         return i;
     }
 
+
     @Test
     public void testFindKthLargest() {
         Assert.assertEquals(5, findKthLargest(new int[]{3, 2, 1, 5, 6, 4}, 2));
         Assert.assertEquals(4, findKthLargest(new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4));
+    }
+
+    @Test
+    public void testRandom() {
+        Random random = new Random();
+        int left = 0, right = 2;
+        for (int i = 0; i < 20; i++) {
+            log.info("nextInt={}", (left + random.nextInt(right - left)));
+        }
     }
 }
