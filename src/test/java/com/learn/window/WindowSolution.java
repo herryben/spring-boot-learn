@@ -268,6 +268,7 @@ public class WindowSolution {
         }
         int[] sCount = new int[26];
         int[] pCount = new int[26];
+        // 长度为p，不是s
         for (int i = 0; i < pLen; i++) {
             ++sCount[s.charAt(i) - 'a'];
             ++pCount[p.charAt(i) - 'a'];
@@ -277,6 +278,7 @@ public class WindowSolution {
         }
 
         for (int i = 0; i < sLen - pLen; i++) {
+            // 移动窗口
             ++sCount[s.charAt(i + pLen) - 'a'];
             --sCount[s.charAt(i) - 'a'];
             if (Arrays.equals(sCount, pCount)) {
@@ -321,6 +323,7 @@ public class WindowSolution {
             char ch = s.charAt(right);
             right++;
             window.compute(ch, (key, val) -> val == null ? 1 : ++val);
+            // 只要有重复的就缩小敞口
             while (window.get(ch) > 1) {
                 char del = s.charAt(left);
                 left++;
@@ -383,8 +386,10 @@ public class WindowSolution {
             // 看重复的字符在i前面还是后面
             int idx = s.indexOf(s.charAt(i), i - dp[i - 1]);
             if (idx < i) {
+                // 在前面则长度未idx到i
                 dp[i] = i - idx;
             } else {
+                // 在后面则长度+1
                 dp[i] = dp[i - 1] + 1;
             }
         }
