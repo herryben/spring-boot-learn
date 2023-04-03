@@ -460,7 +460,7 @@ public class WindowSolution {
      * 解释：
      * 滑动窗口的位置                最大值
      * ---------------               -----
-     * [1  3  -1] -3  5  3  6  7       3
+     * [1  3  -1] -3  5  3  6  7      3
      * 1 [3  -1  -3] 5  3  6  7       3
      * 1  3 [-1  -3  5] 3  6  7       5
      * 1  3  -1 [-3  5  3] 6  7       5
@@ -475,7 +475,25 @@ public class WindowSolution {
      * @return
      */
     public int[] maxSlidingWindow(int[] nums, int k) {
-        int[] ans = new int[k];
+        int[] ans = new int[nums.length - k + 1];
+        Deque<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < k; i++) {
+            while (!queue.isEmpty() && nums[queue.peekLast()] < nums[i]) {
+                queue.pollLast();
+            }
+            queue.offer(i);
+        }
+        ans[0] = nums[queue.peekFirst()];
+        for (int i = k; i < nums.length; i++) {
+            while (!queue.isEmpty() && nums[queue.peekLast()] < nums[i]) {
+                queue.pollLast();
+            }
+            queue.offerLast(i);
+            ans[i - k + 1] = nums[queue.peekFirst()];
+            while (i - queue.peekFirst() + 1 > k) {
+                queue.pollFirst();
+            }
+        }
         return ans;
     }
 
