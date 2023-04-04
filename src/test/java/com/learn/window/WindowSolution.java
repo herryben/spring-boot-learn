@@ -566,7 +566,7 @@ public class WindowSolution {
             int rNum = nums[right];
             sum += rNum;
             right++;
-            while (sum >= target) {
+            while (left < nums.length && sum >= target) {
                 len = Math.min(len, right - left);
                 sum -= nums[left];
                 left++;
@@ -580,5 +580,6 @@ public class WindowSolution {
         Assert.assertEquals(2, minSubArrayLen(7, new int[]{2, 3, 1, 2, 4, 3}));
         Assert.assertEquals(1, minSubArrayLen(4, new int[]{1, 4, 4}));
         Assert.assertEquals(0, minSubArrayLen(11, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
+        Assert.assertEquals(0, minSubArrayLen(0, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
     }
 }
