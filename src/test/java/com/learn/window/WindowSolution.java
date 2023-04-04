@@ -561,13 +561,24 @@ public class WindowSolution {
      * @return
      */
     public int minSubArrayLen(int target, int[] nums) {
-        return target;
+        int left = 0 , right = 0, len = Integer.MAX_VALUE, sum = 0;
+        while (right < nums.length) {
+            int rNum = nums[right];
+            sum += rNum;
+            right++;
+            while (sum >= target) {
+                len = Math.min(len, right - left);
+                sum -= nums[left];
+                left++;
+            }
+        }
+        return len == Integer.MAX_VALUE ? 0 : len;
     }
 
     @Test
     public void testMinSubArrayLen() {
         Assert.assertEquals(2, minSubArrayLen(7, new int[]{2, 3, 1, 2, 4, 3}));
         Assert.assertEquals(1, minSubArrayLen(4, new int[]{1, 4, 4}));
-        Assert.assertEquals(0, minSubArrayLen(0, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
+        Assert.assertEquals(0, minSubArrayLen(11, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
     }
 }
