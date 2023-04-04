@@ -438,7 +438,37 @@ public class WindowSolution {
      */
     public List<Integer> findSubstring(String s, String[] words) {
         List<Integer> ans = new ArrayList<>();
-        int left = 0, right = 0;
+        int len = words[0].length();
+        if (s.length() < len * words.length) {
+            return ans;
+        }
+        Map<String, Integer> window = new HashMap<>();
+        Map<String, Integer> need = new HashMap<>();
+        for (String word : words) {
+            need.compute(word, (key, val) -> val == null ? 1 : ++val);
+        }
+        int left = 0, right = 0, valid = 0;
+        while (right < s.length()) {
+            String str = right + len <= s.length() ? s.substring(right, right + len) : s.substring(right);
+            right = right + len + 1 <= s.length() ? right + len : s.length();
+            if (need.containsKey(str)) {
+                window.compute(str, (key, val) -> val == null ? 0 : ++val);
+                if (window.get(str).equals(need.get(str))) {
+                    valid++;
+                }
+            }
+            while (valid == len) {
+                ans.add(left);
+                String del = left + len <= s.length() ? s.substring(left, left + len) : s.substring(left);
+                left = left + len <= s.length() ? left + len : s.length();
+                if (need.containsKey(del)) {
+                    if (window.get(del).equals(need.get(del))) {
+                        valid--;
+                    }
+                    window.compute(del, (key, value) -> --value);
+                }
+            }
+        }
         return ans;
     }
 
