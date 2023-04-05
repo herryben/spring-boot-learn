@@ -475,6 +475,62 @@ public class WindowSolution {
         Assert.assertEquals(true, Arrays.equals(new Integer[]{6, 9, 12}, findSubstring("barfoofoobarthefoobarman", new String[]{"bar", "foo", "the"}).toArray(new Integer[0])));
     }
 
+    /**
+     * 解题思路：常规滑动窗口+字符串长度内逐一尝试
+     *
+     * @param s
+     * @param words
+     * @return
+     */
+    public List<Integer> findSubstringSliding(String s, String[] words) {
+        List<Integer> ans = new ArrayList<>();
+        int wordLen = words[0].length();
+        if (s.length() < wordLen * words.length) {
+            return ans;
+        }
+        Map<String, Integer> need = new HashMap<>();
+        for (String word : words) {
+            need.compute(word, (key, val) -> val == null ? 1 : ++val);
+        }
+        for (int start = 0; start < wordLen; start++) {
+            int left = start, right = start, valid = 0;
+            Map<String, Integer> window = new HashMap<>();
+            while (right < s.length()) {
+                String str = right + wordLen < s.length() ? s.substring(right, right + wordLen) : s.substring(right);
+                right += wordLen;
+                if (need.containsKey(str)) {
+                    window.compute(str, (key, val) -> val == null ? 1 : ++val);
+                    if (need.get(str).equals(window.get(str))) {
+                        valid++;
+                    }
+                }
+                while (right - left >= words.length * wordLen) {
+                    if (right - left == words.length * wordLen && valid == need.size()) {
+                        ans.add(left);
+                    }
+                    String del = left + wordLen < s.length() ? s.substring(left, left + wordLen) : s.substring(left);
+                    left += wordLen;
+                    if (need.containsKey(del)) {
+                        if (need.get(del).equals(window.get(del))) {
+                            valid--;
+                        }
+                        window.compute(del, (key, val) -> --val);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+
+    @Test
+    public void findSubstringSliding() {
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{1}, findSubstringSliding("ababaab", new String[]{"ab", "ba", "ba"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{13}, findSubstringSliding("lingmindraboofooowingdingbarrwingmonkeypoundcake", new String[]{"fooo", "barr", "wing", "ding", "wing"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{8}, findSubstringSliding("wordgoodgoodgoodbestword", new String[]{"word", "good", "best", "good"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 9}, findSubstringSliding("barfoothefoobarman", new String[]{"foo", "bar"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{}, findSubstringSliding("wordgoodgoodgoodbestword", new String[]{"word", "good", "best", "word"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{6, 9, 12}, findSubstringSliding("barfoofoobarthefoobarman", new String[]{"bar", "foo", "the"}).toArray(new Integer[0])));
+    }
 
     /**
      * 239. 滑动窗口最大值
