@@ -431,7 +431,7 @@ public class WindowSolution {
      * 子串 "foobarthe" 开始位置是 6。它是 words 中以 ["foo","bar","the"] 顺序排列的连接。
      * 子串 "barthefoo" 开始位置是 9。它是 words 中以 ["bar","the","foo"] 顺序排列的连接。
      * 子串 "thefoobar" 开始位置是 12。它是 wor
-     *
+     * 解题思路：以len * words.length为窗口一直滑动
      * @param s
      * @param words
      * @return
@@ -442,30 +442,23 @@ public class WindowSolution {
         if (s.length() < len * words.length) {
             return ans;
         }
-        Map<String, Integer> window = new HashMap<>();
         Map<String, Integer> need = new HashMap<>();
         for (String word : words) {
             need.compute(word, (key, val) -> val == null ? 1 : ++val);
         }
-        int left = 0, right = 0, valid = 0;
-        while (right < s.length()) {
-            String str = right + len <= s.length() ? s.substring(right, right + len) : s.substring(right);
-            right = right + len + 1 <= s.length() ? right + len : s.length();
-            if (need.containsKey(str)) {
-                window.compute(str, (key, val) -> val == null ? 0 : ++val);
-                if (window.get(str).equals(need.get(str))) {
-                    valid++;
-                }
-            }
-            while (valid == len) {
-                ans.add(left);
-                String del = left + len <= s.length() ? s.substring(left, left + len) : s.substring(left);
-                left = left + len <= s.length() ? left + len : s.length();
-                if (need.containsKey(del)) {
-                    if (window.get(del).equals(need.get(del))) {
-                        valid--;
+        for (int i = len * words.length - 1; i < s.length(); i++) {
+            Map<String, Integer> window = new HashMap<>();
+            int valid = 0;
+            for (int j = i - len * words.length + 1; j <= i; j += len) {
+                String str = s.substring(j, j + len);
+                if (need.containsKey(str)) {
+                    window.compute(str, (key, val) -> val == null ? 1 : ++val);
+                    if (need.get(str).equals(window.get(str))) {
+                        valid++;
                     }
-                    window.compute(del, (key, value) -> --value);
+                    if (valid == need.keySet().size()) {
+                        ans.add(i - len * words.length + 1);
+                    }
                 }
             }
         }
@@ -474,10 +467,14 @@ public class WindowSolution {
 
     @Test
     public void testFindSubstring() {
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{1}, findSubstring("ababaab", new String[]{"ab", "ba", "ba"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{13}, findSubstring("lingmindraboofooowingdingbarrwingmonkeypoundcake", new String[]{"fooo", "barr", "wing", "ding", "wing"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{8}, findSubstring("wordgoodgoodgoodbestword", new String[]{"word", "good", "best", "good"}).toArray(new Integer[0])));
         Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 9}, findSubstring("barfoothefoobarman", new String[]{"foo", "bar"}).toArray(new Integer[0])));
         Assert.assertEquals(true, Arrays.equals(new Integer[]{}, findSubstring("wordgoodgoodgoodbestword", new String[]{"word", "good", "best", "word"}).toArray(new Integer[0])));
-        Assert.assertEquals(true, Arrays.equals(new Integer[]{0, 9}, findSubstring("barfoofoobarthefoobarman", new String[]{"bar", "foo", "the"}).toArray(new Integer[0])));
+        Assert.assertEquals(true, Arrays.equals(new Integer[]{6, 9, 12}, findSubstring("barfoofoobarthefoobarman", new String[]{"bar", "foo", "the"}).toArray(new Integer[0])));
     }
+
 
     /**
      * 239. 滑动窗口最大值
