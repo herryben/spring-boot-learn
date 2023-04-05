@@ -113,7 +113,7 @@ public class WindowSolution {
     }
 
     /**
-     * 剑指 Offer 38. 字符串的排列
+     * TODO 剑指 Offer 38. 字符串的排列
      * https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/
      * 示例:
      * 输入：s = "abc"
@@ -606,7 +606,52 @@ public class WindowSolution {
      * @return
      */
     public int[] smallestRange(List<List<Integer>> nums) {
-        return new int[]{};
+        int size = nums.size();
+        Map<Integer, List<Integer>> indices = new HashMap<Integer, List<Integer>>();
+        int xMin = Integer.MAX_VALUE, xMax = Integer.MIN_VALUE;
+        for (int i = 0; i < size; i++) {
+            for (int x : nums.get(i)) {
+                List<Integer> list = indices.getOrDefault(x, new ArrayList<Integer>());
+                list.add(i);
+                indices.put(x, list);
+                xMin = Math.min(xMin, x);
+                xMax = Math.max(xMax, x);
+            }
+        }
+
+        int[] freq = new int[size];
+        int inside = 0;
+        int left = xMin, right = xMin - 1;
+        int bestLeft = xMin, bestRight = xMax;
+
+        while (right < xMax) {
+            right++;
+            if (indices.containsKey(right)) {
+                for (int x : indices.get(right)) {
+                    freq[x]++;
+                    if (freq[x] == 1) {
+                        inside++;
+                    }
+                }
+                while (inside == size) {
+                    if (right - left < bestRight - bestLeft) {
+                        bestLeft = left;
+                        bestRight = right;
+                    }
+                    if (indices.containsKey(left)) {
+                        for (int x : indices.get(left)) {
+                            freq[x]--;
+                            if (freq[x] == 0) {
+                                inside--;
+                            }
+                        }
+                    }
+                    left++;
+                }
+            }
+        }
+
+        return new int[]{bestLeft, bestRight};
     }
 
     @Test
