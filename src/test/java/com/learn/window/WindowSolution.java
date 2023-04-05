@@ -665,4 +665,50 @@ public class WindowSolution {
         Assert.assertEquals(0, minSubArrayLen(11, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
         Assert.assertEquals(0, minSubArrayLen(0, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
     }
+
+    /**
+     * 解题思路：前缀和+二分查找
+     *
+     * @param target
+     * @param nums
+     * @return
+     */
+    public int minSubArrayLenPrefixSumBinary(int target, int[] nums) {
+        int[] prefixSum = new int[nums.length + 1];
+        for (int i = 1; i <= nums.length; i++) {
+            prefixSum[i] = prefixSum[i - 1] + nums[i - 1];
+        }
+        int ans = Integer.MAX_VALUE;
+        for (int i = 1; i <= nums.length; i++) {
+            // 算出 nums[0..idx-1] - nums[0..i] >= target 即:i..idx的和
+            int sum = target + prefixSum[i - 1];
+            int idx = minSubArrayLenPrefixSumBinaryLowBound(prefixSum, sum);
+            if (idx > 0) {
+                ans = Math.min(ans, idx - i + 1);
+            }
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+
+    private int minSubArrayLenPrefixSumBinaryLowBound(int[] data, int target) {
+        int left = 0, right = data.length - 1;
+        while (left < right) {
+            int mid = (left + right) >> 1;
+            if (data[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return data[left] >= target ? left : -1;
+    }
+
+    @Test
+    public void testMinSubArrayLenPrefixSumBinary() {
+        Assert.assertEquals(1, minSubArrayLenPrefixSumBinary(7, new int[]{1, 1, 1, 1, 7}));
+        Assert.assertEquals(2, minSubArrayLenPrefixSumBinary(7, new int[]{2, 3, 1, 2, 4, 3}));
+        Assert.assertEquals(1, minSubArrayLenPrefixSumBinary(4, new int[]{1, 4, 4}));
+        Assert.assertEquals(0, minSubArrayLenPrefixSumBinary(11, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
+        Assert.assertEquals(0, minSubArrayLenPrefixSumBinary(0, new int[]{1, 1, 1, 1, 1, 1, 1, 1}));
+    }
 }
