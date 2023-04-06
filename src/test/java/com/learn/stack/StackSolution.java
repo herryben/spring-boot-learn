@@ -3,7 +3,7 @@ package com.learn.stack;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class StackSolution {
     /**
@@ -64,7 +64,7 @@ public class StackSolution {
     }
 
     /**
-     * TODO 496. 下一个更大元素 I
+     * 496. 下一个更大元素 I
      * https://leetcode.cn/problems/next-greater-element-i/description/
      * nums1 中数字 x 的 下一个更大元素 是指 x 在 nums2 中对应位置 右侧 的 第一个 比 x 大的元素。
      * 给你两个 没有重复元素 的数组 nums1 和 nums2 ，下标从 0 开始计数，其中nums1 是 nums2 的子集。
@@ -90,7 +90,20 @@ public class StackSolution {
      * @return
      */
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-        return nums1;
+        int[] ans = new int[nums1.length];
+        Deque<Integer> stack = new LinkedList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = nums2.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && nums2[i] > stack.peekFirst()) {
+                stack.pop();
+            }
+            map.put(nums2[i], stack.isEmpty() ? -1 : stack.peekFirst());
+            stack.push(nums2[i]);
+        }
+        for (int i = 0; i < nums1.length; i++) {
+            ans[i] = map.get(nums1[i]);
+        }
+        return ans;
     }
 
     @Test
