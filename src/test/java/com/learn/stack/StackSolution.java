@@ -36,7 +36,7 @@ public class StackSolution {
     }
 
     /**
-     * TODO 503. 下一个更大元素 II
+     * 503. 下一个更大元素 II
      * https://leetcode.cn/problems/next-greater-element-ii/
      * 给定一个循环数组 nums （ nums[nums.length - 1] 的下一个元素是 nums[0] ），返回 nums 中每个元素的 下一个更大元素 。
      * 数字 x 的 下一个更大的元素 是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1 。
@@ -54,7 +54,18 @@ public class StackSolution {
      * @return
      */
     public int[] nextGreaterElements(int[] nums) {
-        return nums;
+        int[] ans = new int[nums.length];
+        Deque<Integer> stack = new LinkedList<>();
+        for (int i = 2 * nums.length - 1; i >= 0; i--) {
+            int idx = i % nums.length;
+            // 相等的也需要弹出去
+            while (!stack.isEmpty() && nums[idx] >= stack.peekFirst()) {
+                stack.pop();
+            }
+            ans[idx] = stack.isEmpty() ? -1 : stack.peekFirst();
+            stack.push(nums[idx]);
+        }
+        return ans;
     }
 
     @Test
@@ -94,7 +105,7 @@ public class StackSolution {
         Deque<Integer> stack = new LinkedList<>();
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = nums2.length - 1; i >= 0; i--) {
-            while (!stack.isEmpty() && nums2[i] > stack.peekFirst()) {
+            while (!stack.isEmpty() && nums2[i] >= stack.peekFirst()) {
                 stack.pop();
             }
             map.put(nums2[i], stack.isEmpty() ? -1 : stack.peekFirst());
