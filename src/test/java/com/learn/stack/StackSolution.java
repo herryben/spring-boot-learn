@@ -157,7 +157,7 @@ public class StackSolution {
     }
 
     /**
-     * TODO 918. 环形子数组的最大和
+     * 918. 环形子数组的最大和
      * https://leetcode.cn/problems/maximum-sum-circular-subarray/description/
      * 给定一个长度为 n 的环形整数数组 nums ，返回 nums 的非空 子数组 的最大可能和 。
      * 环形数组 意味着数组的末端将会与开头相连呈环状。形式上， nums[i] 的下一个元素是 nums[(i + 1) % n] ， nums[i] 的前一个元素是 nums[(i - 1 + n) % n] 。
@@ -179,7 +179,18 @@ public class StackSolution {
      * @return
      */
     public int maxSubarraySumCircular(int[] nums) {
-        return 0;
+        int cur = 0, max = Integer.MIN_VALUE, min = Integer.MAX_VALUE, sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            cur = nums[i] + Math.max(cur, 0);
+            max = Math.max(max, cur);
+        }
+        cur = 0;
+        for (int i = 0; i < nums.length; i++) {
+            cur = nums[i] + Math.min(cur, 0);
+            min = Math.min(min, cur);
+        }
+        return Math.max(sum - min, max);
     }
 
     @Test
