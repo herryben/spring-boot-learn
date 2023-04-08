@@ -278,4 +278,59 @@ public class StackSolution {
         Assert.assertEquals(10, maxSubarraySumCircularQueue(new int[]{5, -3, 5}));
         Assert.assertEquals(3, maxSubarraySumCircularQueue(new int[]{3, -2, 2, -3}));
     }
+
+    /**
+     * 581. 最短无序连续子数组
+     * https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/
+     * 给你一个整数数组 nums ，你需要找出一个 连续子数组 ，如果 对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+     * 请你找出符合题意的 最短 子数组，并输出它的长度。
+     * 示例 1：
+     * 输入：nums = [2,6,4,8,10,9,15]
+     * 输出：5
+     * 解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+     * 示例 2：
+     * 输入：nums = [1,2,3,4]
+     * 输出：0
+     * 示例 3：
+     * 输入：nums = [1]
+     * 输出：0
+     *
+     * @param nums
+     * @return
+     */
+    public int findUnsortedSubarray(int[] nums) {
+        if (nums.length == 1) {
+            return 0;
+        }
+        int left = -1, right = -1, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            // 寻找第一个比最大值小的索引（从右到左）
+            if (nums[i] < max) {
+                // 这里就是第一个比最大值小的索引
+                right = i;
+            } else {
+                // 更新最大值
+                max = nums[i];
+            }
+        }
+        for (int i = nums.length - 1; i >= 0; i--) {
+            // 寻找第一个比最小值大的索引（从左到右）
+            if (nums[i] > min) {
+                left = i;
+            } else {
+                min = nums[i];
+            }
+        }
+        return right != -1 ? right - left + 1 : 0;
+    }
+
+    @Test
+    public void testFndUnsortedSubarray() {
+        Assert.assertEquals(4, findUnsortedSubarray(new int[]{1, 3, 2, 2, 2}));
+        Assert.assertEquals(0, findUnsortedSubarray(new int[]{1, 2, 3, 3, 3}));
+        Assert.assertEquals(2, findUnsortedSubarray(new int[]{2, 1}));
+        Assert.assertEquals(5, findUnsortedSubarray(new int[]{2, 6, 4, 8, 10, 9, 15}));
+        Assert.assertEquals(0, findUnsortedSubarray(new int[]{1, 2, 3, 4}));
+        Assert.assertEquals(0, findUnsortedSubarray(new int[]{1}));
+    }
 }
