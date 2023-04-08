@@ -174,14 +174,19 @@ public class StackSolution {
      *  输入：nums = [3,-2,2,-3]
      *  输出：3
      *  解释：从子数组 [3] 和 [3,-2,2] 都可以得到最大和 3
-     *
+     * 解题思路：Kadane算法 + 反向思考取最小
      * @param nums
      * @return
      */
     public int maxSubarraySumCircular(int[] nums) {
+        if (nums.length == 1) {
+            return nums[0];
+        }
         int cur = 0, max = Integer.MIN_VALUE, min = Integer.MAX_VALUE, sum = 0;
         for (int i = 0; i < nums.length; i++) {
+            // 计算总和
             sum += nums[i];
+            // Kadane算法标准步骤
             cur = nums[i] + Math.max(cur, 0);
             max = Math.max(max, cur);
         }
@@ -190,13 +195,56 @@ public class StackSolution {
             cur = nums[i] + Math.min(cur, 0);
             min = Math.min(min, cur);
         }
-        return Math.max(sum - min, max);
+        // 如果最大值是负数说明数组整体都是负数，此时答案就是整个数组的最大值，肯定在但区间内
+        return max < 0 ? max : Math.max(sum - min, max);
     }
 
     @Test
     public void testMaxSubarraySumCircular() {
+        Assert.assertEquals(-2, maxSubarraySumCircular(new int[]{-3, -2, -3}));
         Assert.assertEquals(3, maxSubarraySumCircular(new int[]{1, -2, 3, -2}));
         Assert.assertEquals(10, maxSubarraySumCircular(new int[]{5, -3, 5}));
         Assert.assertEquals(3, maxSubarraySumCircular(new int[]{3, -2, 2, -3}));
+    }
+
+    /**
+     * 解题思路：数组翻倍 + 前缀和 + 单调队列取最小值
+     *
+     * @param nums
+     * @return
+     */
+    public int maxSubarraySumCircularQueue(int[] nums) {
+        int ans = nums[0], len = nums.length;
+        // 前缀和定义：prefixSum[i] = sum(prefixSum[0..i-1])
+        int[] prefixSum = new int[2 * len + 1];
+        for (int i = 0; i < 2 * len; i++) {
+            prefixSum[i + 1] = nums[i % len] + prefixSum[i];
+        }
+        Deque<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        // 这里迭代的是前缀和，所以索引是1..2*len
+        for (int j = 1; j < prefixSum.length; j++) {
+            // 这里要保证 j - peekFirst <= len
+            // queue.peekFirst() < j - len
+            if (j - queue.peekFirst() > len) {
+                queue.pollFirst();
+            }
+            ans = Math.max(ans, prefixSum[j] - prefixSum[queue.peekFirst()]);
+            // 现在的nums[j] 就是之后的nums[queue.peekFirst()]
+            // 要维持队列单调递增
+            while (!queue.isEmpty() && prefixSum[j] <= prefixSum[queue.peekLast()]) {
+                queue.pollLast();
+            }
+            queue.offerLast(j);
+        }
+        return ans;
+    }
+
+    @Test
+    public void testMaxSubarraySumCircularQueue() {
+        Assert.assertEquals(-2, maxSubarraySumCircularQueue(new int[]{-3, -2, -3}));
+        Assert.assertEquals(3, maxSubarraySumCircularQueue(new int[]{1, -2, 3, -2}));
+        Assert.assertEquals(10, maxSubarraySumCircularQueue(new int[]{5, -3, 5}));
+        Assert.assertEquals(3, maxSubarraySumCircularQueue(new int[]{3, -2, 2, -3}));
     }
 }
