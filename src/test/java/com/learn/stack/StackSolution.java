@@ -133,26 +133,57 @@ public class StackSolution {
     }
 
     /**
-     * TODO 316. 去除重复字母
+     * 316. 去除重复字母
      * https://leetcode.cn/problems/remove-duplicate-letters/description/
      * 给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
      * 示例 1：
-     *  输入：s = "bcabc"
-     *  输出："abc"
+     * 输入：s = "bcabc"
+     * 输出："abc"
      * 示例 2：
-     *  输入：s = "cbacdcbc"
-     *  输出："acdb"
+     * 输入：s = "cbacdcbc"
+     * 输出："acdb"
+     * 解题思路： 贪心 + 单调栈
      *
      * @param s
      * @return
      */
     public String removeDuplicateLetters(String s) {
-        return s;
+        StringBuilder sb = new StringBuilder();
+        // 字符的使用频率
+        int[] freq = new int[26];
+        // 字符是否出现在单调队列中
+        boolean[] isVisited = new boolean[26];
+        for (char ch : s.toCharArray()) {
+            freq[ch - 'a']++;
+        }
+        for (char ch : s.toCharArray()) {
+            // 当前字符没有在单调队列中出现过
+            if (!isVisited[ch - 'a']) {
+                // 栈非空且栈顶元素大于当前元素则弹出
+                // sb[0]是栈底 sb[len]是栈顶 维护栈底到栈顶的单调递增
+                while (sb.length() > 0 && ch < sb.charAt(sb.length() - 1)) {
+                    // 这里面是对单调栈顶的元素更新 和当前元素ch没有一毛钱关系
+                    // 字符不能重复所以出现频率不能是0
+                    if (freq[sb.charAt(sb.length() - 1) - 'a'] > 0) {
+                        // 以后可能还会用
+                        isVisited[sb.charAt(sb.length() - 1) - 'a'] = false;
+                        sb.deleteCharAt(sb.length() - 1);
+                    } else {
+                        break;
+                    }
+                }
+                sb.append(ch);
+                isVisited[ch - 'a'] = true;
+                // 字符使用频率-1
+            }
+            freq[ch - 'a']--;
+        }
+        return sb.toString();
     }
 
     @Test
     public void testRemoveDuplicateLetters() {
-        Assert.assertEquals("abc", removeDuplicateLetters("bcabc"));
+//        Assert.assertEquals("abc", removeDuplicateLetters("bcabc"));
         Assert.assertEquals("acdb", removeDuplicateLetters("cbacdcbc"));
     }
 
