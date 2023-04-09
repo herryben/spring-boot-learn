@@ -113,25 +113,6 @@ public class WindowSolution {
     }
 
     /**
-     * TODO 剑指 Offer 38. 字符串的排列
-     * https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/
-     * 示例:
-     * 输入：s = "abc"
-     * 输出：["abc","acb","bac","bca","cab","cba"]
-     *
-     * @param s
-     * @return
-     */
-    public String[] permutation(String s) {
-        return new String[]{};
-    }
-
-    @Test
-    public void testPermutation() {
-        Assert.assertEquals(new String[]{"abc", "acb", "bac", "bca", "cab", "cba"}, permutation("abc"));
-    }
-
-    /**
      * 567. 字符串的排列
      * https://leetcode.cn/problems/permutation-in-string/
      * 给你两个字符串 s1 和 s2 ，写一个函数来判断 s2 是否包含 s1 的排列。如果是，返回 true ；否则，返回 false 。
