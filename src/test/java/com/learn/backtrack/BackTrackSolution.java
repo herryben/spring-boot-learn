@@ -1,13 +1,16 @@
 package com.learn.backtrack;
 
 import com.google.common.collect.Sets;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BackTrackSolution {
     /**
@@ -21,12 +24,34 @@ public class BackTrackSolution {
      * @return
      */
     public String[] permutation(String s) {
-        return new String[]{};
+        List<String> res = new ArrayList<>();
+        Set<Character> visited = new HashSet<>();
+        permutationBackTrack(s, 0, new StringBuilder(), visited, res);
+        return res.toArray(new String[0]);
+    }
+
+    public void permutationBackTrack(String s, int level, StringBuilder path, Set<Character> visited, List<String> res) {
+        if (s.length() == level) {
+            if (path.length() != 0) {
+                res.add(path.toString());
+            }
+            return;
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            if (!visited.contains(s.charAt(i))) {
+                visited.add(s.charAt(i));
+                permutationBackTrack(s, level + 1, path.append(s.charAt(i)), visited, res);
+                visited.remove(s.charAt(i));
+                path.deleteCharAt(path.length() - 1);
+            }
+        }
     }
 
     @Test
     public void testPermutation() {
-        Assert.assertEquals(new String[]{"abc", "acb", "bac", "bca", "cab", "cba"}, permutation("abc"));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(), Sets.newHashSet(permutation(""))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("abc", "acb", "bac", "bca", "cab", "cba"), Sets.newHashSet(permutation("abc"))));
     }
 
     /**
@@ -98,6 +123,7 @@ public class BackTrackSolution {
 
     @Test
     public void testSubsets() {
-
+        ListUtils.isEqualList()
+        Assert.assertEquals();
     }
 }
