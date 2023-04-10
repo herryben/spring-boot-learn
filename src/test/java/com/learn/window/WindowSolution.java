@@ -582,7 +582,9 @@ public class WindowSolution {
      * 示例 2：
      * 输入：nums = [[1,2,3],[1,2,3],[1,2,3]]
      * 输出：[1,1]
-     *
+     * 解题思路：
+     * 用Map indices计算每个数字在每个队列中出现的频率
+     * 在用滑动窗口在xMin..xMax之间寻找满足区间数字在所有列表中都出现的最小区间
      * @param nums
      * @return
      */
