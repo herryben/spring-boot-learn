@@ -345,17 +345,30 @@ public class StackSolution {
      * 示例 2：
      *  输入：height = [4,2,0,3,2,5]
      *  输出：9
-     *
+     * 解题思路：同时维护左右边最大值 + 双指针向中间缩小
      * @param height
      * @return
      */
     public int trap(int[] height) {
-        return 0;
+        int ans = 0;
+        int leftMax = height[0], rightMax = height[height.length - 1], left = 0, right = height.length - 1;
+        while (left < right) {
+            leftMax = Math.max(leftMax, height[left]);
+            rightMax = Math.max(rightMax, height[right]);
+            if (leftMax < rightMax) {
+                ans += leftMax - height[left];
+                left++;
+            } else {
+                ans += rightMax - height[right];
+                right--;
+            }
+        }
+        return ans;
     }
 
     @Test
     public void testTrap() {
-        Assert.assertEquals(6, findUnsortedSubarray(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
-        Assert.assertEquals(9, findUnsortedSubarray(new int[]{4, 2, 0, 3, 2, 5}));
+        Assert.assertEquals(6, trap(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
+        Assert.assertEquals(9, trap(new int[]{4, 2, 0, 3, 2, 5}));
     }
 }
