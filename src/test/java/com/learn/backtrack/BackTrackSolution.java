@@ -1,9 +1,12 @@
 package com.learn.backtrack;
 
+import com.google.common.collect.Sets;
+import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BackTrackSolution {
@@ -45,12 +48,34 @@ public class BackTrackSolution {
      * @return
      */
     public List<String> letterCombinations(String digits) {
-        return Lists.newArrayList();
+        List<String> res = new ArrayList<>();
+        letterCombinationsDfs(digits, 0, new StringBuilder(), res);
+        return res;
+    }
+
+    public static final String[] keyboard = new String[]{"", "","abc","def","ghi","jkl","mno","pqrs","tuv","xyz"};
+    public void letterCombinationsDfs(String digits, int level, StringBuilder path, List<String> res) {
+        if (level == digits.length()) {
+            if (path.length() != 0) {
+                res.add(path.toString());
+            }
+            return;
+        }
+        // 取到该层对应的数字对应的英文字母
+        String str = keyboard[Integer.parseInt(String.valueOf(digits.charAt(level)))];
+        for (int i = 0; i < str.length(); i++) {
+            // 做选择
+            letterCombinationsDfs(digits, level + 1, path.append(str.charAt(i)), res);
+            // 撤销选择
+            path.deleteCharAt(path.length() - 1);
+        }
     }
 
     @Test
     public void testLetterCombinations() {
-
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("ad","ae","af","bd","be","bf","cd","ce","cf"), Sets.newHashSet(letterCombinations("23"))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(), Sets.newHashSet(letterCombinations(""))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("a", "b", "c"), Sets.newHashSet(letterCombinations("2"))));
     }
 
     /**

@@ -817,12 +817,20 @@ public class DpSolution {
      *  输入：nums = [3,2,1,0,4]
      *  输出：false
      *  解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。
-     *
+     * 解题思路：贪心法 最远能跳多远
      * @param nums
      * @return
      */
     public boolean canJump(int[] nums) {
-        return false;
+        int fastest = 0, current = 0;
+        for (int i = 0; i < nums.length; i++) {
+            current = i + nums[i];
+            fastest = Math.max(fastest, current);
+            if (nums[i] == 0 && fastest <= i) {
+                break;
+            }
+        }
+        return fastest >= nums.length;
     }
 
     @Test
@@ -852,7 +860,19 @@ public class DpSolution {
      * @return
      */
     public int jump(int[] nums) {
-        return 0;
+        int[] dp = new int[nums.length];
+        int current = nums[0], fastest = 0;
+        dp[0] = 1;
+        for (int i = 1; i < nums.length; i++) {
+            fastest = Math.max(fastest, i + nums[i]);
+            if (i <= current) {
+                dp[i] = dp[i-1];
+            } else {
+                dp[i] = dp[i-1] + 1;
+                current = fastest;
+            }
+        }
+        return dp[nums.length - 1];
     }
 
     @Test
