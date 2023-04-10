@@ -1,7 +1,6 @@
 package com.learn.backtrack;
 
 import com.google.common.collect.Sets;
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -48,14 +47,17 @@ public class BackTrackSolution {
         }
     }
 
+    public static final String[] keyboard = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
     @Test
     public void testPermutation() {
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("aba", "aab", "baa"), Sets.newHashSet(permutation("aab"))));
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(), Sets.newHashSet(permutation(""))));
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("abc", "acb", "bac", "bca", "cab", "cba"), Sets.newHashSet(permutation("abc"))));
     }
 
     /**
-     * TODO 17. 电话号码的字母组合
+     * 17. 电话号码的字母组合
      * https://leetcode.cn/problems/letter-combinations-of-a-phone-number/description/
      * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
      * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
@@ -77,8 +79,6 @@ public class BackTrackSolution {
         letterCombinationsDfs(digits, 0, new StringBuilder(), res);
         return res;
     }
-
-    public static final String[] keyboard = new String[]{"", "","abc","def","ghi","jkl","mno","pqrs","tuv","xyz"};
     public void letterCombinationsDfs(String digits, int level, StringBuilder path, List<String> res) {
         if (level == digits.length()) {
             if (path.length() != 0) {
@@ -123,7 +123,6 @@ public class BackTrackSolution {
 
     @Test
     public void testSubsets() {
-        ListUtils.isEqualList()
-        Assert.assertEquals();
+//        Assert.assertEquals(Utils.isEqualList());
     }
 }

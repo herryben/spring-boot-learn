@@ -862,7 +862,6 @@ public class DpSolution {
     public int jump(int[] nums) {
         int[] dp = new int[nums.length];
         int current = nums[0], fastest = 0;
-        dp[0] = 1;
         for (int i = 1; i < nums.length; i++) {
             fastest = Math.max(fastest, i + nums[i]);
             if (i <= current) {
