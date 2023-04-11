@@ -335,7 +335,7 @@ public class StackSolution {
     }
 
     /**
-     * TODO 42. 接雨水
+     * 42. 接雨水
      * https://leetcode.cn/problems/trapping-rain-water/description/
      * 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
      * 示例 1：
@@ -352,9 +352,11 @@ public class StackSolution {
     public int trap(int[] height) {
         int ans = 0;
         int leftMax = height[0], rightMax = height[height.length - 1], left = 0, right = height.length - 1;
+        // 双指针向中心走
         while (left < right) {
             leftMax = Math.max(leftMax, height[left]);
             rightMax = Math.max(rightMax, height[right]);
+            // 小的那个索引向前走
             if (leftMax < rightMax) {
                 ans += leftMax - height[left];
                 left++;

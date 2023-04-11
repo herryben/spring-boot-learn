@@ -804,7 +804,7 @@ public class DpSolution {
     }
 
     /**
-     * TODO 55. 跳跃游戏
+     * 55. 跳跃游戏
      * https://leetcode.cn/problems/jump-game/
      * 给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。
      * 数组中的每个元素代表你在该位置可以跳跃的最大长度。
@@ -822,25 +822,28 @@ public class DpSolution {
      * @return
      */
     public boolean canJump(int[] nums) {
-        int fastest = 0, current = 0;
+        int fastest = 0, current;
         for (int i = 0; i < nums.length; i++) {
             current = i + nums[i];
+            // 找最远
             fastest = Math.max(fastest, current);
             if (nums[i] == 0 && fastest <= i) {
+                // 如果已经到了最远，走不下去了，则停止
                 break;
             }
         }
-        return fastest >= nums.length;
+        return fastest >= nums.length - 1;
     }
 
     @Test
     public void testCanJump() {
+        Assert.assertEquals(true, canJump(new int[]{0}));
         Assert.assertEquals(true, canJump(new int[]{2, 3, 1, 1, 4}));
         Assert.assertEquals(false, canJump(new int[]{3, 2, 1, 0, 4}));
     }
 
     /**
-     * TODO 45. 跳跃游戏 II
+     * 45. 跳跃游戏 II
      * https://leetcode.cn/problems/jump-game-ii/description/
      * 给定一个长度为 n 的 0 索引整数数组 nums。初始位置为 nums[0]。
      * 每个元素 nums[i] 表示从索引 i 向前跳转的最大长度。换句话说，如果你在 nums[i] 处，你可以跳转到任意 nums[i + j] 处:
@@ -860,22 +863,22 @@ public class DpSolution {
      * @return
      */
     public int jump(int[] nums) {
-        int[] dp = new int[nums.length];
-        int current = nums[0], fastest = 0;
-        for (int i = 1; i < nums.length; i++) {
+        int step = 0;
+        int current = 0, fastest = 0;
+        // 遍历到倒数第个元素，因为最后一个元素一定会被访问到，造成数字+1
+        for (int i = 0; i < nums.length - 1; i++) {
             fastest = Math.max(fastest, i + nums[i]);
-            if (i <= current) {
-                dp[i] = dp[i-1];
-            } else {
-                dp[i] = dp[i-1] + 1;
+            if (i >= current) {
+                step++;
                 current = fastest;
             }
         }
-        return dp[nums.length - 1];
+        return step;
     }
 
     @Test
     public void testJump() {
+        Assert.assertEquals(0, jump(new int[]{0}));
         Assert.assertEquals(2, jump(new int[]{2, 3, 1, 1, 4}));
         Assert.assertEquals(2, jump(new int[]{3, 2, 1, 0, 4}));
     }
