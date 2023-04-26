@@ -50,10 +50,31 @@ public class TestThreadPool {
 
     @Test
     public void testCompletableFuture() throws Exception {
+        ExecutorService executorService = new ThreadPoolExecutor(5, 10,
+                60L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(), new ThreadPoolExecutor.CallerRunsPolicy());
+        LOGGER.info("future start");
         String res = CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return "s1";
+        }, executorService).thenCombine(CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "s2";
+        }), (s1, s2) -> {
+            String combineResult = String.format("%s + %s", s1, s2);
+            LOGGER.info("combineResult={}", combineResult);
+            return combineResult;
         }).whenComplete((s, t) -> {
             LOGGER.info("11111111 {}", s);
+            // 这里因为没有异常所以会产生NPE
             LOGGER.info("22222222 {}", t.getMessage());
         }).exceptionally(e ->{
             LOGGER.info("3333333 {}", e.getMessage());
