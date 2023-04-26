@@ -1,15 +1,23 @@
 package com.learn.concurrent;
 
+import lombok.SneakyThrows;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
 
 public class TestThreadPool {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestThreadPool.class);
+
+    /**
+     * 参考 https://www.cnblogs.com/dennyzhangdd/p/7010972.html#_label0_2
+     */
+    @SneakyThrows
     @Test
     public void testThreadPool() {
 //        ExecutorService executorService = Executors.newCachedThreadPool();
@@ -18,20 +26,23 @@ public class TestThreadPool {
         ExecutorService executorService = new ThreadPoolExecutor(5, 10,
                 60L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(), new ThreadPoolExecutor.CallerRunsPolicy());
-        List<Future<String>> featureList = Lists.newArrayList();
+        List<Future<String>> futureList = Lists.newArrayList();
 
         for (int i = 0; i < 20; i++) {
             Future<String> future = executorService.submit(new Task(i));
-            featureList.add(future);
+            futureList.add(future);
         }
-
-        for (final Future<String> future: featureList) {
-            try {
-                LOGGER.info("{}", future.get());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+        Collections.reverse(futureList);
+        while (futureList.size() > 0) {
+            Iterator<Future<String>> iterator = futureList.iterator();
+            while (iterator.hasNext()) {
+                Future<String> future = iterator.next();
+                if (future.isDone() && !future.isCancelled()) {
+                    LOGGER.info("{}", future.get());
+                    iterator.remove();
+                } else {
+                    Thread.yield();
+                }
             }
         }
         executorService.shutdown();
@@ -70,7 +81,7 @@ class Task implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        Thread.sleep(5000);
+        Thread.sleep(5000 + id * 100);
         LOGGER.info("call() 被调用 {}", Thread.currentThread().getName());
         return "call 方法被调用,任务返回结果：" + id + " " + Thread.currentThread().getName();
     }
