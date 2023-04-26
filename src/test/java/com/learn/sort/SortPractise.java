@@ -1,6 +1,11 @@
 package com.learn.sort;
 
+import com.learn.concurrent.ConcurrentMergeSort;
+import lombok.SneakyThrows;
 import org.junit.Test;
+
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 
 /**
  * @author herryhaorui@didiglobal.com
@@ -8,7 +13,7 @@ import org.junit.Test;
  * @date 2023/3/3 10:14 下午
  */
 public class SortPractise {
-    private final int N = 5;
+    private final int N = 10_000_000;
     private final int[] datas = new int[N];
 
     public void init() {
@@ -91,6 +96,17 @@ public class SortPractise {
         for (int x = 0; x < tmp.length; x++) {
             data[left + x] = tmp[x];
         }
+    }
+
+    @SneakyThrows
+    @Test
+    public void testConcurrentMergeSort() {
+        ForkJoinPool forkJoinPool = new ForkJoinPool(10);
+        init();
+        print();
+        Future future = forkJoinPool.submit(new ConcurrentMergeSort.MergeSortTask(datas, 0, datas.length - 1));
+        future.get();
+        print();
     }
 
     @Test
