@@ -296,6 +296,12 @@ public class TestSort {
         print();
     }
 
+    /**
+     * 左右都是闭区间 [low, high]
+     * @param datas
+     * @param low
+     * @param high
+     */
     public void mergeSort(int[] datas, int low, int high){
         int mid = (low + high) / 2;
         if (low < high) {
