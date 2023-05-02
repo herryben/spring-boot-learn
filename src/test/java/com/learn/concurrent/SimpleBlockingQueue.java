@@ -1,7 +1,6 @@
 package com.learn.concurrent;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -9,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author herryhaorui@didiglobal.com
- * @desc
+ * @desc https://blog.csdn.net/wat1r/article/details/119130292
  * @date 2023/4/26 7:10 下午
  */
 @Slf4j
