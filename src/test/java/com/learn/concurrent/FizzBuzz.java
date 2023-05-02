@@ -5,11 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.validation.constraints.AssertTrue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntConsumer;
 
 /**
@@ -48,7 +46,7 @@ import java.util.function.IntConsumer;
 @Slf4j
 public class FizzBuzz {
     private int n;
-    private AtomicInteger state = new AtomicInteger(1);
+    private int state = 1;
 
     public void setN(int n) {
         this.n = n;
@@ -56,51 +54,48 @@ public class FizzBuzz {
 
     // printFizz.run() outputs "fizz".
     public void fizz(Runnable printFizz) throws InterruptedException {
-        while (state.get() <= n) {
-            while (state.get() % 3 != 0) {
-                Thread.yield();
-            }
-            if (state.get() <= n) {
-                printFizz.run();
-                state.incrementAndGet();
+        while (state <= n) {
+            synchronized (this) {
+                if (state % 3 == 0 && state % 5 != 0 && state <= n) {
+                    printFizz.run();
+                    state++;
+                }
             }
         }
     }
 
     // printBuzz.run() outputs "buzz".
     public void buzz(Runnable printBuzz) throws InterruptedException {
-        while (state.get() <= n) {
-            while (state.get() % 5 != 0) {
-                Thread.yield();
-            }
-            if (state.get() <= n) {
-                printBuzz.run();
-                state.incrementAndGet();
+        while (state <= n) {
+            synchronized (this) {
+                if (state % 5 == 0 && state % 3 != 0 && state <= n) {
+                    printBuzz.run();
+                    state++;
+                }
             }
         }
     }
 
     // printFizzBuzz.run() outputs "fizzbuzz".
     public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
-        while (state.get() <= n) {
-            while (state.get() % 3 != 0 || state.get() % 5 != 0) {
-                Thread.yield();
-            }
-            if (state.get() <= n) {
-                printFizzBuzz.run();
-                state.incrementAndGet();
+        while (state <= n) {
+            synchronized (this) {
+                if (state % 5 == 0 && state % 3 == 0 && state <= n) {
+                    printFizzBuzz.run();
+                    state++;
+                }
             }
         }
     }
 
     // printNumber.accept(x) outputs "x", where x is an integer.
     public void number(IntConsumer printNumber) throws InterruptedException {
-        while (state.get() <= n) {
-            while (state.get() % 3 == 0 || state.get() % 5 == 0) {
-                Thread.yield();
-            }
-            if (state.get() <= n) {
-                printNumber.accept(state.getAndIncrement());
+        while (state <= n) {
+            synchronized (this) {
+                if (state % 5 != 0 && state % 3 != 0 && state <= n) {
+                    printNumber.accept(state);
+                    state++;
+                }
             }
         }
     }
