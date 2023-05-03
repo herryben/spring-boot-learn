@@ -2,6 +2,7 @@ package com.learn.Utils;
 
 import org.apache.commons.collections.ListUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +20,22 @@ public class Utils {
         }
         for (int i = 0; i < list1.size(); i++) {
             if (!ListUtils.isEqualList(list1.get(i), list2.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public static boolean isEqualArray(int[][] array1, int[][] array2) {
+        if (array1 == array2) {
+            return true;
+        }
+        if (array1 == null || array2 == null || array1.length != array2.length) {
+            return false;
+        }
+        for (int i = 0; i < array1.length; i++) {
+            if (!Arrays.equals(array1[i], array2[i])) {
                 return false;
             }
         }
