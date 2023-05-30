@@ -212,19 +212,24 @@ public class SortSolution {
      * @return
      */
     public int findKthLargest(int[] nums, int k) {
+        // 这里有一个转换 kTh就是nums.length - k
         return quickSort(nums, nums.length - k, 0, nums.length - 1);
     }
 
     public int quickSort(int[] nums, int kTh, int left, int right) {
         if (left == right) {
+            // 左右一样，说明已经是最终结果了，直接返回
+            // 例如：1 2 3，上次循环idx=1,kTth=0,本次循环到达这个分支
             return nums[left];
         } else {
             int idx = partition(nums, left, right);
             if (idx == kTh) {
                 return nums[kTh];
             } else if (idx > kTh) {
+                // 如果idx > kTh 则查找[left, idx - 1]即缩小范围1
                 return quickSort(nums, kTh, left, idx - 1);
             } else {
+                // 如果idx < kTh 则查找[idx + 1, right]即缩小范围1
                 return quickSort(nums, kTh, idx + 1, right);
             }
         }
@@ -234,17 +239,22 @@ public class SortSolution {
         Random random = new Random();
         // nextInt[0, bound)
         int idx = left + random.nextInt(right - left + 1), i = left, j = right;
+        // 直接交换哨兵和最左侧
         int pivot = nums[idx];
         nums[idx] = nums[left];
         nums[left] = pivot;
         while (i < j) {
+            // 从最右侧开始查找比哨兵小的数
             while (i < j && pivot <= nums[j]) {
                 j--;
             }
+            // 这里是填坑
             nums[i] = nums[j];
+            // 从最左侧开始查找比哨兵大于等于的数
             while (i < j && pivot > nums[i]) {
                 i++;
             }
+            // 这里是填坑
             nums[j] = nums[i];
         }
         nums[i] = pivot;
