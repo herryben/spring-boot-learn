@@ -219,7 +219,7 @@ public class SortSolution {
         if (left == right) {
             return nums[left];
         } else {
-            int idx = partition(nums, kTh, left, right);
+            int idx = partition(nums, left, right);
             if (idx == kTh) {
                 return nums[kTh];
             } else if (idx > kTh) {
@@ -230,7 +230,7 @@ public class SortSolution {
         }
     }
 
-    public int partition(int[] nums, int kTh, int left, int right) {
+    public int partition(int[] nums, int left, int right) {
         Random random = new Random();
         // nextInt[0, bound)
         int idx = left + random.nextInt(right - left + 1), i = left, j = right;

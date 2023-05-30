@@ -1,9 +1,12 @@
 package com.learn;
 
 import com.learn.Utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.*;
+@Slf4j
 public class IntervalsSolution {
     /**
      * TODO 56. 合并区间
@@ -19,12 +22,28 @@ public class IntervalsSolution {
      * 输入：intervals = [[1,4],[4,5]]
      * 输出：[[1,5]]
      * 解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
-     *
+     * 结题思路：先排序，当前头小于等于最后一个的尾就是重叠
      * @param intervals
      * @return
      */
     public int[][] merge(int[][] intervals) {
-        return new int[][]{new int[]{}};
+        List<int[]> res = new ArrayList<>();
+        // 先排序，start为排序key
+        Arrays.sort(intervals, (o1, o2) -> {
+            return o1[0] - o2[0];
+        });
+        res.add(new int[]{intervals[0][0], intervals[0][1]});
+        for (int i = 1; i < intervals.length; i++) {
+            int[] current = intervals[i];
+            int[] last = res.get(res.size() - 1);
+            // 当前头小于等于最后一个尾
+            if (current[0] <= last[1]) {
+                last[1] = Math.max(current[1], last[1]);
+            } else {
+                res.add(new int[]{current[0], current[1]});
+            }
+        }
+        return res.toArray(new int[][]{});
     }
 
     @Test
@@ -57,7 +76,24 @@ public class IntervalsSolution {
      * @return
      */
     public int eraseOverlapIntervals(int[][] intervals) {
-        return 0;
+        // 先排序，start为排序key
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] - o2[0];
+            }
+        });
+        int count = 1;
+        int end = intervals[0][1];
+        for (int i = 1; i < intervals.length; i++) {
+            int[] interval = intervals[i];
+            if (interval[0] >= end) {
+                // 如果区间不重合计算+1，重新开始选取
+                count++;
+                end = interval[1];
+            }
+        }
+        return intervals.length - count;
     }
 
     @Test
@@ -68,7 +104,7 @@ public class IntervalsSolution {
     }
 
     /**
-     * TODO 面试题 16.06. 最小差
+     * 面试题 16.06. 最小差
      * https://leetcode.cn/problems/smallest-difference-lcci/
      * 给定两个整数数组a和b，计算具有最小差绝对值的一对数值（每个数组中取一个值），并返回该对数值的差
      * 示例：
@@ -80,17 +116,34 @@ public class IntervalsSolution {
      * 1 <= a.length, b.length <= 100000
      * -2147483648 <= a[i], b[i] <= 2147483647
      * 正确结果在区间 [0, 2147483647] 内
-     *
+     * 解题思路：先对2个数组排序，再用双指针，谁小谁往前
+     * 需要注意补码、反码相关内容
+     * https://www.404bugs.com/index.php/details/1079094626572095488
+     * https://blog.csdn.net/qq_48052049/article/details/125994544
      * @param a
      * @param b
      * @return
      */
     public int smallestDifference(int[] a, int[] b) {
-        return 0;
+        // 这俩用long来解决abs溢出问题
+        long diff = Integer.MAX_VALUE;
+        Arrays.sort(a);
+        Arrays.sort(b);
+        int i = 0, j = 0;
+        while (i < a.length && j < b.length) {
+            diff = Math.min(Math.abs(diff), Math.abs(a[i] - b[j]));
+            if (a[i] < b[j]) {
+                i++;
+            } else {
+                j++;
+            }
+        }
+        return (int) diff;
     }
 
     @Test
     public void testSmallestDifference() {
+        Assert.assertEquals(1, smallestDifference(new int[]{-2147483648, 1}, new int[]{2147483647, 0}));
         Assert.assertEquals(3, smallestDifference(new int[]{1, 3, 15, 11, 2}, new int[]{23, 127, 235, 19, 8}));
     }
 
@@ -125,7 +178,22 @@ public class IntervalsSolution {
      * @return
      */
     public int findMinArrowShots(int[][] points) {
-        return 0;
+        Arrays.sort(points, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] - o2[0];
+            }
+        });
+        int count = 1;
+        int end = points[0][1];
+        for (int i = 1; i < points.length; i++) {
+            int[] point = points[i];
+            if (point[0] > end) {
+                count++;
+                end = point[1];
+            }
+        }
+        return count;
     }
 
     @Test
@@ -136,7 +204,7 @@ public class IntervalsSolution {
     }
 
     /**
-     * TODO 20. 有效的括号
+     * 20. 有效的括号
      * https://leetcode.cn/problems/valid-parentheses/
      * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
      * <p>
@@ -162,13 +230,37 @@ public class IntervalsSolution {
      * @return
      */
     public boolean isValid(String s) {
-        return true;
+        Deque<Character> stack = new ArrayDeque<>();
+        for (char ch: s.toCharArray()) {
+            if (ch == '(' || ch == '[' || ch == '{') {
+                stack.push(ch);
+            } else {
+                if (!stack.isEmpty() && getCharacter(ch) == stack.peekFirst()) {
+                    stack.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    private Character getCharacter(Character ch) {
+        switch (ch) {
+            case ')':
+                return '(';
+            case ']':
+                return '[';
+            default:
+                return '{';
+        }
     }
 
     @Test
     public void testIsValid() {
+        Assert.assertEquals(false, isValid("("));
         Assert.assertEquals(true, isValid("()"));
         Assert.assertEquals(true, isValid("()[]{}"));
-        Assert.assertEquals(true, isValid("(]"));
+        Assert.assertEquals(false, isValid("(]"));
     }
 }
