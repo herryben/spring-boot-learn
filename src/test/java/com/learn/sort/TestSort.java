@@ -365,7 +365,7 @@ public class TestSort {
 
     /**
      * https://mp.weixin.qq.com/s/JgJ0jh2SJd6grQSPnN6Jww
-     *
+     * https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247485044&idx=1&sn=e6b95782141c17abe206bfe2323a4226&chksm=9bd7f87caca0716aa5add0ddddce0bfe06f1f878aafb35113644ebf0cf0bfe51659da1c1b733&scene=21#wechat_redirect
      * @param datas
      * @param target
      * @return
@@ -373,6 +373,7 @@ public class TestSort {
     public int binarySearch(int[] datas, int target) {
         // 这里使用闭区间[2,3]
         int low = 0, high = datas.length - 1;
+        // 这里的<=和上面的闭区间对应
         while (low <= high) {
             int mid = (low + high) / 2;
             if (target > datas[mid]) {
@@ -400,6 +401,7 @@ public class TestSort {
     public int leftBound(int[] datas, int target) {
         // 这里使用左开右闭区间[2,3)
         int low = 0, high = datas.length;
+        // 和上面的开区间对应
         while (low < high) {
             int mid = (low + high) / 2;
             if (datas[mid] > target) {

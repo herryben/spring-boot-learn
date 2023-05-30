@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
  * @date 2023/3/3 10:14 下午
  */
 public class SortPractise {
-    private final int N = 10_000_000;
+    private final int N = 10;
     private final int[] datas = new int[N];
 
     public void init() {
@@ -55,47 +55,43 @@ public class SortPractise {
     public void testQsort() {
         init();
         print();
+        quickSort(datas, 0, datas.length - 1);
         print();
+    }
+
+    public void quickSort(int[] nums, int left, int right) {
+        if (left < right) {
+            int idx = partition(nums, left, right);
+            quickSort(nums, left, idx - 1);
+            quickSort(nums, idx + 1, right);
+        }
+    }
+
+    public int partition(int[] nums, int left, int right) {
+        int idx = left + (right - left) / 2, i = left, j = right;
+        int pivot = nums[idx];
+        nums[idx] = nums[i];
+        nums[i] = pivot;
+        while (i < j) {
+            while (i < j && datas[j] >= pivot) {
+                j--;
+            }
+            datas[i] = datas[j];
+            while (i < j && datas[i] < pivot) {
+                i++;
+            }
+            datas[j] = datas[i];
+        }
+        nums[i] = pivot;
+        return i;
     }
 
     @Test
     public void testMerge() {
         init();
         print();
-        mergeSort(datas, 0, datas.length - 1);
+
         print();
-    }
-
-    public void mergeSort(int[] data, int left, int right) {
-        if (left < right) {
-            int middle = left + (right - left) / 2;
-            mergeSort(data, left, middle);
-            mergeSort(data, middle + 1, right);
-            merge(data, left, middle, right);
-        }
-    }
-
-    public void merge(int[] data, int left, int middle, int right) {
-        int[] tmp = new int[right - left + 1];
-        int i = left, j = middle + 1, k = 0;
-        while (i <= middle && j <= right) {
-            if (data[i] <= data[j]) {
-                tmp[k++] = data[i++];
-            } else {
-                tmp[k++] = data[j++];
-            }
-        }
-
-        while (i <= middle) {
-            tmp[k++] = data[i++];
-        }
-
-        while (j <= right) {
-            tmp[k++] = data[j++];
-        }
-        for (int x = 0; x < tmp.length; x++) {
-            data[left + x] = tmp[x];
-        }
     }
 
     @SneakyThrows
