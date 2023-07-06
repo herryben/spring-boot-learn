@@ -223,4 +223,49 @@ public class BackTrackSolution {
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
                 Lists.newArrayList(1).stream().map(Lists::newArrayList).collect(Collectors.toList())), Sets.newHashSet(permute(new int[] {1}))));
     }
+
+    /**
+     * 22. 括号生成
+     * https://leetcode.cn/problems/generate-parentheses/description/
+     * 示例 1：
+     *
+     * 输入：n = 3
+     * 输出：["((()))","(()())","(())()","()(())","()()()"]
+     * 示例 2：
+     *
+     * 输入：n = 1
+     * 输出：["()"]
+     * 解题思路：
+     * 1.有条件回溯
+     * 2.右括号增长速度不能大于左括号
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        generateParenthesis(result, 0, 0, n, new StringBuilder());
+        return result;
+    }
+
+    public void generateParenthesis(List<String> res, int open, int close, int n, StringBuilder track) {
+        if (track.length() == 2 * n) {
+            res.add(track.toString());
+        }
+        if (open < n) {
+            track.append("(");
+            generateParenthesis(res, open + 1, close, n, track);
+            track.deleteCharAt(track.length() - 1);
+        }
+        if (close < open) {
+            track.append(")");
+            generateParenthesis(res, open, close + 1, n, track);
+            track.deleteCharAt(track.length() - 1);
+        }
+    }
+
+    @Test
+    public void testGenerateParenthesis() {
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("((()))","(()())","(())()","()(())","()()()"), Sets.newHashSet(generateParenthesis(3))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("()"), Sets.newHashSet(generateParenthesis(1))));
+    }
 }
