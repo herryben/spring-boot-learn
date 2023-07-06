@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BackTrackSolution {
     /**
@@ -172,5 +173,54 @@ public class BackTrackSolution {
                 Lists.newArrayList(2, 3), Lists.newArrayList(1, 2, 3)), Sets.newHashSet(subsets(new int[] {1,2,3}))));
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
                 Lists.newArrayList(), Lists.newArrayList(0)), Sets.newHashSet(subsets(new int[] {0}))));
+    }
+
+    /**
+     * https://leetcode.cn/problems/permutations/
+     * 46. 全排列
+     * 示例 1：
+     *
+     * 输入：nums = [1,2,3]
+     * 输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+     * 示例 2：
+     *
+     * 输入：nums = [0,1]
+     * 输出：[[0,1],[1,0]]
+     * 示例 3：
+     *
+     * 输入：nums = [1]
+     * 输出：[[1]]
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = Lists.newArrayList();
+        permute(nums, res, new LinkedList<>());
+        return res;
+    }
+
+    public void permute(int[] nums, List<List<Integer>> res, List<Integer> track) {
+        if(track.size() == nums.length) {
+            res.add(new ArrayList<>(track));
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (track.contains(nums[i])) {
+                continue;
+            }
+            track.add(nums[i]);
+            permute(nums, res, track);
+            track.remove(track.size() - 1);
+        }
+    }
+
+    @Test
+    public void testPermute() {
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(1,2,3), Lists.newArrayList(1,3,2), Lists.newArrayList(2,1,3),
+                Lists.newArrayList(2,3,1), Lists.newArrayList(3,1,2) ,Lists.newArrayList(3,2,1)), Sets.newHashSet(permute(new int[] {1,2,3}))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(0, 1), Lists.newArrayList(1, 0)), Sets.newHashSet(permute(new int[] {0, 1}))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(1).stream().map(Lists::newArrayList).collect(Collectors.toList())), Sets.newHashSet(permute(new int[] {1}))));
     }
 }
