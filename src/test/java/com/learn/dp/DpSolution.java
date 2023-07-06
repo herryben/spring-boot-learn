@@ -36,10 +36,8 @@ public class DpSolution {
      */
     public int climbStairs(int n) {
         int[] dp = new int[n + 1];
-        dp[0] = 1;
-        dp[1] = 1;
+        dp[0] = dp[1] = 1;
         for (int i = 2; i <= n; i++) {
-            // 跳1+跳2级
             dp[i] = dp[i - 1] + dp[i - 2];
         }
         return dp[n];
@@ -186,11 +184,9 @@ public class DpSolution {
     public int coinChangeOfficial(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
         Arrays.fill(dp, amount + 1);
-        dp[0] = 0;
         for (int i = 1; i <= amount; i++) {
-            for (int coin : coins) {
-                if (i - coin >= 0) {
-                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            for (int coin: coins) {
+                if () {
                 }
             }
         }
