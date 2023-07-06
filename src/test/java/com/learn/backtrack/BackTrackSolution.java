@@ -1,6 +1,7 @@
 package com.learn.backtrack;
 
 import com.google.common.collect.Sets;
+import com.learn.Utils.Utils;
 import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -107,23 +108,22 @@ public class BackTrackSolution {
      */
     public List<String> letterCombinations(String digits) {
         List<String> res = new ArrayList<>();
-        letterCombinationsDfs(digits, 0, new StringBuilder(), res);
+        letterCombinationsDfs(digits, res, 0, new StringBuilder());
         return res;
     }
-    public void letterCombinationsDfs(String digits, int level, StringBuilder path, List<String> res) {
+
+    public void letterCombinationsDfs(String digits, List<String> res, int level, StringBuilder track) {
         if (level == digits.length()) {
-            if (path.length() != 0) {
-                res.add(path.toString());
+            if (track.length() != 0) {
+                res.add(track.toString());
             }
             return;
         }
-        // 取到该层对应的数字对应的英文字母
-        String str = keyboard[Integer.parseInt(String.valueOf(digits.charAt(level)))];
-        for (int i = 0; i < str.length(); i++) {
-            // 做选择
-            letterCombinationsDfs(digits, level + 1, path.append(str.charAt(i)), res);
-            // 撤销选择
-            path.deleteCharAt(path.length() - 1);
+        String letter = keyboard[Integer.parseInt(String.valueOf(digits.charAt(level)))];
+        for (char ch: letter.toCharArray()) {
+            track.append(ch);
+            letterCombinationsDfs(digits, res, level + 1, track);
+            track.deleteCharAt(track.length() - 1);
         }
     }
 
@@ -149,11 +149,28 @@ public class BackTrackSolution {
      * @return
      */
     public List<List<Integer>> subsets(int[] nums) {
-        return Lists.newArrayList();
+        List<List<Integer>> res = Lists.newArrayList();
+        List<Integer> track = new LinkedList<>();
+        subsets(nums, 0, res, track);
+        return res;
+    }
+
+    public void subsets(int[] nums, int start, List<List<Integer>> res, List<Integer> track) {
+        res.add(new ArrayList<>(track));
+        for (int i = start; i < nums.length; i++) {
+            track.add(nums[i]);
+            subsets(nums, i + 1, res, track);
+            track.remove(track.size() - 1);
+        }
     }
 
     @Test
     public void testSubsets() {
-//        Assert.assertEquals(Utils.isEqualList());
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(), Lists.newArrayList(1), Lists.newArrayList(2),
+                Lists.newArrayList(1, 2), Lists.newArrayList(3), Lists.newArrayList(1, 3),
+                Lists.newArrayList(2, 3), Lists.newArrayList(1, 2, 3)), Sets.newHashSet(subsets(new int[] {1,2,3}))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(), Lists.newArrayList(0)), Sets.newHashSet(subsets(new int[] {0}))));
     }
 }
