@@ -17,7 +17,7 @@ public class BackTrackSolution {
      * 示例:
      * 输入：s = "abc"
      * 输出：["abc","acb","bac","bca","cab","cba"]
-     *
+     * 解题思路：就是普通的排列
      * @param s
      * @return
      */
@@ -420,5 +420,52 @@ public class BackTrackSolution {
                 {'S', 'F', 'C', 'S'},
                 {'A', 'D', 'E', 'E'}
         }, "ABCB"));
+    }
+
+    /**
+     * 494. 目标和
+     * https://leetcode.cn/problems/target-sum/
+     * 给你一个整数数组 nums 和一个整数 target 。
+     *
+     * 向数组中的每个整数前添加 '+' 或 '-' ，然后串联起所有整数，可以构造一个 表达式 ：
+     *
+     * 例如，nums = [2, 1] ，可以在 2 之前添加 '+' ，在 1 之前添加 '-' ，然后串联起来得到表达式 "+2-1" 。
+     * 返回可以通过上述方法构造的、运算结果等于 target 的不同 表达式 的数目。
+     * 示例 1：
+     *
+     * 输入：nums = [1,1,1,1,1], target = 3
+     * 输出：5
+     * 解释：一共有 5 种方法让最终目标和为 3 。
+     * -1 + 1 + 1 + 1 + 1 = 3
+     * +1 - 1 + 1 + 1 + 1 = 3
+     * +1 + 1 - 1 + 1 + 1 = 3
+     * +1 + 1 + 1 - 1 + 1 = 3
+     * +1 + 1 + 1 + 1 - 1 = 3
+     *
+     * 示例 2：
+     * 输入：nums = [1], target = 1
+     * 输出：1
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays(int[] nums, int target) {
+        return findTargetSumWays(nums, target, 0, 0, 0);
+    }
+
+    public int findTargetSumWays(int[] nums, int target, int total, int cur, int ans) {
+        if (total == target && cur == nums.length) {
+            return ans + 1;
+        }
+        if (cur >= nums.length) {
+            return 0;
+        }
+        return findTargetSumWays(nums,target, total + nums[cur], cur + 1, ans) + findTargetSumWays(nums,target, total - nums[cur], cur + 1, ans);
+    }
+
+    @Test
+    public void testFindTargetSumWays() {
+        Assert.assertEquals(5, findTargetSumWays(new int[] {1,1,1,1,1}, 3));
+        Assert.assertEquals(1, findTargetSumWays(new int[]{1},1));
     }
 }
