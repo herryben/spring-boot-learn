@@ -120,6 +120,7 @@ public class BackTrackSolution {
             }
             return;
         }
+        // 就是普通组合的变种
         String letter = keyboard[Integer.parseInt(String.valueOf(digits.charAt(level)))];
         for (char ch: letter.toCharArray()) {
             track.append(ch);
@@ -157,6 +158,7 @@ public class BackTrackSolution {
     }
 
     public void subsets(int[] nums, int start, List<List<Integer>> res, List<Integer> track) {
+        // 子集的主要特点就是无条件加入结果
         res.add(new ArrayList<>(track));
         for (int i = start; i < nums.length; i++) {
             track.add(nums[i]);
@@ -315,6 +317,7 @@ public class BackTrackSolution {
                 return;
             }
             track.add(candidates[i]);
+            // 这里和传统组合的区别是不需要迭代i
             combinationSum(candidates, sum + candidates[i], i, target, result, track);
             track.remove(track.size() - 1);
         }
@@ -342,5 +345,80 @@ public class BackTrackSolution {
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
                 Lists.newArrayList(2, 2, 2, 2), Lists.newArrayList(2, 3, 3), Lists.newArrayList(3, 5)), Sets.newHashSet(combinationSum(new int[] {2,3,5}, 8))));
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(), Sets.newHashSet(combinationSum(new int[] {2}, 1))));
+    }
+
+    /**
+     * https://leetcode.cn/problems/word-search/
+     * 79. 单词搜索
+     * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     * 示例 1：
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+     * 输出：true
+     * 示例 2：
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+     * 输出：true
+     * 示例 3：
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+     * 输出：false
+     * 解题思路：
+     * 从每个位置开始
+     * 以是否访问过为状态进行回溯探测
+     * @param board
+     * @param word
+     * @return
+     */
+    public boolean exist(char[][] board, String word) {
+        boolean[][] isVisited = new boolean[board.length][board[0].length];
+        // 棋盘类题固定套路，从每个格子开始不停地回溯
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (backTrack(board, i, j, word, 0, isVisited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean backTrack(char[][] board, int x, int y, String word, int step, boolean[][] isVisited) {
+        if (step == word.length()) {
+            return true;
+        }
+        if (x < 0 || y < 0 || x >= board.length || y >= board[0].length) {
+            return false;
+        }
+        if (isVisited[x][y]) {
+            return false;
+        }
+        if (board[x][y] != word.charAt(step)) {
+            return false;
+        }
+        isVisited[x][y] = true;
+        boolean ans = backTrack(board, x + 1, y, word, step + 1, isVisited)
+                || backTrack(board, x - 1, y, word, step + 1, isVisited)
+                || backTrack(board, x, y + 1, word, step + 1, isVisited)
+                || backTrack(board, x, y - 1, word, step + 1, isVisited);
+        isVisited[x][y] = false;
+        return ans;
+    }
+
+    @Test
+    public void testExist() {
+        Assert.assertEquals(true, exist(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "ABCCED"));
+        Assert.assertEquals(true, exist(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "SEE"));
+        Assert.assertEquals(false, exist(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "ABCB"));
     }
 }
