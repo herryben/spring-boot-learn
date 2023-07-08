@@ -45,6 +45,7 @@ public class PrefixSum {
      * 即最终结果求：preSum[j + 1] - preSum[i] = k
      * 简单移项可得符合条件的下标 i 需要满足 preSum[j + 1] - k = preSum[i]
      * 因为前缀和是从0开始加到j，所以只需要算1次即可，举例：1, 1的前缀和为2；1, 1, -1的前缀和也为2
+     * 从0~nums.length保证了i~j递增，不会算到>j之后的结果
      * @param nums
      * @param k
      * @return
@@ -69,5 +70,32 @@ public class PrefixSum {
     public void testSubarraySum() {
         Assert.assertEquals(2, subarraySum(new int[] {1,1,1}, 2));
         Assert.assertEquals(2, subarraySum(new int[] {1,2,3}, 3));
+    }
+
+    /**
+     * 解题思路：
+     * 双指针枚举
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraySum2(int[] nums, int k) {
+        int ans = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int sum = 0;
+            for (int j = i; j >= 0; j--) {
+                sum += nums[j];
+                if (sum == k) {
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+
+    @Test
+    public void testSubarraySum2() {
+        Assert.assertEquals(2, subarraySum2(new int[] {1,1,1}, 2));
+        Assert.assertEquals(2, subarraySum2(new int[] {1,2,3}, 3));
     }
 }
