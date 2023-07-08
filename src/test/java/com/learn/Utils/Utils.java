@@ -1,5 +1,7 @@
 package com.learn.Utils;
 
+import com.learn.linked.ListNode;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.ListUtils;
 
 import java.util.Arrays;
@@ -10,6 +12,7 @@ import java.util.List;
  * @desc
  * @date 2023/4/10 9:29 下午
  */
+@Slf4j
 public class Utils {
     public static boolean isEqualList(List<List> list1, List<List> list2) {
         if (list1 == list2) {
@@ -40,5 +43,31 @@ public class Utils {
             }
         }
         return true;
+    }
+
+    public static boolean isLinkedListArrayEqual(ListNode head, int[] array) {
+        for (int num: array) {
+            if (head == null || num != head.val) {
+                return false;
+            }
+            head = head.next;
+        }
+        return head == null;
+    }
+
+    public static ListNode buildLinkedList(int[] array) {
+        ListNode dummy = new ListNode(-1);
+        ListNode head = dummy;
+        for (int num: array) {
+            head.next = new ListNode(num);
+            head = head.next;
+        }
+        return dummy.next;
+    }
+
+    public static void printLinkedList(ListNode head) {
+        for(; head != null; head = head.next) {
+            log.info(String.valueOf(head.val));
+        }
     }
 }
