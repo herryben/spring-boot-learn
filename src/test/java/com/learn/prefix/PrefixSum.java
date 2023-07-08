@@ -3,6 +3,9 @@ package com.learn.prefix;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author herryhaorui@didiglobal.com
  * @desc
@@ -23,5 +26,48 @@ public class PrefixSum {
         Assert.assertEquals(8, numMatrix.sumRegion(2, 1, 4, 3)); // return 8 (红色矩形框的元素总和)
         Assert.assertEquals(11, numMatrix.sumRegion(1, 1, 2, 2)); // return 11 (绿色矩形框的元素总和)
         Assert.assertEquals(12, numMatrix.sumRegion(1, 2, 2, 4)); // return 12 (蓝色矩形框的元素总和)
+    }
+
+    /**
+     * 560. 和为 K 的子数组
+     * 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的连续子数组的个数 。
+     * https://leetcode.cn/problems/subarray-sum-equals-k/description/
+     * 示例 1：
+     *
+     * 输入：nums = [1,1,1], k = 2
+     * 输出：2
+     * 示例 2：
+     *
+     * 输入：nums = [1,2,3], k = 3
+     * 输出：2
+     * 解题思路：前缀和
+     * 求i..j的区间和为preSum[j + 1] - preSum[i]
+     * 即最终结果求：preSum[j + 1] - preSum[i] = k
+     * 简单移项可得符合条件的下标 i 需要满足 preSum[j + 1] - k = preSum[i]
+     * 因为前缀和是从0开始加到j，所以只需要算1次即可，举例：1, 1的前缀和为2；1, 1, -1的前缀和也为2
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraySum(int[] nums, int k) {
+        int sum = 0, ans = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        for(int num : nums) {
+            sum += num;
+            int diff = sum - k;
+            if (map.containsKey(diff)) {
+                ans += map.get(diff);
+            }
+            map.compute(sum, (key, val) -> val == null ? 1 : ++val);
+//            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        }
+        return ans;
+    }
+
+    @Test
+    public void testSubarraySum() {
+        Assert.assertEquals(2, subarraySum(new int[] {1,1,1}, 2));
+        Assert.assertEquals(2, subarraySum(new int[] {1,2,3}, 3));
     }
 }
