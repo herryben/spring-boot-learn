@@ -488,4 +488,91 @@ public class LinkedSolution {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(addTwoNumbers2(Utils.buildLinkedList(new int[]{2,4,3}), Utils.buildLinkedList(new int[]{5,6,4})), new int[]{8,0,7}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(addTwoNumbers2(Utils.buildLinkedList(new int[]{0}), Utils.buildLinkedList(new int[]{0})), new int[]{0}));
     }
+
+    /**
+     * 86. 分隔链表
+     * https://leetcode.cn/problems/partition-list/description/
+     * 给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
+     *
+     * 你应当 保留 两个分区中每个节点的初始相对位置。
+     * 示例 1：
+     *
+     *
+     * 输入：head = [1,4,3,2,5,2], x = 3
+     * 输出：[1,2,2,4,3,5]
+     * 示例 2：
+     *
+     * 输入：head = [2,1], x = 2
+     * 输出：[1,2]
+     * @param head
+     * @param x
+     * @return
+     */
+    public ListNode partition(ListNode head, int x) {
+        ListNode leftDummy = new ListNode();
+        ListNode rightDummy = new ListNode();
+        ListNode left = leftDummy;
+        ListNode right = rightDummy;
+        for(; head != null; head = head.next) {
+            if (head.val < x) {
+                left.next = head;
+                left = left.next;
+            } else {
+                right.next = head;
+                right = right.next;
+            }
+        }
+        left.next = rightDummy.next;
+        // right.next可能还在指向别的节点，不能忘记这一步
+        right.next = null;
+        return leftDummy.next;
+    }
+
+    @Test
+    public void testPartition() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(partition(Utils.buildLinkedList(new int[]{1,4,3,2,5,2}), 3), new int[]{1,2,2,4,3,5}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(partition(Utils.buildLinkedList(new int[]{2,1}), 2), new int[]{1,2}));
+    }
+
+    /**
+     * 24. 两两交换链表中的节点
+     * https://leetcode.cn/problems/swap-nodes-in-pairs/
+     * 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+     * 示例 1：
+     * 输入：head = [1,2,3,4]
+     * 输出：[2,1,4,3]
+     * 示例 2：
+     *
+     * 输入：head = []
+     * 输出：[]
+     * 示例 3：
+     *
+     * 输入：head = [1]
+     * 输出：[1]
+     * 解题思路：
+     * 1.从dummy节点开始用3个变量pre, cur, next标记4个节点pre, cur, next, next.next
+     * 2.一共3步：①pre.next指向下下个节点 ②cur.next指向下下个节点 ③next.next指回cur
+     * @param head
+     * @return
+     */
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        for(ListNode pre = dummy, cur = pre.next, next = cur.next; next != null; pre = cur, cur = cur.next, next = cur != null ? cur.next : null) {
+            pre.next = cur.next;
+            cur.next = next.next;
+            next.next = cur;
+        }
+        return dummy.next;
+    }
+
+    @Test
+    public void testSwapPairs() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{1,2,3,4})), new int[]{2,1,4,3}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{})), new int[]{}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{1})), new int[]{1}));
+    }
 }
