@@ -276,4 +276,40 @@ public class SortSolution {
             log.info("nextInt={}", (left + random.nextInt(right - left)));
         }
     }
+
+    /**
+     * 剑指 Offer II 072. 求平方根 https://leetcode.cn/problems/jJ0w9p/
+     * 69. x 的平方根 https://leetcode.cn/problems/sqrtx/
+     * 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
+     * 由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+     * 注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
+     * 阶梯思路：upper bound 寻找最接近x的数
+     * @param x
+     * @return
+     */
+    public int mySqrt(int x) {
+        int ans = 0, left = 1, right = x;
+        // 2端都是闭区间
+        while (left <= right) {
+            // upper bound的形式，因为我们要找的ans要是最接近于x的最大的数，利用upper bound
+            int mid = left + (right - left) / 2;
+            if (mid <= x / mid) {
+                // 只要mid <= x/mid，left左边界就会一直向右移动，ans就会一直更新（变大）
+                // 直到不在满足mid <= x/mid的条件为止，ans就会停止更新，永远停在满足mid<=x/mid条件下面的最后一次更新
+                // 即满足ans * ans <= mid的最大值。
+                ans = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return ans;
+    }
+
+    @Test
+    public void testMySqrt() {
+        Assert.assertEquals(2, mySqrt(8));
+        Assert.assertEquals(2, mySqrt(5));
+        Assert.assertEquals(3, mySqrt(9));
+    }
 }

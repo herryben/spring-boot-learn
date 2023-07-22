@@ -1,12 +1,14 @@
 package com.learn.backtrack;
 
 import com.google.common.collect.Sets;
+import com.learn.Utils.Utils;
 import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BackTrackSolution {
     /**
@@ -15,7 +17,7 @@ public class BackTrackSolution {
      * 示例:
      * 输入：s = "abc"
      * 输出：["abc","acb","bac","bca","cab","cba"]
-     *
+     * 解题思路：就是普通的排列
      * @param s
      * @return
      */
@@ -107,23 +109,23 @@ public class BackTrackSolution {
      */
     public List<String> letterCombinations(String digits) {
         List<String> res = new ArrayList<>();
-        letterCombinationsDfs(digits, 0, new StringBuilder(), res);
+        letterCombinationsDfs(digits, res, 0, new StringBuilder());
         return res;
     }
-    public void letterCombinationsDfs(String digits, int level, StringBuilder path, List<String> res) {
+
+    public void letterCombinationsDfs(String digits, List<String> res, int level, StringBuilder track) {
         if (level == digits.length()) {
-            if (path.length() != 0) {
-                res.add(path.toString());
+            if (track.length() != 0) {
+                res.add(track.toString());
             }
             return;
         }
-        // 取到该层对应的数字对应的英文字母
-        String str = keyboard[Integer.parseInt(String.valueOf(digits.charAt(level)))];
-        for (int i = 0; i < str.length(); i++) {
-            // 做选择
-            letterCombinationsDfs(digits, level + 1, path.append(str.charAt(i)), res);
-            // 撤销选择
-            path.deleteCharAt(path.length() - 1);
+        // 就是普通组合的变种
+        String letter = keyboard[Integer.parseInt(String.valueOf(digits.charAt(level)))];
+        for (char ch: letter.toCharArray()) {
+            track.append(ch);
+            letterCombinationsDfs(digits, res, level + 1, track);
+            track.deleteCharAt(track.length() - 1);
         }
     }
 
@@ -149,11 +151,321 @@ public class BackTrackSolution {
      * @return
      */
     public List<List<Integer>> subsets(int[] nums) {
-        return Lists.newArrayList();
+        List<List<Integer>> res = Lists.newArrayList();
+        List<Integer> track = new LinkedList<>();
+        subsets(nums, 0, res, track);
+        return res;
+    }
+
+    public void subsets(int[] nums, int start, List<List<Integer>> res, List<Integer> track) {
+        // 子集的主要特点就是无条件加入结果
+        res.add(new ArrayList<>(track));
+        for (int i = start; i < nums.length; i++) {
+            track.add(nums[i]);
+            subsets(nums, i + 1, res, track);
+            track.remove(track.size() - 1);
+        }
     }
 
     @Test
     public void testSubsets() {
-//        Assert.assertEquals(Utils.isEqualList());
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(), Lists.newArrayList(1), Lists.newArrayList(2),
+                Lists.newArrayList(1, 2), Lists.newArrayList(3), Lists.newArrayList(1, 3),
+                Lists.newArrayList(2, 3), Lists.newArrayList(1, 2, 3)), Sets.newHashSet(subsets(new int[] {1,2,3}))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(), Lists.newArrayList(0)), Sets.newHashSet(subsets(new int[] {0}))));
+    }
+
+    /**
+     * https://leetcode.cn/problems/permutations/
+     * 46. 全排列
+     * 示例 1：
+     *
+     * 输入：nums = [1,2,3]
+     * 输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+     * 示例 2：
+     *
+     * 输入：nums = [0,1]
+     * 输出：[[0,1],[1,0]]
+     * 示例 3：
+     *
+     * 输入：nums = [1]
+     * 输出：[[1]]
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = Lists.newArrayList();
+        permute(nums, res, new LinkedList<>());
+        return res;
+    }
+
+    public void permute(int[] nums, List<List<Integer>> res, List<Integer> track) {
+        if(track.size() == nums.length) {
+            res.add(new ArrayList<>(track));
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (track.contains(nums[i])) {
+                continue;
+            }
+            track.add(nums[i]);
+            permute(nums, res, track);
+            track.remove(track.size() - 1);
+        }
+    }
+
+    @Test
+    public void testPermute() {
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(1,2,3), Lists.newArrayList(1,3,2), Lists.newArrayList(2,1,3),
+                Lists.newArrayList(2,3,1), Lists.newArrayList(3,1,2) ,Lists.newArrayList(3,2,1)), Sets.newHashSet(permute(new int[] {1,2,3}))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(0, 1), Lists.newArrayList(1, 0)), Sets.newHashSet(permute(new int[] {0, 1}))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(1).stream().map(Lists::newArrayList).collect(Collectors.toList())), Sets.newHashSet(permute(new int[] {1}))));
+    }
+
+    /**
+     * 22. 括号生成
+     * https://leetcode.cn/problems/generate-parentheses/description/
+     * 示例 1：
+     *
+     * 输入：n = 3
+     * 输出：["((()))","(()())","(())()","()(())","()()()"]
+     * 示例 2：
+     *
+     * 输入：n = 1
+     * 输出：["()"]
+     * 解题思路：
+     * 1.有条件回溯
+     * 2.右括号增长速度不能大于左括号
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        generateParenthesis(result, 0, 0, n, new StringBuilder());
+        return result;
+    }
+
+    public void generateParenthesis(List<String> res, int open, int close, int n, StringBuilder track) {
+        if (track.length() == 2 * n) {
+            res.add(track.toString());
+        }
+        if (open < n) {
+            track.append("(");
+            generateParenthesis(res, open + 1, close, n, track);
+            track.deleteCharAt(track.length() - 1);
+        }
+        if (close < open) {
+            track.append(")");
+            generateParenthesis(res, open, close + 1, n, track);
+            track.deleteCharAt(track.length() - 1);
+        }
+    }
+
+    @Test
+    public void testGenerateParenthesis() {
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("((()))","(()())","(())()","()(())","()()()"), Sets.newHashSet(generateParenthesis(3))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("()"), Sets.newHashSet(generateParenthesis(1))));
+    }
+
+    /**
+     * 39. 组合总和
+     * https://leetcode.cn/problems/combination-sum/description/
+     * 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+     *
+     * candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。
+     *
+     * 对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+     * 示例 1：
+     *
+     * 输入：candidates = [2,3,6,7], target = 7
+     * 输出：[[2,2,3],[7]]
+     * 解释：
+     * 2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。
+     * 7 也是一个候选， 7 = 7 。
+     * 仅有这两种组合。
+     * 示例 2：
+     *
+     * 输入: candidates = [2,3,5], target = 8
+     * 输出: [[2,2,2,2],[2,3,3],[3,5]]
+     * 示例 3：
+     *
+     * 输入: candidates = [2], target = 1
+     * 输出: []
+     * 解题思路：组合的求和变种
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        combinationSum(candidates, 0, 0, target, result, new LinkedList<>());
+//        dfs(result, candidates, 0, new LinkedList<>(), target, 0);
+        return result;
+    }
+
+    public void combinationSum(int[] candidates, int sum, int start, int target, List<List<Integer>> result, List<Integer> track) {
+        if (sum == target) {
+            result.add(new ArrayList<>(track));
+            return;
+        }
+        for (int i = start; i < candidates.length; i++) {
+            if(sum + candidates[i] > target) {
+                return;
+            }
+            track.add(candidates[i]);
+            // 这里和传统组合的区别是不需要迭代i
+            combinationSum(candidates, sum + candidates[i], i, target, result, track);
+            track.remove(track.size() - 1);
+        }
+    }
+
+    public void dfs(List<List<Integer>> res, int[] candidates, int tmp, List<Integer> path, int target, int start){
+        if(tmp == target){
+            res.add(path);
+            return;
+        }
+        for(int i =start ;i < candidates.length; i++){
+            if(tmp + candidates[i] > target){
+                return;
+            }
+            path.add(candidates[i]);
+            dfs(res, candidates, tmp + candidates[i], new ArrayList<>(path), target, i);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    @Test
+    public void testCombination() {
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(2,2,3), Lists.newArrayList(7)), Sets.newHashSet(combinationSum(new int[] {2,3,6,7}, 7))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(
+                Lists.newArrayList(2, 2, 2, 2), Lists.newArrayList(2, 3, 3), Lists.newArrayList(3, 5)), Sets.newHashSet(combinationSum(new int[] {2,3,5}, 8))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(), Sets.newHashSet(combinationSum(new int[] {2}, 1))));
+    }
+
+    /**
+     * https://leetcode.cn/problems/word-search/
+     * 79. 单词搜索
+     * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     * 示例 1：
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+     * 输出：true
+     * 示例 2：
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+     * 输出：true
+     * 示例 3：
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+     * 输出：false
+     * 解题思路：
+     * 从每个位置开始
+     * 以是否访问过为状态进行回溯探测
+     * @param board
+     * @param word
+     * @return
+     */
+    public boolean exist(char[][] board, String word) {
+        boolean[][] isVisited = new boolean[board.length][board[0].length];
+        // 棋盘类题固定套路，从每个格子开始不停地回溯
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (backTrack(board, i, j, word, 0, isVisited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean backTrack(char[][] board, int x, int y, String word, int step, boolean[][] isVisited) {
+        if (step == word.length()) {
+            return true;
+        }
+        if (x < 0 || y < 0 || x >= board.length || y >= board[0].length) {
+            return false;
+        }
+        if (isVisited[x][y]) {
+            return false;
+        }
+        if (board[x][y] != word.charAt(step)) {
+            return false;
+        }
+        isVisited[x][y] = true;
+        boolean ans = backTrack(board, x + 1, y, word, step + 1, isVisited)
+                || backTrack(board, x - 1, y, word, step + 1, isVisited)
+                || backTrack(board, x, y + 1, word, step + 1, isVisited)
+                || backTrack(board, x, y - 1, word, step + 1, isVisited);
+        isVisited[x][y] = false;
+        return ans;
+    }
+
+    @Test
+    public void testExist() {
+        Assert.assertEquals(true, exist(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "ABCCED"));
+        Assert.assertEquals(true, exist(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "SEE"));
+        Assert.assertEquals(false, exist(new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        }, "ABCB"));
+    }
+
+    /**
+     * 494. 目标和
+     * https://leetcode.cn/problems/target-sum/
+     * 给你一个整数数组 nums 和一个整数 target 。
+     *
+     * 向数组中的每个整数前添加 '+' 或 '-' ，然后串联起所有整数，可以构造一个 表达式 ：
+     *
+     * 例如，nums = [2, 1] ，可以在 2 之前添加 '+' ，在 1 之前添加 '-' ，然后串联起来得到表达式 "+2-1" 。
+     * 返回可以通过上述方法构造的、运算结果等于 target 的不同 表达式 的数目。
+     * 示例 1：
+     *
+     * 输入：nums = [1,1,1,1,1], target = 3
+     * 输出：5
+     * 解释：一共有 5 种方法让最终目标和为 3 。
+     * -1 + 1 + 1 + 1 + 1 = 3
+     * +1 - 1 + 1 + 1 + 1 = 3
+     * +1 + 1 - 1 + 1 + 1 = 3
+     * +1 + 1 + 1 - 1 + 1 = 3
+     * +1 + 1 + 1 + 1 - 1 = 3
+     *
+     * 示例 2：
+     * 输入：nums = [1], target = 1
+     * 输出：1
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays(int[] nums, int target) {
+        return findTargetSumWays(nums, target, 0, 0, 0);
+    }
+
+    public int findTargetSumWays(int[] nums, int target, int total, int cur, int ans) {
+        if (total == target && cur == nums.length) {
+            return ans + 1;
+        }
+        if (cur >= nums.length) {
+            return 0;
+        }
+        return findTargetSumWays(nums,target, total + nums[cur], cur + 1, ans) + findTargetSumWays(nums,target, total - nums[cur], cur + 1, ans);
+    }
+
+    @Test
+    public void testFindTargetSumWays() {
+        Assert.assertEquals(5, findTargetSumWays(new int[] {1,1,1,1,1}, 3));
+        Assert.assertEquals(1, findTargetSumWays(new int[]{1},1));
     }
 }
