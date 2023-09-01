@@ -549,14 +549,14 @@ public class WindowSolution {
         }
         ans[0] = nums[queue.peekFirst()];
         for (int i = k; i < nums.length; i++) {
+            while (!queue.isEmpty() && i - queue.peekFirst() + 1 > k) {
+                queue.pollFirst();
+            }
             while (!queue.isEmpty() && nums[queue.peekLast()] < nums[i]) {
                 queue.pollLast();
             }
             queue.offerLast(i);
             ans[i - k + 1] = nums[queue.peekFirst()];
-            while (i - queue.peekFirst() + 1 > k) {
-                queue.pollFirst();
-            }
         }
         return ans;
     }
