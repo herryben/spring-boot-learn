@@ -828,7 +828,7 @@ public class DpSolution {
             // 找最远
             fastest = Math.max(fastest, current);
             if (nums[i] == 0 && fastest <= i) {
-                // 如果已经到了最远，走不下去了，则停止
+                // 如果已经到了最远，走不下去了，则停止，相当于陷到了==0的地方
                 break;
             }
         }
