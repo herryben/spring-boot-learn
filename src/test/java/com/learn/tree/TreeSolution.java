@@ -418,7 +418,34 @@ public class TreeSolution {
 
     @Test
     public void testBuildTree() {
-        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(buildTree(new int[]{3,9,20,15,7}, new int[]{9,3,15,20,7}), new Integer[]{3,9,20,null,null,15,7}));
+        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(buildTree(new int[]{3, 9, 20, 15, 7}, new int[]{9, 3, 15, 20, 7}), new Integer[]{3, 9, 20, null, null, 15, 7}));
         Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(buildTree(new int[]{-1}, new int[]{-1}), new Integer[]{-1}));
     }
+
+    /**
+     * 226. 翻转二叉树
+     * https://leetcode.cn/problems/invert-binary-tree/
+     * 给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    @Test
+    public void testInvertTree() {
+        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(invertTree(Utils.buildBinaryTree(new Integer[]{4, 2, 7, 1, 3, 6, 9})), new Integer[]{4, 7, 2, 9, 6, 3, 1}));
+        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(invertTree(Utils.buildBinaryTree(new Integer[]{})), new Integer[]{}));
+        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(invertTree(Utils.buildBinaryTree(new Integer[]{2, 1, 3})), new Integer[]{2, 3, 1}));
+    }
+
 }
