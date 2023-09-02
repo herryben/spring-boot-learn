@@ -39,6 +39,7 @@ public class NumArray {
     }
 
     public int sumRange(int left, int right) {
+        // 索引转和 用+1
         return preSum[right + 1] - preSum[left];
     }
 }
