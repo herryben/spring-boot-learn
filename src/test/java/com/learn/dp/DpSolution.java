@@ -865,7 +865,7 @@ public class DpSolution {
     public int jump(int[] nums) {
         int step = 0;
         int current = 0, fastest = 0;
-        // 遍历到倒数第个元素，因为最后一个元素一定会被访问到，造成数字+1
+        // 遍历到倒数第2个元素，因为最后一个元素一定会被访问到，造成数字+1
         for (int i = 0; i < nums.length - 1; i++) {
             fastest = Math.max(fastest, i + nums[i]);
             if (i >= current) {
