@@ -4,7 +4,6 @@ import com.learn.Utils.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.rmi.CORBA.Util;
 import java.util.*;
 
 /**
@@ -659,5 +658,44 @@ public class LinkedSolution {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(deleteDuplicates2(Utils.buildLinkedList(new int[]{1,2,3,3,4,4,5})), new int[]{1,2,5}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(deleteDuplicates2(Utils.buildLinkedList(new int[]{1,1,1,2,3})), new int[]{2,3}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(deleteDuplicates2(Utils.buildLinkedList(new int[]{1,1,1})), new int[]{}));
+    }
+
+    /**
+     * 147. 对链表进行插入排序
+     * 给定单个链表的头 head ，使用 插入排序 对链表进行排序，并返回 排序后链表的头 。
+     *
+     * 插入排序 算法的步骤:
+     *
+     * 插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。
+     * 每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。
+     * 重复直到所有输入数据插入完为止。
+     * 下面是插入排序算法的一个图形示例。部分排序的列表(黑色)最初只包含列表中的第一个元素。每次迭代时，从输入数据中删除一个元素(红色)，并就地插入已排序的列表中。
+     * @param head
+     * @return
+     */
+    public ListNode insertionSortList(ListNode head) {
+        ListNode dummy = new ListNode(Integer.MIN_VALUE);
+        for(ListNode cur = head; cur != null;){
+            ListNode pos = findPos(dummy, cur.val);
+            ListNode next = cur.next;
+            cur.next = pos.next;
+            pos.next = cur;
+            cur = next;
+        }
+        return dummy.next;
+    }
+
+    public ListNode findPos(ListNode head, int val){
+        ListNode pre = null;
+        for(ListNode cur = head; cur != null && cur.val <= val; pre = cur, cur = cur.next){
+
+        }
+        return pre;
+    }
+
+    @Test
+    public void testInsertionSortList() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{4,2,1,3})), new int[]{1,2,3,4}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{-1,5,3,4,0})), new int[]{-1,0,3,4,5}));
     }
 }
