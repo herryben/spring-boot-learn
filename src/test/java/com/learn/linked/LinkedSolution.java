@@ -594,7 +594,8 @@ public class LinkedSolution {
      * 输出：[1]
      * 解题思路：
      * 1.从dummy节点开始用3个变量pre, cur, next标记4个节点pre, cur, next, next.next
-     * 2.一共3步：①pre.next指向下下个节点 ②cur.next指向下下个节点 ③next.next指回cur
+     * 2.一共3步：①pre.next指向cur下个节点 ②cur.next指向next下个节点 ③next.next指回cur
+     * 3.pre从dummy开始
      * @param head
      * @return
      */
@@ -617,5 +618,46 @@ public class LinkedSolution {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{1,2,3,4})), new int[]{2,1,4,3}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{})), new int[]{}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{1})), new int[]{1}));
+    }
+
+    /**
+     * https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/description/
+     * 82. 删除排序链表中的重复元素 II
+     * 给定一个已排序的链表的头 head ， 删除原始链表中所有重复数字的节点，只留下不同的数字 。返回 已排序的链表 。
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates2(ListNode head) {
+        ListNode dummy = new ListNode(Integer.MIN_VALUE);
+        dummy.next = head;
+        ListNode pre = dummy, cur =  dummy.next;
+        while(cur != null){
+            boolean rep = false;
+            while(cur.next != null && cur.val == cur.next.val){
+                ListNode tmp = cur;
+                cur = cur.next;
+                tmp = null;
+                rep = true;
+            }
+            if(rep){
+                // 重复cur再往前走一步
+                cur = cur.next;
+            } else {
+                // 不重复2个都往前走
+                pre.next = cur;
+                pre = pre.next;
+                cur = cur.next;
+            }
+        }
+        pre.next = null;
+        return dummy.next;
+    }
+
+    @Test
+    public void testDeleteDuplicates2() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(deleteDuplicates2(Utils.buildLinkedList(new int[]{1,2,3,3,4,4,5})), new int[]{1,2,5}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(deleteDuplicates2(Utils.buildLinkedList(new int[]{1,1,1,2,3})), new int[]{2,3}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(deleteDuplicates2(Utils.buildLinkedList(new int[]{1,1,1})), new int[]{}));
     }
 }
