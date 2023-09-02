@@ -5,11 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 @Slf4j
 public class IntervalsSolution {
     /**
-     * TODO 56. 合并区间
+     * 56. 合并区间
      * https://leetcode.cn/problems/merge-intervals/
      * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
      * 示例 1：
@@ -38,6 +41,7 @@ public class IntervalsSolution {
             int[] last = res.get(res.size() - 1);
             // 当前头小于等于最后一个尾
             if (current[0] <= last[1]) {
+                // 相当于合并
                 last[1] = Math.max(current[1], last[1]);
             } else {
                 res.add(new int[]{current[0], current[1]});
@@ -53,7 +57,7 @@ public class IntervalsSolution {
     }
 
     /**
-     * TODO 435. 无重叠区间
+     * 435. 无重叠区间
      * https://leetcode.cn/problems/non-overlapping-intervals/description/
      * 给定一个区间的集合 intervals ，其中 intervals[i] = [starti, endi] 。返回 需要移除区间的最小数量，使剩余区间互不重叠 。
      * 示例 1:
@@ -132,6 +136,7 @@ public class IntervalsSolution {
         int i = 0, j = 0;
         while (i < a.length && j < b.length) {
             diff = Math.min(Math.abs(diff), Math.abs(a[i] - b[j]));
+            // 贪心 谁小谁往前走
             if (a[i] < b[j]) {
                 i++;
             } else {
@@ -148,7 +153,7 @@ public class IntervalsSolution {
     }
 
     /**
-     * TODO 452. 用最少数量的箭引爆气球
+     * 452. 用最少数量的箭引爆气球
      * 有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 points ，其中points[i] = [xstart, xend] 表示水平直径在 xstart 和 xend之间的气球。你不知道气球的确切 y 坐标。
      * <p>
      * 一支弓箭可以沿着 x 轴从不同点 完全垂直 地射出。在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 xstart，xend， 且满足  xstart ≤ x ≤ xend，则该气球会被 引爆 。可以射出的弓箭的数量 没有限制 。 弓箭一旦被射出之后，可以无限地前进。
@@ -201,66 +206,5 @@ public class IntervalsSolution {
         Assert.assertEquals(2, findMinArrowShots(new int[][]{{10, 16}, {2, 8}, {1, 6}, {7, 12}}));
         Assert.assertEquals(4, findMinArrowShots(new int[][]{{1, 2}, {3, 4}, {5, 6}, {7, 8}}));
         Assert.assertEquals(2, findMinArrowShots(new int[][]{{1, 2}, {2, 3}, {3, 4}, {4, 5}}));
-    }
-
-    /**
-     * 20. 有效的括号
-     * https://leetcode.cn/problems/valid-parentheses/
-     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
-     * <p>
-     * 有效字符串需满足：
-     * <p>
-     * 左括号必须用相同类型的右括号闭合。
-     * 左括号必须以正确的顺序闭合。
-     * 每个右括号都有一个对应的相同类型的左括号。
-     * 示例 1：
-     * <p>
-     * 输入：s = "()"
-     * 输出：true
-     * 示例 2：
-     * <p>
-     * 输入：s = "()[]{}"
-     * 输出：true
-     * 示例 3：
-     * <p>
-     * 输入：s = "(]"
-     * 输出：false
-     *
-     * @param s
-     * @return
-     */
-    public boolean isValid(String s) {
-        Deque<Character> stack = new ArrayDeque<>();
-        for (char ch: s.toCharArray()) {
-            if (ch == '(' || ch == '[' || ch == '{') {
-                stack.push(ch);
-            } else {
-                if (!stack.isEmpty() && getCharacter(ch) == stack.peekFirst()) {
-                    stack.pop();
-                } else {
-                    return false;
-                }
-            }
-        }
-        return stack.isEmpty();
-    }
-
-    private Character getCharacter(Character ch) {
-        switch (ch) {
-            case ')':
-                return '(';
-            case ']':
-                return '[';
-            default:
-                return '{';
-        }
-    }
-
-    @Test
-    public void testIsValid() {
-        Assert.assertEquals(false, isValid("("));
-        Assert.assertEquals(true, isValid("()"));
-        Assert.assertEquals(true, isValid("()[]{}"));
-        Assert.assertEquals(false, isValid("(]"));
     }
 }

@@ -401,4 +401,66 @@ public class StackSolution {
         Assert.assertEquals(6, trapDp(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
         Assert.assertEquals(9, trapDp(new int[]{4, 2, 0, 3, 2, 5}));
     }
+
+    /**
+     * 20. 有效的括号
+     * https://leetcode.cn/problems/valid-parentheses/
+     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+     * <p>
+     * 有效字符串需满足：
+     * <p>
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     * 每个右括号都有一个对应的相同类型的左括号。
+     * 示例 1：
+     * <p>
+     * 输入：s = "()"
+     * 输出：true
+     * 示例 2：
+     * <p>
+     * 输入：s = "()[]{}"
+     * 输出：true
+     * 示例 3：
+     * <p>
+     * 输入：s = "(]"
+     * 输出：false
+     * 解题思路：单调栈变形
+     *
+     * @param s
+     * @return
+     */
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        for (char ch : s.toCharArray()) {
+            if (ch == '(' || ch == '[' || ch == '{') {
+                stack.push(ch);
+            } else {
+                if (!stack.isEmpty() && getCharacter(ch) == stack.peekFirst()) {
+                    stack.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    private Character getCharacter(Character ch) {
+        switch (ch) {
+            case ')':
+                return '(';
+            case ']':
+                return '[';
+            default:
+                return '{';
+        }
+    }
+
+    @Test
+    public void testIsValid() {
+        Assert.assertEquals(false, isValid("("));
+        Assert.assertEquals(true, isValid("()"));
+        Assert.assertEquals(true, isValid("()[]{}"));
+        Assert.assertEquals(false, isValid("(]"));
+    }
 }
