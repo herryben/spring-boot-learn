@@ -366,20 +366,22 @@ public class DpSolution {
      */
     public boolean canPartition (int[] nums) {
         int sum = Arrays.stream(nums).sum();
-        int n = sum % 2;
-        if (n == 1) {
+        int mod = sum % 2, n = sum / 2;
+        if (mod == 1) {
             return false;
         }
-        boolean[][] dp = new boolean[nums.length+1][n + 1];
+        boolean[][] dp = new boolean[nums.length + 1][n + 1];
         for (int i = 0; i <= nums.length; i++) {
             dp[i][0] = true;
         }
         for (int i = 1; i <= nums.length; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (j >= nums[i-1]) {
-                    dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i-1]];
+            for (int j = 1; j <= sum / 2; j++) {
+                if (j >= nums[i - 1]) {
+                    // 可以用这个硬币，不用 || 用
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
                 } else {
-                    dp[i][j] = dp[i-1][j];
+                    // 不用了这个硬币，取上一个状态
+                    dp[i][j] = dp[i - 1][j];
                 }
             }
         }
