@@ -5,10 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.rmi.CORBA.Util;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author herryhaorui@didiglobal.com
@@ -213,6 +210,52 @@ public class LinkedSolution {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{1,2,3,4,5})), new int[]{5,4,3,2,1}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{1,2})), new int[]{2,1}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{})), new int[]{}));
+    }
+
+    /**
+     * 25. K 个一组翻转链表
+     * https://leetcode.cn/problems/reverse-nodes-in-k-group/
+     * 给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。
+     *
+     * k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+     *
+     * 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        for (ListNode pre = dummy, end = head; end != null; end = pre.next) {
+            for (int i = 1; i < k && end != null; i++) {
+                end = end.next;
+            }
+            if (end == null) {
+                break;
+            }
+            pre = reverse(pre, pre.next, end);
+        }
+        return dummy.next;
+    }
+
+    ListNode reverse(ListNode pre, ListNode start, ListNode end) {
+        ListNode endNext = end.next;
+        ListNode dummy = new ListNode();
+        for (ListNode cur = start, next = cur.next; cur != endNext; cur = next, next = next == null ? null : next.next) {
+            cur.next = dummy.next;
+            dummy.next = cur;
+        }
+        pre.next = end;
+        start.next = endNext;
+        dummy.next = null;
+        return start;
+    }
+
+    @Test
+    public void testReverseKGroup() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseKGroup(Utils.buildLinkedList(new int[]{1,2,3,4,5}), 2), new int[]{2,1,4,3,5}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseKGroup(Utils.buildLinkedList(new int[]{1,2,3,4,5}), 3), new int[]{3,2,1,4,5}));
     }
 
     /**
