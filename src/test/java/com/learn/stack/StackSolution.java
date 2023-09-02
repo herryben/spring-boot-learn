@@ -223,6 +223,7 @@ public class StackSolution {
         }
         cur = 0;
         for (int i = 0; i < nums.length; i++) {
+            // 当前累计和是否中断
             cur = nums[i] + Math.min(cur, 0);
             min = Math.min(min, cur);
         }
