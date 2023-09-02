@@ -470,7 +470,7 @@ public class DpSolution {
         for (int i = 0; i <= len; i++) {
             dp[i][i] = 1;
         }
-        // 倒着算
+        // 当前i状态依赖上一个i+1的状态，所以倒着算
         for (int i = len; i > 0; i--) {
             for (int j = i + 1; j <= len; j++) {
                 if (s.charAt(i - 1) == s.charAt(j - 1)) {
