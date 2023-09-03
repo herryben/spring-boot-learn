@@ -10,7 +10,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * @author herryhaorui@didiglobal.com
@@ -45,6 +44,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class PrintInOrder {
+    // first一进来就执行，所以不需要信号量
     Semaphore secondSemaphore = new Semaphore(0);
     Semaphore thirdSemaphore = new Semaphore(0);
     public void first(Runnable printFirst) throws InterruptedException {
