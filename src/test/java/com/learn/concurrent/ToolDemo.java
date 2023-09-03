@@ -31,7 +31,7 @@ public class ToolDemo {
             });
             thread.start();
         }
-
+        // 大家一起倒数，数到0执行一个特定的动作
         countDownLatch.await();
         log.info("CountDownLatchDemo.testCountDownLatch finished");
     }
@@ -44,6 +44,8 @@ public class ToolDemo {
             Thread thread = new Thread(() -> {
                 try {
                     TimeUnit.SECONDS.sleep(finalI);
+                    log.info("thread i={} enter", finalI);
+                    // 大家拉起到某一个共同位置，一起往下执行
                     cyclicBarrier.await();
                 } catch (InterruptedException | BrokenBarrierException e) {
                     e.printStackTrace();
@@ -53,6 +55,6 @@ public class ToolDemo {
             thread.start();
         }
 
-        TimeUnit.MINUTES.sleep(1);
+        TimeUnit.SECONDS.sleep(5);
     }
 }
