@@ -10,6 +10,7 @@ public class SingletonClassInitialization {
     }
 
     private static class InstanceHolder {
+        // 饿汉式
         // 这个语句其实是3个指令
         // memory = allocate(); 1.分配对象的内存空间
         // instance = memory; 3.设置instance指向刚分配的内存地址，注意，此时对象还没有被初始化
