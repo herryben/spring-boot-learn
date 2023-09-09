@@ -76,17 +76,23 @@ public class BackTrackSolution {
      * 4.可以断定这时 [j,end) 必然是降序，逆置 [j,end)，使其升序
      * 5.如果在步骤 1 找不到符合的相邻元素对，说明当前 [begin,end) 为一个降序顺序，则直接跳到步骤 4
      * 该方法支持数据重复，且在 C++ STL 中被采用。
+     *
+     * 1. 从后向前第一个降式逆置就是升式,所以要找到从后向前的第一个升式
+     * 2. 又要让这个逆置后的升式尽可能地小，所以要找升式前一个数的第一大的数，并交换
+     * 3. 把交换后的降式逆置为升式
      * @param nums
      */
     public int[] nextPermutation(int[] nums) {
         // i是前面一个数，j是后面一个数，k是第一个比i大的数
         int i = nums.length - 2, j = nums.length - 1, k = nums.length - 1;
+        // 1. 从后向前第一个降式逆置就是升式,所以要找到从后向前的第一个升式
         // 寻找第一个相邻升序的元素对 (i,j)
         while (i >= 0 && nums[i] >= nums[j]) {
             i--;
             j--;
         }
-
+        // 2. 又要让这个逆置后的升式尽可能地小，所以要找升式前一个数的第一大的数，并交换
+        // 如果找到了i,下一步就是找到第一个比他大的k并交换
         if (i >= 0) {
             while (nums[i] >= nums[k]) {
                 k--;
@@ -95,7 +101,8 @@ public class BackTrackSolution {
             nums[i] = nums[k];
             nums[k] = tmp;
         }
-
+        // 3. 把交换后的降式逆置为升式
+        // [j,end)开始逆置
         for (int left = j, right = nums.length - 1; left < right; left++, right--) {
             int tmp = nums[left];
             nums[left] = nums[right];
