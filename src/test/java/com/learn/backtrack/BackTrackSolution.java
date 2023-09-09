@@ -47,7 +47,7 @@ public class BackTrackSolution {
     }
 
     /**
-     * TODO 31. 下一个排列
+     * 31. 下一个排列
      * https://leetcode.cn/problems/next-permutation/description/
      * 整数数组的一个 排列  就是将其所有成员以序列或线性顺序排列。
      * 例如，arr = [1,2,3] ，以下这些都可以视作 arr 的排列：[1,2,3]、[1,3,2]、[3,1,2]、[2,3,1] 。
@@ -66,10 +66,41 @@ public class BackTrackSolution {
      * 示例 3：
      *  输入：nums = [1,1,5]
      *  输出：[1,5,1]
-     *
+     * 解题思路：
+     * https://leetcode.cn/problems/next-permutation/solutions/80560/xia-yi-ge-pai-lie-suan-fa-xiang-jie-si-lu-tui-dao-/
+     * 算法过程
+     * 标准的 “下一个排列” 算法可以描述为：
+     * 1.从后向前 查找第一个 相邻升序 的元素对 (i,j)，满足 A[i] < A[j]。此时 [j,end) 必然是降序
+     * 2.在 [j,end) 从后向前 查找第一个满足 A[i] < A[k] 的 k。A[i]、A[k] 分别就是上文所说的「小数」、「大数」
+     * 3.将 A[i] 与 A[k] 交换
+     * 4.可以断定这时 [j,end) 必然是降序，逆置 [j,end)，使其升序
+     * 5.如果在步骤 1 找不到符合的相邻元素对，说明当前 [begin,end) 为一个降序顺序，则直接跳到步骤 4
+     * 该方法支持数据重复，且在 C++ STL 中被采用。
      * @param nums
      */
     public int[] nextPermutation(int[] nums) {
+        // i是前面一个数，j是后面一个数，k是第一个比i大的数
+        int i = nums.length - 2, j = nums.length - 1, k = nums.length - 1;
+        // 寻找第一个相邻升序的元素对 (i,j)
+        while (i >= 0 && nums[i] >= nums[j]) {
+            i--;
+            j--;
+        }
+
+        if (i >= 0) {
+            while (nums[i] >= nums[k]) {
+                k--;
+            }
+            int tmp = nums[i];
+            nums[i] = nums[k];
+            nums[k] = tmp;
+        }
+
+        for (int left = j, right = nums.length - 1; left < right; left++, right--) {
+            int tmp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = tmp;
+        }
         return nums;
     }
 
