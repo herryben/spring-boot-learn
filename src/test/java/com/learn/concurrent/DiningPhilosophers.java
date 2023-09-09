@@ -6,6 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 1226. 哲学家进餐
  * https://leetcode.cn/problems/the-dining-philosophers/description/
  * 解题思路：总是让哲学家抢下标的小叉子，这样肯定只会有一个冲突，不会造成死锁
+ * 即：第1个和第5个人产生冲突，第4个人可以获取2把锁
  */
 public class DiningPhilosophers {
 

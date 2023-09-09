@@ -1,7 +1,6 @@
 package com.learn.backtrack;
 
 import com.google.common.collect.Sets;
-import com.learn.Utils.Utils;
 import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -12,12 +11,13 @@ import java.util.stream.Collectors;
 
 public class BackTrackSolution {
     /**
-     * TODO 剑指 Offer 38. 字符串的排列
+     * 剑指 Offer 38. 字符串的排列
      * https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/
      * 示例:
      * 输入：s = "abc"
      * 输出：["abc","acb","bac","bca","cab","cba"]
      * 解题思路：就是普通的排列
+     *
      * @param s
      * @return
      */
@@ -168,7 +168,7 @@ public class BackTrackSolution {
     }
 
     /**
-     * TODO 78. 子集
+     * 78. 子集
      * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
      * 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
      * 示例 1：
@@ -284,6 +284,7 @@ public class BackTrackSolution {
         if (track.length() == 2 * n) {
             res.add(track.toString());
         }
+        // 让左括号增长快于右括号
         if (open < n) {
             track.append("(");
             generateParenthesis(res, open + 1, close, n, track);
@@ -333,8 +334,8 @@ public class BackTrackSolution {
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();
-        combinationSum(candidates, 0, 0, target, result, new LinkedList<>());
-//        dfs(result, candidates, 0, new LinkedList<>(), target, 0);
+//        combinationSum(candidates, 0, 0, target, result, new LinkedList<>());
+        dfs(result, candidates, 0, new LinkedList<>(), target, 0);
         return result;
     }
 
@@ -348,7 +349,7 @@ public class BackTrackSolution {
                 return;
             }
             track.add(candidates[i]);
-            // 这里和传统组合的区别是不需要迭代i
+            // 数字可以选多次，所以这里和传统组合的区别是不需要迭代i
             combinationSum(candidates, sum + candidates[i], i, target, result, track);
             track.remove(track.size() - 1);
         }
@@ -384,13 +385,19 @@ public class BackTrackSolution {
      * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
      * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
      * 示例 1：
-     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+     * 输入：board = [["A","B","C","E"],
+     *              ["S","F","C","S"],
+     *              ["A","D","E","E"]], word = "ABCCED"
      * 输出：true
      * 示例 2：
-     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+     * 输入：board = [["A","B","C","E"],
+     *              ["S","F","C","S"],
+     *              ["A","D","E","E"]], word = "SEE"
      * 输出：true
      * 示例 3：
-     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+     * 输入：board = [["A","B","C","E"],
+     *              ["S","F","C","S"],
+     *              ["A","D","E","E"]], word = "ABCB"
      * 输出：false
      * 解题思路：
      * 从每个位置开始
@@ -416,12 +423,15 @@ public class BackTrackSolution {
         if (step == word.length()) {
             return true;
         }
+        // 越界 false
         if (x < 0 || y < 0 || x >= board.length || y >= board[0].length) {
             return false;
         }
+        // 访问过 false
         if (isVisited[x][y]) {
             return false;
         }
+        // 不是目标字符 false
         if (board[x][y] != word.charAt(step)) {
             return false;
         }
@@ -488,10 +498,12 @@ public class BackTrackSolution {
         if (total == target && cur == nums.length) {
             return ans + 1;
         }
+        // 终止条件，当前层级已经用完
         if (cur >= nums.length) {
             return 0;
         }
-        return findTargetSumWays(nums,target, total + nums[cur], cur + 1, ans) + findTargetSumWays(nums,target, total - nums[cur], cur + 1, ans);
+        return findTargetSumWays(nums, target, total + nums[cur], cur + 1, ans)
+                + findTargetSumWays(nums, target, total - nums[cur], cur + 1, ans);
     }
 
     @Test

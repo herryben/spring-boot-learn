@@ -43,19 +43,24 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class H2O {
+    // 初始化就有一个氧
     Semaphore oxygenSemaphore = new Semaphore(2);
     Semaphore hydrogenSemaphore = new Semaphore(0);
     public void hydrogen(Runnable releaseHydrogen) throws InterruptedException {
+        // 一次需要0.5个氧
         oxygenSemaphore.acquire();
         // releaseHydrogen.run() outputs "H". Do not change or remove this line.
         releaseHydrogen.run();
+        // 产生一个氢
         hydrogenSemaphore.release();
     }
 
     public void oxygen(Runnable releaseOxygen) throws InterruptedException {
+        // 一次需要2个氢
         hydrogenSemaphore.acquire(2);
         // releaseOxygen.run() outputs "O". Do not change or remove this line.
         releaseOxygen.run();
+        // 产生一个氧
         oxygenSemaphore.release(2);
     }
 

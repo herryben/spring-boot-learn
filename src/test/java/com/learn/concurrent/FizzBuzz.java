@@ -56,6 +56,7 @@ public class FizzBuzz {
     public void fizz(Runnable printFizz) throws InterruptedException {
         while (state <= n) {
             synchronized (this) {
+                // 二次确认
                 if (state % 3 == 0 && state % 5 != 0 && state <= n) {
                     printFizz.run();
                     state++;
