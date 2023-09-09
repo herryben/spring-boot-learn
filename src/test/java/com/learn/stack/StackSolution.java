@@ -218,6 +218,7 @@ public class StackSolution {
             // 计算总和
             sum += nums[i];
             // Kadane算法标准步骤
+            // 本质上是动归 cur是当前累积增量，如果累积的增量小于0，累积增量就是上一个状态
             cur = nums[i] + Math.max(cur, 0);
             max = Math.max(max, cur);
         }
@@ -232,7 +233,7 @@ public class StackSolution {
     }
 
     @Test
-    public void testMaxSubarraySumCircular() {
+    public void testMaxSubArraySumCircular() {
         Assert.assertEquals(-2, maxSubarraySumCircular(new int[]{-3, -2, -3}));
         Assert.assertEquals(3, maxSubarraySumCircular(new int[]{1, -2, 3, -2}));
         Assert.assertEquals(10, maxSubarraySumCircular(new int[]{5, -3, 5}));
