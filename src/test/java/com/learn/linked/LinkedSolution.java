@@ -224,10 +224,13 @@ public class LinkedSolution {
      * 25. K 个一组翻转链表
      * https://leetcode.cn/problems/reverse-nodes-in-k-group/
      * 给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。
-     *
+     * <p>
      * k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+     * <p>
+     * 你不能只是单纯地改变节点内部的值，而是需要实际进行节点交换。
+     * 解题思路：
+     * 1. for循环数够个数
      *
-     * 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
      * @param head
      * @param k
      * @return
@@ -236,27 +239,40 @@ public class LinkedSolution {
         ListNode dummy = new ListNode();
         dummy.next = head;
         for (ListNode pre = dummy, end = head; end != null; end = pre.next) {
+            // end开始就是区间的第一个，所以从1开始
             for (int i = 1; i < k && end != null; i++) {
                 end = end.next;
             }
+            // 不够就break
             if (end == null) {
                 break;
             }
-            pre = reverse(pre, pre.next, end);
+            pre = reverse(pre, pre.next, end, end.next);
         }
         return dummy.next;
     }
 
-    ListNode reverse(ListNode pre, ListNode start, ListNode end) {
-        ListNode endNext = end.next;
+    /**
+     * 闭区间反转
+     *
+     * @param pre   区间的前一个
+     * @param start 区间开始
+     * @param end   区间结束
+     * @param after 区间的后一个
+     * @return
+     */
+    ListNode reverse(ListNode pre, ListNode start, ListNode end, ListNode after) {
         ListNode dummy = new ListNode();
-        for (ListNode cur = start, next = cur.next; cur != endNext; cur = next, next = next == null ? null : next.next) {
+        for (ListNode cur = start, next = cur.next; cur != after; cur = next, next = next == null ? null : next.next) {
             cur.next = dummy.next;
             dummy.next = cur;
         }
+        // 头变成了尾，尾变成了头
+        // 记录了区间的前一个和后一个，用前一个和后一个把反转的链表连上
         pre.next = end;
-        start.next = endNext;
+        start.next = after;
         dummy.next = null;
+        // 返回尾
         return start;
     }
 
