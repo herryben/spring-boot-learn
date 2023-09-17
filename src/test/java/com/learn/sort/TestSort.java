@@ -399,7 +399,7 @@ public class TestSort {
      * 含义是小于target的数据有几个
      */
     public int leftBound(int[] datas, int target) {
-        // 这里使用左开右闭区间[2,3)
+        // 这里使用左闭右开区间[2,3)
         int low = 0, high = datas.length;
         // 和上面的开区间对应
         while (low < high) {
@@ -427,7 +427,7 @@ public class TestSort {
     }
 
     public int rightBound(int[] datas, int target) {
-        // 这里使用左开右闭区间[2,3)
+        // 这里使用左闭右开区间[2,3)
         int low = 0, high = datas.length;
         while (low < high) {
             int mid = (low + high) / 2;
