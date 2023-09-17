@@ -4,7 +4,9 @@ import com.learn.Utils.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 /**
  * @author herryhaorui@didiglobal.com
@@ -695,7 +697,89 @@ public class LinkedSolution {
 
     @Test
     public void testInsertionSortList() {
-        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{4,2,1,3})), new int[]{1,2,3,4}));
-        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{-1,5,3,4,0})), new int[]{-1,0,3,4,5}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{4, 2, 1, 3})), new int[]{1, 2, 3, 4}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{-1, 5, 3, 4, 0})), new int[]{-1, 0, 3, 4, 5}));
+    }
+
+    public static ListNode reverse(ListNode head) {
+        ListNode dummy = new ListNode();
+        for (ListNode cur = head, next = cur.next;
+             cur != null; cur = next, next = next != null ?
+                next.next : null) {
+            cur.next = dummy.next;
+            dummy.next = cur;
+        }
+        return dummy.next;
+    }
+
+    /**
+     * 143. 重排链表
+     * https://leetcode.cn/problems/reorder-list/
+     * 给定一个单链表 L 的头节点 head ，单链表 L 表示为：
+     * <p>
+     * L0 → L1 → … → Ln - 1 → Ln
+     * 请将其重新排列后变为：
+     * <p>
+     * L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+     * 不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+     * 示例 1：
+     * 输入：head = [1,2,3,4]
+     * 输出：[1,4,2,3]
+     * <p>
+     * 示例 2：
+     * 输入：head = [1,2,3,4,5]
+     * 输出：[1,5,2,4,3]
+     * 解题思路：
+     * 1.查找中间位置节点
+     * 1.1 要找的是中间节点靠前的位置，所以需要一个pre节点记录
+     * 1.2 找中间节点标准格式：while(fast != null && fast.next != null)
+     * 2.从中间靠前位置断开
+     * 3.从中间靠后位置逆置
+     * 4.新建dummy节点合并
+     *
+     * @param head
+     */
+    public ListNode reorderList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        // 1.1 要找的是中间节点靠前的位置，所以需要一个pre节点记录
+        // 1.2 找中间节点标准格式：while(fast != null && fast.next != null)
+        ListNode fast = head, slow = head, pre = slow;
+        while (fast != null && fast.next != null) {
+            pre = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // 2.从中间靠前位置断开
+        pre.next = null;
+        ListNode afterHead = slow;
+        // 3.从中间靠后位置逆置
+        afterHead = reverse(afterHead);
+        ListNode dummy = new ListNode();
+        ListNode after = dummy;
+        while (head != null || afterHead != null) {
+            if (head != null) {
+                after.next = head;
+                head = head.next;
+                after = after.next;
+            }
+
+            if (afterHead != null) {
+                after.next = afterHead;
+                afterHead = afterHead.next;
+                after = after.next;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    @Test
+    public void testReorderList() {
+//        Utils.printLinkedList(reorderList(Utils.buildLinkedList(new int[]{1,2,3,4})));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reorderList(Utils.buildLinkedList(new int[]{1, 2, 3, 4})), new int[]{1, 4, 2, 3}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reorderList(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5})), new int[]{1, 5, 2, 4, 3}));
     }
 }
