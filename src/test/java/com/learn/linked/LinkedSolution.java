@@ -860,4 +860,45 @@ public class LinkedSolution {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reorderList(Utils.buildLinkedList(new int[]{1, 2, 3, 4})), new int[]{1, 4, 2, 3}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reorderList(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5})), new int[]{1, 5, 2, 4, 3}));
     }
+
+    /**
+     * 61. 旋转链表
+     * https://leetcode.cn/problems/rotate-list/description/
+     * 给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。
+     * 示例 1：
+     * 输入：head = [1,2,3,4,5], k = 2
+     * 输出：[4,5,1,2,3]
+     * 示例 2：
+     * 输入：head = [0,1,2], k = 4
+     * 输出：[2,0,1]
+     *
+     * @param head
+     * @param k
+     * @return 解题思路：
+     * 1. 算出链表的长度
+     * 2. 计算出剩余的步数step = len - k % len
+     * 3. 头尾相接
+     * 4. 走过step，断开
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        int len = 1;
+        ListNode h = head;
+        for (; h.next != null; h = h.next) {
+            len++;
+        }
+        int step = len - k % len;
+        h.next = head;
+        for (int i = 0; i < step; i++) {
+            h = h.next;
+        }
+        head = h.next;
+        h.next = null;
+        return head;
+    }
+
+    @Test
+    public void testRotateRight() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(rotateRight(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5}), 2), new int[]{4, 5, 1, 2, 3}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(rotateRight(Utils.buildLinkedList(new int[]{0, 1, 2}), 4), new int[]{2, 0, 1}));
+    }
 }
