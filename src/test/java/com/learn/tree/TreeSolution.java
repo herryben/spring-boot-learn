@@ -28,11 +28,6 @@ public class TreeSolution {
      * 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
      *
      * 例如，给定如下二叉树:  root = [3,5,1,6,2,0,8,null,null,7,4]
-     *
-     *
-     *
-     *
-     *
      * 示例 1:
      *
      * 输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
@@ -43,6 +38,9 @@ public class TreeSolution {
      * 输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
      * 输出: 5
      * 解释: 节点 5 和节点 4 的最近公共祖先是节点 5。因为根据定义最近公共祖先节点可以为节点本身。
+     * 解题思路：
+     * 1. 后序遍历
+     * 2. 左右子树查找的公共祖先都有，说明当前root就是最近公共祖先
      * @param root
      * @param p
      * @param q
@@ -85,7 +83,7 @@ public class TreeSolution {
      *
      * 输入：root1 = [1], root2 = [1,2]
      * 输出：[2,2]
-     * 解题思路：都合并到root1上面
+     * 解题思路：都合并到root1上面，左边合并左边，右边合并右边
      * @param root1
      * @param root2
      * @return
@@ -106,22 +104,29 @@ public class TreeSolution {
     @Test
     public void testMergeTrees() {
         Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(mergeTrees(Utils.buildBinaryTree(new Integer[]{1,3,2,5}), Utils.buildBinaryTree(new Integer[]{2,1,3,null,4,null,7})), new Integer[]{3,4,5,5,4,null,7}));
-        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(mergeTrees(Utils.buildBinaryTree(new Integer[]{1}), Utils.buildBinaryTree(new Integer[]{1,2})), new Integer[]{2,2}));
+        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(mergeTrees(Utils.buildBinaryTree(new Integer[]{1}), Utils.buildBinaryTree(new Integer[]{1, 2})), new Integer[]{2, 2}));
     }
 
     int ans;
+
     public int diameterOfBinaryTree(TreeNode root) {
         ans = 0;
-        deth(root);
+        depth(root);
         return ans;
     }
 
-    public int deth(TreeNode root) {
+    /**
+     * 后序遍历
+     *
+     * @param root
+     * @return
+     */
+    public int depth(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        int maxL = deth(root.left);
-        int maxR = deth(root.right);
+        int maxL = depth(root.left);
+        int maxR = depth(root.right);
         ans = Math.max(ans, maxL + maxR);
         return Math.max(maxL, maxR) + 1;
     }
@@ -152,7 +157,7 @@ public class TreeSolution {
      *
      * 输入：root = [2,null,3,null,4,null,5,null,6]
      * 输出：5
-     * 解题思路：就是层级遍历
+     * 解题思路：就是层级遍历，遇到左右子树都为空就返回
      * @param root
      * @return
      */
@@ -251,6 +256,7 @@ public class TreeSolution {
      * 输入：root = [1,2,2,null,3,null,3]
      * 输出：false
      * 解题思路：把一棵树传入2遍判断是否对称
+     * root.val/root.left.val/root.right.val都相等
      * @param root
      * @return
      */
@@ -296,10 +302,13 @@ public class TreeSolution {
      *
      * 输入：root = [0]
      * 输出：[0]
+     * 解题思路：
+     * 1. 先序遍历拍平放到列表里
+     * 2. 遍历列表串起来
      * @param root
      */
     public TreeNode flatten(TreeNode root) {
-        List<TreeNode> list = new ArrayList<TreeNode>();
+        List<TreeNode> list = new ArrayList<>();
         preOrder(root, list);
         for (int i = 1; i < list.size(); i++) {
             TreeNode pre = list.get(i - 1);
@@ -349,6 +358,9 @@ public class TreeSolution {
      * 输入：root = [5,1,4,null,null,3,6]
      * 输出：false
      * 解释：根节点的值是 5 ，但是右子节点的值是 4 。
+     * 解题思路：
+     * 1. 先序遍历
+     * 2. 递归验证左右子树
      * @param root
      * @return
      */
@@ -408,9 +420,11 @@ public class TreeSolution {
          if (left == right) {
              return null;
          }
+         // 算出 val和index
          int rootVal = preorder[pos++];
          int rootIndex = map.get(rootVal);
          TreeNode root = new TreeNode(rootVal);
+         // 递归构建左右子树
          root.left = inorder(preorder, map, left, rootIndex);
          root.right = inorder(preorder, map, rootIndex + 1, right);
          return root;
@@ -454,7 +468,11 @@ public class TreeSolution {
      * 小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为 root 。
      * 除了 root 之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果 两个直接相连的房子在同一天晚上被打劫 ，房屋将自动报警。
      * 给定二叉树的 root 。返回 在不触动警报的情况下 ，小偷能够盗取的最高金额 。
-     *
+     * 解题思路：
+     * 1. 后序遍历 + 动态规划计算
+     *  1.1 后序遍历才能计算结果
+     * 2. rob[0] 该层不抢 rob[1] 该层不抢
+     * 3. 强和不强之中选最大
      * @param root
      * @return
      */
