@@ -273,6 +273,10 @@ public class LinkedSolution {
      *
      * 输入：head = [1,2], n = 1
      * 输出：[1]
+     * 解题思路：
+     * 1. 快慢指针找N节点靠前位置
+     *  1.1 为了兼容1个节点的场景，新增dummy节点，人为构造2个节点
+     * 2.从N节点靠前位置开始断开
      * @param head
      * @param n
      * @return
@@ -283,16 +287,16 @@ public class LinkedSolution {
         }
         ListNode dummy = new ListNode();
         dummy.next = head;
-        ListNode p = dummy, q = dummy;
+        ListNode slow = dummy, fast = dummy;
         for (int i = 0; i < n; i++) {
-            q = q.next;
+            fast = fast.next;
         }
-        while (q.next != null) {
-            q = q.next;
-            p = p.next;
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
         }
-        ListNode next = p.next;
-        p.next = next.next;
+        ListNode next = slow.next;
+        slow.next = next.next;
         next.next = null;
         return dummy.next;
     }
