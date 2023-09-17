@@ -755,13 +755,14 @@ public class LinkedSolution {
     /**
      * 147. 对链表进行插入排序
      * 给定单个链表的头 head ，使用 插入排序 对链表进行排序，并返回 排序后链表的头 。
-     *
+     * <p>
      * 插入排序 算法的步骤:
-     *
-     * 插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。
+     * <p>
+     * 插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序地输出列表。
      * 每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。
      * 重复直到所有输入数据插入完为止。
      * 下面是插入排序算法的一个图形示例。部分排序的列表(黑色)最初只包含列表中的第一个元素。每次迭代时，从输入数据中删除一个元素(红色)，并就地插入已排序的列表中。
+     *
      * @param head
      * @return
      */
@@ -779,7 +780,7 @@ public class LinkedSolution {
 
     public ListNode findPos(ListNode head, int val){
         ListNode pre = null;
-        for(ListNode cur = head; cur != null && cur.val <= val; pre = cur, cur = cur.next){
+        for(ListNode cur = head; cur != null && cur.val <= val; pre = cur, cur = cur.next) {
 
         }
         return pre;
@@ -789,6 +790,36 @@ public class LinkedSolution {
     public void testInsertionSortList() {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{4, 2, 1, 3})), new int[]{1, 2, 3, 4}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(insertionSortList(Utils.buildLinkedList(new int[]{-1, 5, 3, 4, 0})), new int[]{-1, 0, 3, 4, 5}));
+    }
+
+    /**
+     * TODO 148. 排序链表
+     * https://leetcode.cn/problems/sort-list/
+     * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+     * <p>
+     * 输入：head = [4,2,1,3]
+     * 输出：[1,2,3,4]
+     * 示例 2：
+     * 输入：head = [-1,5,3,4,0]
+     * 输出：[-1,0,3,4,5]
+     * 示例 3：
+     * 输入：head = []
+     * 输出：[]
+     * 解题思路：
+     * 1.二路归并排序
+     * 1.1 先找到中间节点，然后归并
+     *
+     * @param head
+     * @return
+     */
+    public ListNode sortList(ListNode head) {
+        return head;
+    }
+
+    @Test
+    public void testSortList() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(sortList(Utils.buildLinkedList(new int[]{4, 2, 1, 3})), new int[]{1, 2, 3, 4}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(sortList(Utils.buildLinkedList(new int[]{-1, 5, 3, 4, 0})), new int[]{-1, 0, 3, 4, 5}));
     }
 
     public static ListNode reverse(ListNode head) {
