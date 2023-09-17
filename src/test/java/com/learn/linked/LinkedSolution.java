@@ -710,6 +710,7 @@ public class LinkedSolution {
      * 1. 2个循环遍历，需要一个pre记录前一个节点
      * 2. 重复了cur直接往前走，相当于跳过
      * 3. 不重复，就放到新的链表上
+     * 4. 特殊边界值处理 如果所有元素都重复，此时dummy == pre，要把pre.next置为null
      *
      * @param head
      * @return
