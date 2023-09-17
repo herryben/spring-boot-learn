@@ -595,6 +595,10 @@ public class LinkedSolution {
      *
      * 输入：head = [2,1], x = 2
      * 输出：[1,2]
+     * 解题思路：
+     * 1. 左右双指针分别递增小于和大于的节点
+     * 2. 左右接上
+     * 3. 断开右边
      * @param head
      * @param x
      * @return
