@@ -52,7 +52,8 @@ public class LinkedSolution {
      * 输入：lists = [[]]
      * 输出：[]
      * 解题思路：
-     *
+     * 1. 新建优先级队列
+     * 2. 每次获取头
      * @param lists
      * @return
      */
