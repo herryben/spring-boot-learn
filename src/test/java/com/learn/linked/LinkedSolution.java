@@ -291,7 +291,9 @@ public class LinkedSolution {
             q = q.next;
             p = p.next;
         }
-        p.next = p.next.next;
+        ListNode next = p.next;
+        p.next = next.next;
+        next.next = null;
         return dummy.next;
     }
     @Test
@@ -315,6 +317,8 @@ public class LinkedSolution {
      * 输入：head = [1,2,3,4,5,6]
      * 输出：[4,5,6]
      * 解释：该链表有两个中间结点，值分别为 3 和 4 ，返回第二个结点。
+     * 解题思路：
+     * 1.要找找的是中间靠后的位置，所以不用pre节点记录
      * @param head
      * @return
      */
@@ -430,10 +434,14 @@ public class LinkedSolution {
      * 2. 两数相加
      * https://leetcode.cn/problems/add-two-numbers/
      * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
-     *
+     * <p>
      * 请你将两个数相加，并以相同形式返回一个表示和的链表。
-     *
+     * <p>
      * 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+     * 解题思路：
+     * 1.直接模拟
+     * 2.进位处理
+     *
      * @param l1
      * @param l2
      * @return
@@ -485,6 +493,11 @@ public class LinkedSolution {
      *
      * 输入：l1 = [0], l2 = [0]
      * 输出：[0]
+     * 解题思路：
+     * 1. 用2个栈逆置列表
+     * 2. 模拟加法
+     * 3. 头插法
+     * 4. 进位处理
      * @param l1
      * @param l2
      * @return
@@ -500,7 +513,6 @@ public class LinkedSolution {
         Deque<Integer> stack1 = new LinkedList<>();
         Deque<Integer> stack2 = new LinkedList<>();
         ListNode dummy = new ListNode();
-        ListNode p = dummy;
         while (l1 != null) {
             stack1.push(l1.val);
             l1 = l1.next;
@@ -515,13 +527,16 @@ public class LinkedSolution {
             int val = (a + b + carry) % 10;
             carry = (a + b + carry) / 10;
             ListNode tmp = new ListNode(val);
-            tmp.next = p.next;
-            p.next = tmp;
+            // 头插法
+            tmp.next = dummy.next;
+            dummy.next = tmp;
         }
+
+        // 头插法进位处理
         if (carry != 0) {
             ListNode tmp = new ListNode(carry);
-            tmp.next = p.next;
-            p.next = tmp;
+            tmp.next = dummy.next;
+            dummy.next = tmp;
         }
         return dummy.next;
     }
@@ -778,7 +793,6 @@ public class LinkedSolution {
 
     @Test
     public void testReorderList() {
-//        Utils.printLinkedList(reorderList(Utils.buildLinkedList(new int[]{1,2,3,4})));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reorderList(Utils.buildLinkedList(new int[]{1, 2, 3, 4})), new int[]{1, 4, 2, 3}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reorderList(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5})), new int[]{1, 5, 2, 4, 3}));
     }
