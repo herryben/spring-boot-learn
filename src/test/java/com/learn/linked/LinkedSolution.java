@@ -168,8 +168,10 @@ public class LinkedSolution {
         }
         for(ListNode cur = head, next = head.next; next != null; next = next.next) {
             if (cur.val == next.val) {
+                // 等于就跳过
                 cur.next = next.next;
             } else {
+                // 不等于往前走
                 cur = next;
             }
         }
@@ -704,6 +706,10 @@ public class LinkedSolution {
      * https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/description/
      * 82. 删除排序链表中的重复元素 II
      * 给定一个已排序的链表的头 head ， 删除原始链表中所有重复数字的节点，只留下不同的数字 。返回 已排序的链表 。
+     * 解题思路：
+     * 1. 2个循环遍历，需要一个pre记录前一个节点
+     * 2. 重复了cur直接往前走，相当于跳过
+     * 3. 不重复，就放到新的链表上
      *
      * @param head
      * @return
@@ -711,16 +717,14 @@ public class LinkedSolution {
     public ListNode deleteDuplicates2(ListNode head) {
         ListNode dummy = new ListNode(Integer.MIN_VALUE);
         dummy.next = head;
-        ListNode pre = dummy, cur =  dummy.next;
-        while(cur != null){
+        ListNode pre = dummy, cur = dummy.next;
+        while (cur != null) {
             boolean rep = false;
-            while(cur.next != null && cur.val == cur.next.val){
-                ListNode tmp = cur;
+            while (cur.next != null && cur.val == cur.next.val) {
                 cur = cur.next;
-                tmp = null;
                 rep = true;
             }
-            if(rep){
+            if (rep) {
                 // 重复cur再往前走一步
                 cur = cur.next;
             } else {
@@ -730,6 +734,8 @@ public class LinkedSolution {
                 cur = cur.next;
             }
         }
+
+        // 特殊边界值：如果所有元素都重复，此时dummy == pre，要把pre.next置为null
         pre.next = null;
         return dummy.next;
     }
