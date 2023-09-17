@@ -230,6 +230,8 @@ public class LinkedSolution {
      * 你不能只是单纯地改变节点内部的值，而是需要实际进行节点交换。
      * 解题思路：
      * 1. for循环数够个数
+     * 2. 闭区间反转
+     * 3. 连上反转后的区间
      *
      * @param head
      * @param k
