@@ -622,7 +622,7 @@ public class LinkedSolution {
      * 解题思路：
      * 1.从dummy节点开始用3个变量pre, cur, next标记4个节点pre, cur, next, next.next
      * 2.一共3步：①pre.next指向cur下个节点 ②cur.next指向next下个节点 ③next.next指回cur
-     * 3.pre从dummy开始
+     * 3.pre从dummy开始简化代码逻辑
      * @param head
      * @return
      */
@@ -642,9 +642,43 @@ public class LinkedSolution {
 
     @Test
     public void testSwapPairs() {
-        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{1,2,3,4})), new int[]{2,1,4,3}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{1, 2, 3, 4})), new int[]{2, 1, 4, 3}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{})), new int[]{}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs(Utils.buildLinkedList(new int[]{1})), new int[]{1}));
+    }
+
+    /**
+     * 解题思路
+     * 1. 用1，2，3，4法
+     * 1.1.next = 3
+     * 1.2.next = 4
+     * 1.3.next = 2
+     * 2. 用dummy做第一个节点简化代码
+     *
+     * @param head
+     * @return
+     */
+    public ListNode swapPairs2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        for (ListNode one = dummy, two = one.next, three = two.next, four = three.next;
+             three != null;
+             one = two, two = two.next, three = two != null ? two.next : null, four = three != null ? three.next : null) {
+            one.next = three;
+            two.next = four;
+            three.next = two;
+        }
+        return dummy.next;
+    }
+
+    @Test
+    public void testSwapPairs2() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs2(Utils.buildLinkedList(new int[]{1, 2, 3, 4})), new int[]{2, 1, 4, 3}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs2(Utils.buildLinkedList(new int[]{})), new int[]{}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(swapPairs2(Utils.buildLinkedList(new int[]{1})), new int[]{1}));
     }
 
     /**
