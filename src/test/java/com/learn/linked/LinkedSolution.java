@@ -46,15 +46,19 @@ public class LinkedSolution {
      * 输入：lists = []
      * 输出：[]
      * 示例 3：
-     *
+     * 1. 建一个优先级队列
+     * 2. 把所有的head都加进去
+     * 3. 每次从队列拿出最小值尾插法
      * 输入：lists = [[]]
      * 输出：[]
+     * 解题思路：
+     *
      * @param lists
      * @return
      */
     public ListNode mergeKLists(ListNode[] lists) {
         ListNode dummy = new ListNode();
-        ListNode p = dummy;
+        ListNode cur = dummy;
         PriorityQueue<ListNode> queue = new PriorityQueue<>((o1, o2) -> o1.val - o2.val);
         for(ListNode head : lists) {
             if (head != null) {
@@ -62,12 +66,12 @@ public class LinkedSolution {
             }
         }
         while (!queue.isEmpty()) {
-            ListNode tmp = queue.poll();
-            p.next = tmp;
-            if (tmp.next != null) {
-                queue.offer(tmp.next);
+            ListNode head = queue.poll();
+            cur.next = head;
+            if (head.next != null) {
+                queue.offer(head.next);
             }
-            p = p.next;
+            cur = cur.next;
         }
         return dummy.next;
     }
@@ -97,6 +101,8 @@ public class LinkedSolution {
      *
      * 输入：l1 = [], l2 = [0]
      * 输出：[0]
+     * 解题思路：
+     * 1. 归并排序中归并的部分
      * @param list1
      * @param list2
      * @return
