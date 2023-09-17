@@ -407,28 +407,30 @@ public class TreeSolution {
      * @return
      */
     int pos = 0;
+
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         pos = 0;
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < inorder.length; i++) {
             map.put(inorder[i], i);
         }
-        return inorder(preorder, map, 0, inorder.length);
-     }
+        return preOrder(preorder, map, 0, inorder.length);
+    }
 
-     public TreeNode inorder(int[] preorder, Map<Integer, Integer> map, int left, int right) {
-         if (left == right) {
-             return null;
-         }
-         // 算出 val和index
-         int rootVal = preorder[pos++];
-         int rootIndex = map.get(rootVal);
-         TreeNode root = new TreeNode(rootVal);
-         // 递归构建左右子树
-         root.left = inorder(preorder, map, left, rootIndex);
-         root.right = inorder(preorder, map, rootIndex + 1, right);
-         return root;
-     }
+    // 左闭右开
+    public TreeNode preOrder(int[] preorder, Map<Integer, Integer> map, int left, int right) {
+        if (left == right) {
+            return null;
+        }
+        // 算出 val和index
+        int rootVal = preorder[pos++];
+        int rootIndex = map.get(rootVal);
+        TreeNode root = new TreeNode(rootVal);
+        // 递归构建左右子树
+        root.left = preOrder(preorder, map, left, rootIndex);
+        root.right = preOrder(preorder, map, rootIndex + 1, right);
+        return root;
+    }
 
     @Test
     public void testBuildTree() {
