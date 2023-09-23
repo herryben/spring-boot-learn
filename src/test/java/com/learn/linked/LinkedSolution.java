@@ -943,4 +943,51 @@ public class LinkedSolution {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(rotateRight(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5}), 2), new int[]{4, 5, 1, 2, 3}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(rotateRight(Utils.buildLinkedList(new int[]{0, 1, 2}), 4), new int[]{2, 0, 1}));
     }
+
+    /**
+     * 92. 反转链表 II
+     * https://leetcode.cn/problems/reverse-linked-list-ii/description/
+     * 给你单链表的头指针 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
+     * 示例 1：
+     * 输入：head = [1,2,3,4,5], left = 2, right = 4
+     * 输出：[1,4,3,2,5]
+     * 示例 2：
+     * 输入：head = [5], left = 1, right = 1
+     * 输出：[5]
+     *
+     * @param head
+     * @param left
+     * @param right 解题思路：
+     *              1. dummy节点开始，for循环计数 left - 1步到达第left节点前一个
+     *              2. for循环奇数剩下的right - left
+     *              3. 头插法 + 穿针引线法
+     *              3.1 穿针引线 3步
+     *              ① cur.next = next;
+     *              ② next.next = pre.next
+     *              ③ pre.next = next
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode pre = dummy;
+        for (int i = 0; i < left - 1; i++) {
+            pre = pre.next;
+        }
+
+        ListNode cur = pre.next;
+        for (int i = 0; i < right - left; i++) {
+            ListNode next = cur.next;
+            cur.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+        }
+        return dummy.next;
+    }
+
+    @Test
+    public void testReverseBetween() {
+        Assert.assertTrue(Utils.isLinkedListArrayEqual(reverseBetween(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5}), 2, 4), new int[]{1, 4, 3, 2, 5}));
+        Assert.assertTrue(Utils.isLinkedListArrayEqual(reverseBetween(Utils.buildLinkedList(new int[]{5}), 1, 1), new int[]{5}));
+    }
 }
