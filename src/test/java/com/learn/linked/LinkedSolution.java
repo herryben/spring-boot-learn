@@ -268,7 +268,7 @@ public class LinkedSolution {
      */
     ListNode reverse(ListNode pre, ListNode start, ListNode end, ListNode after) {
         ListNode dummy = new ListNode();
-        for (ListNode cur = start, next = cur.next; cur != after; cur = next, next = next == null ? null : next.next) {
+        for (ListNode cur = start, next = cur.next; cur != after/*这里是 after，因为只有after才可能等于null*/; cur = next, next = next == null ? null : next.next) {
             cur.next = dummy.next;
             dummy.next = cur;
         }
