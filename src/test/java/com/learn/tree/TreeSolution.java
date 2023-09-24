@@ -22,6 +22,7 @@ public class TreeSolution {
     }
     /**
      * 剑指 Offer 68 - II. 二叉树的最近公共祖先
+     * LCR 194. 二叉树的最近公共祖先
      * https://leetcode.cn/problems/er-cha-shu-de-zui-jin-gong-gong-zu-xian-lcof/description/
      * 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
      *
@@ -52,6 +53,7 @@ public class TreeSolution {
         }
         TreeNode left = lowestCommonAncestor(root.left, p, q);
         TreeNode right = lowestCommonAncestor(root.right, p, q);
+        // 当前节树为null，说明这2个节点在另一个树上
         if (left == null) {
             return right;
         }
@@ -83,7 +85,9 @@ public class TreeSolution {
      *
      * 输入：root1 = [1], root2 = [1,2]
      * 输出：[2,2]
-     * 解题思路：都合并到root1上面，左边合并左边，右边合并右边
+     * 解题思路：
+     * 1. 都合并到root1上面，左边合并左边，右边合并右边
+     * 2. 剩下就是标准的先序遍历
      * @param root1
      * @param root2
      * @return
