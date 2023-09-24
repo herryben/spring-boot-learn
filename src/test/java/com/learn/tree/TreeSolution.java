@@ -103,16 +103,8 @@ public class TreeSolution {
 
     @Test
     public void testMergeTrees() {
-        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(mergeTrees(Utils.buildBinaryTree(new Integer[]{1,3,2,5}), Utils.buildBinaryTree(new Integer[]{2,1,3,null,4,null,7})), new Integer[]{3,4,5,5,4,null,7}));
+        Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(mergeTrees(Utils.buildBinaryTree(new Integer[]{1, 3, 2, 5}), Utils.buildBinaryTree(new Integer[]{2, 1, 3, null, 4, null, 7})), new Integer[]{3, 4, 5, 5, 4, null, 7}));
         Assert.assertEquals(true, Utils.isBinaryTreeArrayEqual(mergeTrees(Utils.buildBinaryTree(new Integer[]{1}), Utils.buildBinaryTree(new Integer[]{1, 2})), new Integer[]{2, 2}));
-    }
-
-    int ans;
-
-    public int diameterOfBinaryTree(TreeNode root) {
-        ans = 0;
-        depth(root);
-        return ans;
     }
 
     /**
@@ -121,6 +113,39 @@ public class TreeSolution {
      * @param root
      * @return
      */
+    int ans;
+
+    /**
+     * 543. 二叉树的直径
+     * https://leetcode.cn/problems/diameter-of-binary-tree/
+     * 给你一棵二叉树的根节点，返回该树的 直径 。
+     * <p>
+     * 二叉树的 直径 是指树中任意两个节点之间最长路径的 长度 。这条路径可能经过也可能不经过根节点 root 。
+     * <p>
+     * 两节点之间路径的 长度 由它们之间边数表示。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * <p>
+     * 输入：root = [1,2,3,4,5]
+     * 输出：3
+     * 解释：3 ，取路径 [4,2,1,3] 或 [5,2,1,3] 的长度。
+     * 示例 2：
+     * <p>
+     * 输入：root = [1,2]
+     * 输出：1
+     *
+     * @param root
+     * @return
+     */
+    public int diameterOfBinaryTree(TreeNode root) {
+        ans = 0;
+        depth(root);
+        return ans;
+    }
+
     public int depth(TreeNode root) {
         if (root == null) {
             return 0;
@@ -256,6 +281,7 @@ public class TreeSolution {
      * 输入：root = [1,2,2,null,3,null,3]
      * 输出：false
      * 解题思路：把一棵树传入2遍判断是否对称
+     * 先序遍历
      * root.val/root.left.val/root.right.val都相等
      * @param root
      * @return
@@ -268,6 +294,7 @@ public class TreeSolution {
         if (root1 == null && root2 == null) {
             return true;
         }
+        // 有一个树不相等就是部队称
         if (root1 == null || root2 == null) {
             return false;
         }
@@ -442,7 +469,8 @@ public class TreeSolution {
      * 226. 翻转二叉树
      * https://leetcode.cn/problems/invert-binary-tree/
      * 给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
-     *
+     * 解题思路：
+     * 后序遍历：因为先知道了左右子树才能赋值给root
      * @param root
      * @return
      */
