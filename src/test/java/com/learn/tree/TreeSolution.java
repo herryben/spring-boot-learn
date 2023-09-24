@@ -504,9 +504,10 @@ public class TreeSolution {
      * 给定二叉树的 root 。返回 在不触动警报的情况下 ，小偷能够盗取的最高金额 。
      * 解题思路：
      * 1. 后序遍历 + 动态规划计算
-     *  1.1 后序遍历才能计算结果
-     * 2. rob[0] 该层不抢 rob[1] 该层不抢
-     * 3. 强和不强之中选最大
+     * 1.1 后序遍历才能计算结果
+     * 2. rob[0] 该层不抢 rob[1] 该层抢
+     * 3. 抢和不抢之中选最大
+     *
      * @param root
      * @return
      */
@@ -522,7 +523,9 @@ public class TreeSolution {
         }
         int[] left = search(root.left);
         int[] right = search(root.right);
+        // 本层不抢，所以左右子树即可以抢也可以不抢
         rob[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+        // 本层抢，所以左右子树只能不抢
         rob[1] = root.val + left[0] + right[0];
         return rob;
     }
