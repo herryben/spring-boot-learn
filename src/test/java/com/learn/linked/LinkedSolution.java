@@ -762,11 +762,19 @@ public class LinkedSolution {
      * 每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。
      * 重复直到所有输入数据插入完为止。
      * 下面是插入排序算法的一个图形示例。部分排序的列表(黑色)最初只包含列表中的第一个元素。每次迭代时，从输入数据中删除一个元素(红色)，并就地插入已排序的列表中。
+     * 解题思路：
+     * 1. 从dummy节点开始查找具体的位置
+     * 1.1 dummy节点初始化最大/最小值
+     * 2. findPos找到插入位置的前一个节点
+     * 3. 穿针引线
+     * 3.1 需要next节点记录下一个节点
+     * 3.2 当前节点cur = next
      *
      * @param head
      * @return
      */
     public ListNode insertionSortList(ListNode head) {
+        // 1.1 dummy节点初始化最大/最小值
         ListNode dummy = new ListNode(Integer.MIN_VALUE);
         for(ListNode cur = head; cur != null;){
             ListNode pos = findPos(dummy, cur.val);
