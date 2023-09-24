@@ -801,7 +801,7 @@ public class LinkedSolution {
     }
 
     /**
-     * TODO 148. 排序链表
+     * 148. 排序链表
      * https://leetcode.cn/problems/sort-list/
      * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
      * <p>
@@ -814,14 +814,53 @@ public class LinkedSolution {
      * 输入：head = []
      * 输出：[]
      * 解题思路：
-     * 1.二路归并排序
-     * 1.1 先找到中间节点，然后归并
+     * 1. 用dummy节点找到中间靠前节点
+     * 2. 二路归并排序
+     * 2.1 先找到中间节点，然后归并
      *
      * @param head
      * @return
      */
     public ListNode sortList(ListNode head) {
-        return head;
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode fast = dummy, slow = dummy;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode before = head;
+        ListNode after = slow.next;
+        slow.next = null;
+
+        before = sortList(before);
+        after = sortList(after);
+
+        dummy = new ListNode();
+        ListNode cur = dummy;
+        while (before != null && after != null) {
+            if (before.val < after.val) {
+                cur.next = before;
+                cur = cur.next;
+                before = before.next;
+            } else {
+                cur.next = after;
+                cur = cur.next;
+                after = after.next;
+            }
+        }
+
+        if (before != null) {
+            cur.next = before;
+        }
+
+        if (after != null) {
+            cur.next = after;
+        }
+        return dummy.next;
     }
 
     @Test
