@@ -75,7 +75,9 @@ public class IntervalsSolution {
      * 输入: intervals = [ [1,2], [2,3] ]
      * 输出: 0
      * 解释: 你不需要移除任何区间，因为它们已经是无重叠的了。
-     *
+     * 解题思路：
+     * 1. 算出不重合的数量
+     * 2. 总数- 不重合的数量
      * @param intervals
      * @return
      */
@@ -87,6 +89,7 @@ public class IntervalsSolution {
                 return o1[0] - o2[0];
             }
         });
+        // 不重合的数量
         int count = 1;
         int end = intervals[0][1];
         for (int i = 1; i < intervals.length; i++) {
@@ -120,7 +123,10 @@ public class IntervalsSolution {
      * 1 <= a.length, b.length <= 100000
      * -2147483648 <= a[i], b[i] <= 2147483647
      * 正确结果在区间 [0, 2147483647] 内
-     * 解题思路：先对2个数组排序，再用双指针，谁小谁往前
+     * 解题思路：
+     * 1. 贪心
+     * 2. 先对2个数组排序
+     * 3. 再用双指针，谁小谁往前
      * 需要注意补码、反码相关内容
      * https://www.404bugs.com/index.php/details/1079094626572095488
      * https://blog.csdn.net/qq_48052049/article/details/125994544
@@ -178,7 +184,8 @@ public class IntervalsSolution {
      * 解释：气球可以用2支箭来爆破:
      * - 在x = 2处发射箭，击破气球[1,2]和[2,3]。
      * - 在x = 4处射出箭，击破气球[3,4]和[4,5]。
-     *
+     * 解题思路
+     * 1. 计算不重合的数量
      * @param points
      * @return
      */
