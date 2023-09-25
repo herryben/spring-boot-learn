@@ -93,7 +93,7 @@ public class DpSolution {
                     // 硬币不够用了
                     dp[i][j] = dp[i - 1][j];
                 } else {
-                    // 硬币够用
+                    // 硬币够用 = 不用这个硬币凑够 + 用这个硬币凑够
                     dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]];
                 }
             }
@@ -702,7 +702,7 @@ public class DpSolution {
         for (int i = 0; i < s.length(); i++) {
             int len = Math.max(expendLongestPalindrome(s, i, i), expendLongestPalindrome(s, i, i + 1));
             if (end - start < len) {
-                // 兼容bb 和 aba2种情况
+                // 取靠左位置，兼容bb 和 aba2种情况
                 start = i - (len - 1) / 2;
                 end = i + len / 2;
             }
