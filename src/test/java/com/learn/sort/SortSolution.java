@@ -26,7 +26,7 @@ public class SortSolution {
      * 输出：23
      * 解题思路：
      * 二分查找左边界
-     *
+     * 查找区间[1, max]
      * @param piles
      * @param h
      * @return
@@ -48,6 +48,7 @@ public class SortSolution {
         return low;
     }
 
+    // 小技巧：(pile + speed - 1) / speed 向上去整
     public int needHours(int[] piles, int speed) {
         int needHour = 0;
         for (int pile : piles) {
@@ -121,6 +122,7 @@ public class SortSolution {
     public int needDays(int[] weights, int cap) {
         int needDays = 1, current = 0;
         for (int weight : weights) {
+            // 提前判断，如果满了就新增一天
             if (current + weight > cap) {
                 needDays++;
                 current = 0;
@@ -154,7 +156,11 @@ public class SortSolution {
      * 输入：nums = [2,3,4,5], queries = [1]
      * 输出：[0]
      * 解释：空子序列是唯一一个满足元素和小于或等于 1 的子序列，所以 answer[0] = 0 。
-     * 解题思路：前缀和加二分搜索
+     * 解题思路：
+     * 1. 排序
+     * 2. 前缀和
+     * 3. 二分搜索
+     *  3.1因为是求最长，所以是upperBound
      * @param nums
      * @param queries
      * @return
@@ -283,7 +289,8 @@ public class SortSolution {
      * 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
      * 由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
      * 注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
-     * 阶梯思路：upper bound 寻找最接近x的数
+     * 解题思路：upper bound 寻找最接近x的数
+     *
      * @param x
      * @return
      */
