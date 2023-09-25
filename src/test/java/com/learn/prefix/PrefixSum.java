@@ -61,7 +61,6 @@ public class PrefixSum {
                 ans += map.get(diff);
             }
             map.compute(sum, (key, val) -> val == null ? 1 : ++val);
-//            map.put(sum, map.getOrDefault(sum, 0) + 1);
         }
         return ans;
     }
@@ -81,8 +80,10 @@ public class PrefixSum {
      */
     public int subarraySum2(int[] nums, int k) {
         int ans = 0;
+        // 枚举所有数
         for (int i = 0; i < nums.length; i++) {
             int sum = 0;
+            // 枚举[0, i]
             for (int j = i; j >= 0; j--) {
                 sum += nums[j];
                 if (sum == k) {
