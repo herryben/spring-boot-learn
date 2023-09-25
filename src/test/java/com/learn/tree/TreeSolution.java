@@ -586,4 +586,49 @@ public class TreeSolution {
         Assert.assertEquals(3, pathSum(Utils.buildBinaryTree(new Integer[]{5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1}), 22));
         Assert.assertEquals(0, pathSum(Utils.buildBinaryTree(new Integer[]{1000000000, 1000000000, null, 294967296, null, 1000000000, null, 1000000000, null, 1000000000}), 0));
     }
+
+    /**
+     * 124. 二叉树中的最大路径和
+     * https://leetcode.cn/problems/binary-tree-maximum-path-sum/description/?envType=study-plan-v2&envId=top-100-liked
+     * 二叉树中的 路径 被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+     * <p>
+     * 路径和 是路径中各节点值的总和。
+     * <p>
+     * 给你一个二叉树的根节点 root ，返回其 最大路径和 。
+     * 示例 1：
+     * 输入：root = [1,2,3]
+     * 输出：6
+     * 解释：最优路径是 2 -> 1 -> 3 ，路径和为 2 + 1 + 3 = 6
+     * 示例 2：
+     * 输入：root = [-10,9,20,null,null,15,7]
+     * 输出：42
+     * 解释：最优路径是 15 -> 20 -> 7 ，路径和为 15 + 20 + 7 = 42
+     *
+     * @param root
+     * @return
+     */
+    int maxSum = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+        maxSum = 0;
+        dfs(root);
+        return maxSum;
+    }
+
+    public int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int maxLeft = Math.max(dfs(root.left), 0);
+        int maxRight = Math.max(dfs(root.right), 0);
+        maxSum = Math.max(maxSum, maxLeft + maxRight + root.val);
+        // 路径不能重复，所以这里取最大，如果都取了就重复了
+        return Math.max(maxLeft, maxRight) + root.val;
+    }
+
+    @Test
+    public void testMaxPathSum() {
+        Assert.assertEquals(6, maxPathSum(Utils.buildBinaryTree(new Integer[]{1, 2, 3})));
+        Assert.assertEquals(42, maxPathSum(Utils.buildBinaryTree(new Integer[]{-10, 9, 20, null, null, 15, 7})));
+    }
 }
