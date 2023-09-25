@@ -174,8 +174,8 @@ public class StackSolution {
                 }
                 sb.append(ch);
                 isVisited[ch - 'a'] = true;
-                // 字符使用频率-1
             }
+            // 字符使用频率-1
             freq[ch - 'a']--;
         }
         return sb.toString();
@@ -183,7 +183,7 @@ public class StackSolution {
 
     @Test
     public void testRemoveDuplicateLetters() {
-//        Assert.assertEquals("abc", removeDuplicateLetters("bcabc"));
+        Assert.assertEquals("abc", removeDuplicateLetters("bcabc"));
         Assert.assertEquals("acdb", removeDuplicateLetters("cbacdcbc"));
     }
 
@@ -296,7 +296,10 @@ public class StackSolution {
      * 示例 3：
      * 输入：nums = [1]
      * 输出：0
-     *
+     * 解题思路：
+     * 1. 找到最大、最小值
+     * 2. 找到从左到右第一个比最大值小的数
+     * 3. 找到从右到左第一个比最小值大的数
      * @param nums
      * @return
      */
