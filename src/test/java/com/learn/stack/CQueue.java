@@ -7,14 +7,18 @@ import java.util.Stack;
 
 /**
  * @author herryhaorui@didiglobal.com
- * @desc
- * 用两个栈实现队列
+ * @desc 用两个栈实现队列
  * https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/solutions/103069/mian-shi-ti-09-yong-liang-ge-zhan-shi-xian-dui-l-3/
+ * 解题思路：
+ * 1. 倒入s1，此时逆序
+ * 2. 倒入s2，此时正序
+ * -> s1 | s2 ->
  * @date 2023/6/26 10:17 下午
  */
 public class CQueue {
-    private Stack<Integer> stack1;
-    private Stack<Integer> stack2;
+    private final Stack<Integer> stack1;
+    private final Stack<Integer> stack2;
+
     public CQueue() {
         stack1 = new Stack<>();
         stack2 = new Stack<>();
