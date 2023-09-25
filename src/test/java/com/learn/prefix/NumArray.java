@@ -26,7 +26,7 @@ package com.learn.prefix;
  * numArray.sumRange(2, 5); // return -1 (3 + (-5) + 2 + (-1))
  * numArray.sumRange(0, 5); // return -3 ((-2) + 0 + 3 + (-5) + 2 + (-1)
  * 前缀和 求索引区间[1, 4]内的所有元素之和 = preSum[5](0 + 1 + 2 + 3 + 4) - preSum[1](0)
- * 公式 sum[i, j] = preSum[j + 1] - preSum[i];
+ * 这里用的是原数组索引，公式 sum[i, j] = preSum[j + 1] - preSum[i];
  */
 public class NumArray {
     int[] preSum;

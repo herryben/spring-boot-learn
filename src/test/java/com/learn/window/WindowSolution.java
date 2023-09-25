@@ -710,7 +710,8 @@ public class WindowSolution {
         int ans = Integer.MAX_VALUE;
         for (int i = 1; i <= nums.length; i++) {
             // 算出 nums[0..idx-1] - nums[0..i] >= target 即:i..idx的和
-            // 和转索引 用-1
+            // 这里用的是前缀和的索引，所以公式是sum[i, j] = preSum[j] - preSum[i - 1];
+            // target = prefixSum[idx](sum) - prefixSum[i - 1]
             int sum = target + prefixSum[i - 1];
             int idx = minSubArrayLenPrefixSumBinaryLowBound(prefixSum, sum);
             if (idx > 0) {
