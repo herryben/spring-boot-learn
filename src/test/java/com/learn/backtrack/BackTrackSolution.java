@@ -278,6 +278,7 @@ public class BackTrackSolution {
      * 解题思路：
      * 1.有条件回溯
      * 2.右括号增长速度不能大于左括号
+     *  2.1就是让左括号增长快于右括号
      * @param n
      * @return
      */
@@ -352,7 +353,7 @@ public class BackTrackSolution {
             return;
         }
         for (int i = start; i < candidates.length; i++) {
-            if(sum + candidates[i] > target) {
+            if (sum + candidates[i] > target) {
                 return;
             }
             track.add(candidates[i]);
@@ -362,17 +363,30 @@ public class BackTrackSolution {
         }
     }
 
-    public void dfs(List<List<Integer>> res, int[] candidates, int tmp, List<Integer> path, int target, int start){
-        if(tmp == target){
+    /**
+     * 解题思路：
+     * 1. 有条件回溯
+     * 2. 普通组合的变种
+     *
+     * @param res
+     * @param candidates
+     * @param sum
+     * @param path
+     * @param target
+     * @param start
+     */
+    public void dfs(List<List<Integer>> res, int[] candidates, int sum, List<Integer> path, int target, int start) {
+        if (sum == target) {
             res.add(path);
             return;
         }
-        for(int i =start ;i < candidates.length; i++){
-            if(tmp + candidates[i] > target){
+        for (int i = start; i < candidates.length; i++) {
+            if (sum + candidates[i] > target) {
                 return;
             }
             path.add(candidates[i]);
-            dfs(res, candidates, tmp + candidates[i], new ArrayList<>(path), target, i);
+            // 数字可以选多次，所以这里和传统组合的区别是不需要迭代i
+            dfs(res, candidates, sum + candidates[i], new ArrayList<>(path), target, i);
             path.remove(path.size() - 1);
         }
     }
@@ -407,7 +421,7 @@ public class BackTrackSolution {
      *              ["A","D","E","E"]], word = "ABCB"
      * 输出：false
      * 解题思路：
-     * 从每个位置开始
+     * 1.棋盘类题目固定套路：从每个位置开始
      * 以是否访问过为状态进行回溯探测
      * @param board
      * @param word
@@ -427,6 +441,7 @@ public class BackTrackSolution {
     }
 
     public boolean backTrack(char[][] board, int x, int y, String word, int step, boolean[][] isVisited) {
+        // 上一层是+1，所以需要一进来就判断
         if (step == word.length()) {
             return true;
         }
@@ -493,6 +508,8 @@ public class BackTrackSolution {
      * 示例 2：
      * 输入：nums = [1], target = 1
      * 输出：1
+     * 解题思路：
+     * 1.
      * @param nums
      * @param target
      * @return
@@ -501,16 +518,17 @@ public class BackTrackSolution {
         return findTargetSumWays(nums, target, 0, 0, 0);
     }
 
-    public int findTargetSumWays(int[] nums, int target, int total, int cur, int ans) {
-        if (total == target && cur == nums.length) {
+    public int findTargetSumWays(int[] nums, int target, int total, int level, int ans) {
+        // 一开始终止条件，等于目标和 且 层级用完
+        if (total == target && level == nums.length) {
             return ans + 1;
         }
         // 终止条件，当前层级已经用完
-        if (cur >= nums.length) {
+        if (level >= nums.length) {
             return 0;
         }
-        return findTargetSumWays(nums, target, total + nums[cur], cur + 1, ans)
-                + findTargetSumWays(nums, target, total - nums[cur], cur + 1, ans);
+        return findTargetSumWays(nums, target, total + nums[level], level + 1, ans)
+                + findTargetSumWays(nums, target, total - nums[level], level + 1, ans);
     }
 
     @Test
