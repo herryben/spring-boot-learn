@@ -30,7 +30,7 @@ public class HouseRobber {
         int[] dp = new int[nums.length + 1];
         dp[1] = nums[0];
         for (int i = 2; i <= nums.length; i++) {
-            // Math.max(选前一个, 选前前一个加自己)
+            // Math.max(选前一个（不抢当前）, 选前前一个加自己（抢当前）)
             dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]);
         }
         return dp[nums.length];
