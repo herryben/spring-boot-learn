@@ -3,7 +3,7 @@ package com.learn.other;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class OtherSolution {
+public class ArraySolution {
     /**
      * 287. 寻找重复数
      * https://leetcode.cn/problems/find-the-duplicate-number/description/?envType=study-plan-v2&envId=top-100-liked
@@ -54,7 +54,7 @@ public class OtherSolution {
     }
 
     /**
-     * 128. 最长连续序列
+     * TODO 128. 最长连续序列
      * https://leetcode.cn/problems/longest-consecutive-sequence/?envType=study-plan-v2&envId=top-100-liked
      * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
      * <p>
