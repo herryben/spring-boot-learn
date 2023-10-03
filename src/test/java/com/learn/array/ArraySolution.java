@@ -1,4 +1,4 @@
-package com.learn.other;
+package com.learn.array;
 
 import org.junit.Assert;
 import org.junit.Test;
