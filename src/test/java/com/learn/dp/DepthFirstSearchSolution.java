@@ -343,4 +343,101 @@ public class DepthFirstSearchSolution {
                 {'0','0','0','1','1'}
         }));
     }
+
+    /**
+     * 994. 腐烂的橘子
+     * https://leetcode.cn/problems/rotting-oranges/description/?envType=study-plan-v2&envId=top-100-liked
+     * 在给定的 m x n 网格 grid 中，每个单元格可以有以下三个值之一：
+     *
+     * 值 0 代表空单元格；
+     * 值 1 代表新鲜橘子；
+     * 值 2 代表腐烂的橘子。
+     * 每分钟，腐烂的橘子 周围 4 个方向上相邻 的新鲜橘子都会腐烂。
+     *
+     * 返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 -1 。
+     * 示例 1：
+     * 输入：grid = [[2,1,1],[1,1,0],[0,1,1]]
+     * 输出：4
+     * 示例 2：
+     *
+     * 输入：grid = [[2,1,1],[0,1,1],[1,0,1]]
+     * 输出：-1
+     * 解释：左下角的橘子（第 2 行， 第 0 列）永远不会腐烂，因为腐烂只会发生在 4 个正向上。
+     * 示例 3：
+     *
+     * 输入：grid = [[0,2]]
+     * 输出：0
+     * 解释：因为 0 分钟时已经没有新鲜橘子了，所以答案就是 0 。
+     * 解题思路：
+     * 1.多源bfs
+     * @param grid
+     * @return
+     */
+    public int orangesRotting(int[][] grid) {
+        int step = 0;
+        int flash = 0;
+        int nr = grid.length;
+        int nc = grid[0].length;
+        Queue<Integer> queue = new ArrayDeque<>();
+        for (int i = 0; i < nr; i++) {
+            for (int j = 0; j < nc; j++) {
+                if (grid[i][j] == 2) {
+                    queue.offer(i * nc + j);
+                }
+
+                if (grid[i][j] == 1) {
+                    flash++;
+                }
+            }
+        }
+
+        // 最后一个节点在队列中，但是已经不符合规则，所以会多加1
+        while (flash > 0 && !queue.isEmpty()) {
+            step++;
+            int sz = queue.size();
+            for (int i = 0; i < sz; i++) {
+                int idx = queue.poll();
+                int x = idx / nc;
+                int y = idx % nc;
+                int[] dx = new int[]{1, -1, 0, 0};
+                int[] dy = new int[]{0, 0, 1, -1};
+                for (int j = 0; j < 4; j++) {
+                    int nx = x + dx[j];
+                    int ny = y + dy[j];
+                    if (0 <= nx && nx < nr && 0 <= ny && ny < nc && grid[nx][ny] == 1) {
+                        flash--;
+                        grid[nx][ny] = 2;
+                        queue.offer(nx * nc + ny);
+                    }
+                }
+            }
+        }
+        if (flash > 0) {
+            return -1;
+        }
+        return step;
+    }
+
+    @Test
+    public void testOrangesRotting() {
+        Assert.assertEquals(2, orangesRotting(new int[][]{
+                {1},
+                {2},
+                {1},
+                {1},
+        }));
+        Assert.assertEquals(4, orangesRotting(new int[][]{
+                {2, 1, 1},
+                {1, 1, 0},
+                {0, 1, 1}
+        }));
+        Assert.assertEquals(-1, orangesRotting(new int[][]{
+                {2, 1, 1},
+                {0, 1, 1},
+                {1, 0, 1}
+        }));
+        Assert.assertEquals(0, orangesRotting(new int[][]{
+                {0, 2},
+        }));
+    }
 }
