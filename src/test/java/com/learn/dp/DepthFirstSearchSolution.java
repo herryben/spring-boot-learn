@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -439,5 +441,210 @@ public class DepthFirstSearchSolution {
         Assert.assertEquals(0, orangesRotting(new int[][]{
                 {0, 2},
         }));
+    }
+
+    /**
+     * 207. 课程表
+     * https://leetcode.cn/problems/course-schedule/description/?envType=study-plan-v2&envId=top-100-liked
+     * 你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。
+     *
+     * 在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，其中 prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学习课程  bi 。
+     *
+     * 例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。
+     * 请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。
+     * 示例 1：
+     *
+     * 输入：numCourses = 2, prerequisites = [[1,0]]
+     * 输出：true
+     * 解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
+     * 示例 2：
+     *
+     * 输入：numCourses = 2, prerequisites = [[1,0],[0,1]]
+     * 输出：false
+     * 解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。
+     * 解题思路：
+     * 1. 以出度为切入点进行dfs
+     *  1.1 最终不依赖其他课程的课程出度为0
+     * @param numCourses
+     * @param prerequisites
+     * @return
+     */
+    int[] visit;
+    List<List<Integer>> edges;
+    boolean valid = true;
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        visit = new int[numCourses];
+        edges = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            edges.add(new ArrayList<>());
+        }
+
+        for (int[] prerequisite : prerequisites) {
+            // 计算出度
+            edges.get(prerequisite[1]).add(prerequisite[0]);
+        }
+
+        // 从头开始遍历每个未访问过的节点
+        for (int i = 0; i < numCourses; i++) {
+            if (visit[i] == 0) {
+                dfs(i);
+                if (!valid) {
+                    return false;
+                }
+            }
+        }
+        return valid;
+    }
+
+    public void dfs(int node) {
+        visit[node] = 1;
+        for (Integer cur : edges.get(node)) {
+            if (visit[cur] == 0) {
+                dfs(cur);
+                if (!valid) {
+                    return;
+                }
+            } else if (visit[cur] == 1) {
+                valid = false;
+                return;
+            }
+        }
+        visit[node] = 2;
+    }
+
+    @Test
+    public void testCanFinish() {
+        Assert.assertEquals(true, canFinish(2, new int[][]{{1,0}}));
+        Assert.assertEquals(false, canFinish(2, new int[][]{{1,0}, {0,1}}));
+    }
+
+    /**
+     * 解题思路：
+     * 1.1 dsf 全局变量转化为局部变量
+     * @param numCourses
+     * @param prerequisites
+     * @return
+     */
+    public boolean canFinishDfs(int numCourses, int[][] prerequisites) {
+        int[] visit = new int[numCourses];
+        List<List<Integer>> edges = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            edges.add(new ArrayList<>());
+        }
+
+        for (int[] prerequisite : prerequisites) {
+            // 计算出度
+            edges.get(prerequisite[1]).add(prerequisite[0]);
+        }
+
+        // 从头开始遍历每个未访问过的节点
+        for (int i = 0; i < numCourses; i++) {
+            if (visit[i] == 0) {
+                if (!dfs2(edges, visit, i)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean dfs2(List<List<Integer>> edges, int[] visit, int node) {
+        visit[node] = 1;
+        for (Integer cur : edges.get(node)) {
+            if (visit[cur] == 0) {
+                if (!dfs2(edges, visit, cur)) {
+                    return false;
+                }
+            } else if (visit[cur] == 1) {
+                return false;
+            }
+        }
+        visit[node] = 2;
+        return true;
+    }
+
+    @Test
+    public void testCanFinishDfs() {
+        Assert.assertEquals(true, canFinishDfs(2, new int[][]{{1,0}}));
+        Assert.assertEquals(false, canFinishDfs(2, new int[][]{{1,0}, {0,1}}));
+    }
+
+    /**
+     * 解题思路：
+     * 1.1 dsf 全局变量转化为局部变量
+     * @param numCourses
+     * @param prerequisites
+     * @return
+     */
+    public boolean canFinishBfs(int numCourses, int[][] prerequisites) {
+        int total = 0;
+        int[] indeg = new int[numCourses];
+        List<List<Integer>> edges = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            edges.add(new ArrayList<>());
+        }
+
+        for (int[] prerequisite : prerequisites) {
+            // 计算入度
+            edges.get(prerequisite[1]).add(prerequisite[0]);
+            indeg[prerequisite[0]]++;
+        }
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        // 从头开始遍历每个未访问过的节点
+        for (int i = 0; i < numCourses; i++) {
+            if (indeg[i] == 0) {
+                queue.add(i);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            total++;
+            int cur = queue.poll();
+            for (Integer node : edges.get(cur)) {
+                indeg[node]--;
+                if(indeg[node] == 0) {
+                    queue.add(node);
+                }
+            }
+        }
+        return total == numCourses;
+    }
+
+    @Test
+    public void testCanFinishBfs() {
+        Assert.assertEquals(true, canFinishBfs(2, new int[][]{{1,0}}));
+        Assert.assertEquals(false, canFinishBfs(2, new int[][]{{1,0}, {0,1}}));
+    }
+
+    public boolean canFinishSimple(int numCourses, int[][] prerequisites) {
+        int[] count=new int[numCourses];
+        for( int[] x : prerequisites){
+            count[x[1]]++;
+        }
+        boolean[] safe=new boolean[prerequisites.length];
+        int safenum=0;
+        while(safenum<prerequisites.length){
+            int t=0;
+            for(int i=0;i<prerequisites.length;++i){
+                if(!safe[i]){
+                    if(count[prerequisites[i][0]]==0){
+                        safe[i]=true;
+                        count[prerequisites[i][1]]--;
+                        t++;
+                        safenum++;
+                    }
+                }
+            }
+            if(t==0){return false;}
+
+        }
+        return true;
+    }
+
+    @Test
+    public void testCanFinishSimple() {
+        Assert.assertEquals(true, canFinishSimple(2, new int[][]{{1,0}}));
+        Assert.assertEquals(false, canFinishSimple(2, new int[][]{{1,0}, {0,1}}));
     }
 }
