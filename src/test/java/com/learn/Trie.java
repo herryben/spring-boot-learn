@@ -37,20 +37,51 @@ import org.junit.Test;
  * trie.search("app");     // 返回 True
  */
 public class Trie {
+    TrieNode root = new TrieNode();
     public Trie() {
-
     }
 
     public void insert(String word) {
-
+        TrieNode cur = root;
+        for (char ch : word.toCharArray()) {
+            if (cur.get(ch) == null) {
+                cur.put(ch, new TrieNode());
+            }
+            cur = cur.get(ch);
+        }
+        cur.end = true;
     }
 
     public boolean search(String word) {
-        return true;
+        TrieNode node = searchNode(word);
+        return node != null && node.end;
     }
 
     public boolean startsWith(String prefix) {
-        return true;
+        return searchNode(prefix) != null;
+    }
+
+    private TrieNode searchNode(String word) {
+        TrieNode cur = root;
+        for (char ch : word.toCharArray()) {
+            if ((cur = cur.get(ch)) == null) {
+                return null;
+            }
+        }
+        return cur;
+    }
+
+    public static class TrieNode {
+        boolean end;
+        TrieNode[] next = new TrieNode[26];
+
+        TrieNode get(char ch) {
+            return next[ch - 'a'];
+        }
+
+        void put(char ch, TrieNode node) {
+            next[ch - 'a'] = node;
+        }
     }
 
     @Test
