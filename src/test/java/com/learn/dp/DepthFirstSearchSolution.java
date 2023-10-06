@@ -351,6 +351,7 @@ public class DepthFirstSearchSolution {
                 int idx = queue.poll();
                 int x = idx / nc;
                 int y = idx % nc;
+                // 小技巧：使用2个数组进行方向迭代
                 int[] dx = new int[]{1, -1, 0, 0};
                 int[] dy = new int[]{0, 0, 1, -1};
                 for (int j = 0; j < 4; j++) {

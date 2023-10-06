@@ -1,6 +1,8 @@
 package com.learn.backtrack;
 
 import com.google.common.collect.Sets;
+import com.learn.Utils.Utils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -535,5 +537,37 @@ public class BackTrackSolution {
     public void testFindTargetSumWays() {
         Assert.assertEquals(5, findTargetSumWays(new int[] {1,1,1,1,1}, 3));
         Assert.assertEquals(1, findTargetSumWays(new int[]{1},1));
+    }
+
+    /**
+     * 131. 分割回文串
+     * https://leetcode.cn/problems/palindrome-partitioning/?envType=study-plan-v2&envId=top-100-liked
+     * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
+     *
+     * 回文串 是正着读和反着读都一样的字符串。
+
+     * 示例 1：
+     *
+     * 输入：s = "aab"
+     * 输出：[["a","a","b"],["aa","b"]]
+     * 示例 2：
+     *
+     * 输入：s = "a"
+     * @param s
+     * @return
+     */
+    public List<List<String>> partition(String s) {
+        return Lists.newArrayList();
+    }
+
+    @Test
+    public void testPartition() {
+        List<List<String>> list1 = new ArrayList<>();
+        list1.add(Lists.newArrayList("a", "a", "b"));
+        list1.add(Lists.newArrayList("aa", "b"));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(partition("aab"), list1));
+        List<List<String>> list2 = new ArrayList<>();
+        list2.add(Lists.newArrayList("a"));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(partition("a"), list2));
     }
 }
