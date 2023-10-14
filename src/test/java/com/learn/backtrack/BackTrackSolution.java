@@ -142,7 +142,8 @@ public class BackTrackSolution {
      * 示例 3：
      * 输入：digits = "2"
      * 输出：["a","b","c"]
-     *
+     * 解题思路：
+     * 1.就是普通组合的变种
      * @param digits
      * @return
      */
