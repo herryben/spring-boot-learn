@@ -539,23 +539,55 @@ public class BackTrackSolution {
     }
 
     /**
-     * TODO 131. 分割回文串
+     * 131. 分割回文串
      * https://leetcode.cn/problems/palindrome-partitioning/?envType=study-plan-v2&envId=top-100-liked
      * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
-     *
+     * <p>
      * 回文串 是正着读和反着读都一样的字符串。
      * 示例 1：
-     *
+     * <p>
      * 输入：s = "aab"
      * 输出：[["a","a","b"],["aa","b"]]
      * 示例 2：
-     *
+     * 解题思路：
+     * 1.dp存储回文状态
+     * 1.1 dp[i][j] = charAt(i) == charAt(j) && dp[i+1][j-1] (i < j)
+     * 1.2 dp[i][j] = ture (i >= j)
+     * 2.进行标准排列变形
      * 输入：s = "a"
+     *
      * @param s
      * @return
      */
     public List<List<String>> partition(String s) {
-        return Lists.newArrayList();
+        List<List<String>> res = Lists.newArrayList();
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dp[i], true);
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                dp[i][j] = s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
+            }
+        }
+
+        backTrack(s, res, n, dp, 0, new ArrayList<>());
+        return res;
+    }
+
+    public void backTrack(String s, List<List<String>> res, int n, boolean[][] dp, int i, List<String> track) {
+        if (i == n) {
+            res.add(new ArrayList<>(track));
+            return;
+        }
+        for (int j = i; j < n; j++) {
+            if (dp[i][j]) {
+                track.add(s.substring(i, j + 1));
+                backTrack(s, res, n, dp, j + 1, track);
+                track.remove(track.size() - 1);
+            }
+        }
     }
 
     @Test
@@ -602,11 +634,11 @@ public class BackTrackSolution {
         Set<Integer> cols = new HashSet<>();
         Set<Integer> d1 = new HashSet<>();
         Set<Integer> d2 = new HashSet<>();
-        backtrace(res, 0, n, queue, cols, d1, d2);
+        backTrack(res, 0, n, queue, cols, d1, d2);
         return res;
     }
 
-    void backtrace(List<List<String>> res, int row, int n, int[] queue, Set<Integer> cols, Set<Integer> d1, Set<Integer> d2) {
+    void backTrack(List<List<String>> res, int row, int n, int[] queue, Set<Integer> cols, Set<Integer> d1, Set<Integer> d2) {
         if (row == n) {
             res.add(generate(queue, n));
         }
@@ -618,7 +650,7 @@ public class BackTrackSolution {
                 d1.add(dia1);
                 d2.add(dia2);
                 queue[row] = i;
-                backtrace(res, row + 1, n, queue, cols, d1, d2);
+                backTrack(res, row + 1, n, queue, cols, d1, d2);
                 cols.remove(i);
                 d1.remove(dia1);
                 d2.remove(dia2);
