@@ -568,4 +568,78 @@ public class BackTrackSolution {
         list2.add(Lists.newArrayList("a"));
         Assert.assertEquals(true, CollectionUtils.isEqualCollection(partition("a"), list2));
     }
+
+    /**
+     * 51. N 皇后
+     * https://leetcode.cn/problems/n-queens/description/?envType=study-plan-v2&envId=top-100-liked
+     * 按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。
+     * <p>
+     * n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+     * <p>
+     * 给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。
+     * <p>
+     * 每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * <p>
+     * 输入：n = 4
+     * 输出：[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+     * 解释：如上图所示，4 皇后问题存在两个不同的解法。
+     * 示例 2：
+     * <p>
+     * 输入：n = 1
+     * 输出：[["Q"]]
+     *
+     * @param n
+     * @return
+     */
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> res = new ArrayList<>();
+        int[] queue = new int[n];
+        Set<Integer> cols = new HashSet<>();
+        Set<Integer> d1 = new HashSet<>();
+        Set<Integer> d2 = new HashSet<>();
+        backtrace(res, 0, n, queue, cols, d1, d2);
+        return res;
+    }
+
+    void backtrace(List<List<String>> res, int row, int n, int[] queue, Set<Integer> cols, Set<Integer> d1, Set<Integer> d2) {
+        if (row == n) {
+            res.add(generate(queue, n));
+        }
+        for (int i = 0; i < n; i++) {
+            int dia1 = row - i;
+            int dia2 = row + i;
+            if (!cols.contains(i) && !d1.contains(dia1) && !d2.contains(dia2)) {
+                cols.add(i);
+                d1.add(dia1);
+                d2.add(dia2);
+                queue[row] = i;
+                backtrace(res, row + 1, n, queue, cols, d1, d2);
+                cols.remove(i);
+                d1.remove(dia1);
+                d2.remove(dia2);
+                queue[row] = -1;
+            }
+        }
+    }
+
+    List<String> generate(int[] queue, int n) {
+        List<String> res = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            char[] ch = new char[n];
+            Arrays.fill(ch, '.');
+            ch[queue[i]] = 'Q';
+            res.add(new String(ch));
+        }
+        return res;
+    }
+
+    @Test
+    public void testSolveNQueens() {
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(solveNQueens(4), Lists.newArrayList(Lists.newArrayList(".Q..", "...Q", "Q...", "..Q."), Lists.newArrayList("..Q.", "Q...", "...Q", ".Q.."))));
+    }
 }
