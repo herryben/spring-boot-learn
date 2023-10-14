@@ -27,6 +27,7 @@ public class SortSolution {
      * 解题思路：
      * 二分查找左边界
      * 查找区间[1, max]
+     * 因为是求最小速度，所以是leftBound
      * @param piles
      * @param h
      * @return
@@ -119,6 +120,13 @@ public class SortSolution {
         return low;
     }
 
+    /**
+     * 就是简单模拟
+     *
+     * @param weights
+     * @param cap
+     * @return
+     */
     public int needDays(int[] weights, int cap) {
         int needDays = 1, current = 0;
         for (int weight : weights) {
