@@ -366,6 +366,8 @@ public class TestSort {
     /**
      * https://mp.weixin.qq.com/s/JgJ0jh2SJd6grQSPnN6Jww
      * https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247485044&idx=1&sn=e6b95782141c17abe206bfe2323a4226&chksm=9bd7f87caca0716aa5add0ddddce0bfe06f1f878aafb35113644ebf0cf0bfe51659da1c1b733&scene=21#wechat_redirect
+     * 标准二分模板（闭区间）
+     *
      * @param datas
      * @param target
      * @return
@@ -396,6 +398,7 @@ public class TestSort {
     }
 
     /**
+     * 标准leftBound模板
      * 含义是小于target的数据有几个
      */
     public int leftBound(int[] datas, int target) {
@@ -426,6 +429,13 @@ public class TestSort {
         }
     }
 
+    /**
+     * 标准rightBound模板
+     *
+     * @param datas
+     * @param target
+     * @return
+     */
     public int rightBound(int[] datas, int target) {
         // 这里使用左闭右开区间[2,3)
         int low = 0, high = datas.length;
