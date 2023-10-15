@@ -20,7 +20,9 @@ public class StackSolution {
      * 示例 3:
      *  输入: temperatures = [30,60,90]
      *  输出: [1,1,0]
-     *
+     * 解题思路：
+     * 1.单调栈
+     *  1.1 维持从栈底到栈顶元素单调递增
      * @param temperatures
      * @return
      */
@@ -169,6 +171,7 @@ public class StackSolution {
                         isVisited[sb.charAt(sb.length() - 1) - 'a'] = false;
                         sb.deleteCharAt(sb.length() - 1);
                     } else {
+                        // 字符以后没有了，所以不弹出
                         break;
                     }
                 }
@@ -351,6 +354,7 @@ public class StackSolution {
      *  输入：height = [4,2,0,3,2,5]
      *  输出：9
      * 解题思路：同时维护左右边最大值 + 双指针向中间缩小
+     * TODO 可以实现下单调栈法
      * @param height
      * @return
      */
@@ -362,6 +366,8 @@ public class StackSolution {
             leftMax = Math.max(leftMax, height[left]);
             rightMax = Math.max(rightMax, height[right]);
             // 小的那个索引向前走
+            // 如果 height[left]<height[right]，则必有leftMax<rightMax，此时height[left]是低洼处，容量是左右两边低的那个
+            // 算完了再往前走，找下一个低洼处
             if (leftMax < rightMax) {
                 ans += leftMax - height[left];
                 left++;
