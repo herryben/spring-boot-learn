@@ -513,12 +513,12 @@ public class StackSolution {
     public String decodeString(String s) {
         StringBuilder res = new StringBuilder();
         Deque<Integer> multiStack = new LinkedList<>();
-        Deque<String> resStack = new LinkedList<>();
+        Deque<StringBuilder> resStack = new LinkedList<>();
         int multi = 0;
         for (char ch : s.toCharArray()) {
             if (ch == '[') {
                 multiStack.push(multi);
-                resStack.push(res.toString());
+                resStack.push(res);
                 multi = 0;
                 res = new StringBuilder();
             } else if (ch == ']') {
@@ -527,9 +527,9 @@ public class StackSolution {
                 for (int i = 0; i < curMulti; i++) {
                     tmp.append(res);
                 }
-                res = new StringBuilder(resStack.pop() + tmp);
+                res = resStack.pop().append(tmp);
             } else if (Character.isDigit(ch)) {
-                multi = multi * 10 + Integer.parseInt(ch + "");
+                multi = multi * 10 + Integer.parseInt(String.valueOf(ch));
             } else {
                 res.append(ch);
             }
