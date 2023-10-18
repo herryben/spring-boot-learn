@@ -150,9 +150,8 @@ public class DpSolution {
         for (int i = 0; i <= coins.length; i++) {
             dp[i][0] = 0;
         }
-
-        for (int j = 0; j <= amount; j++) {
-            for (int i = 1; i <= coins.length; i++) {
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 0; j <= amount; j++) {
                 if (j - coins[i - 1] >= 0) {
                     // 如果余额还能大于等于0，则选用i-1枚硬币凑够j和i枚硬币凑够余额的2者最小（因为是无限硬币）
                     dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - coins[i - 1]] + 1);
