@@ -551,4 +551,59 @@ public class StackSolution {
         Assert.assertEquals("abcabccdcdcdef", decodeString("2[abc]3[cd]ef"));
         Assert.assertEquals("abccdcdcdxyz", decodeString("abc3[cd]xyz"));
     }
+
+    /**
+     * 84. 柱状图中最大的矩形
+     * https://leetcode.cn/problems/largest-rectangle-in-histogram/description/?envType=study-plan-v2&envId=top-100-liked
+     * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+     * 求在该柱状图中，能够勾勒出来的矩形的最大面积。
+     * 示例 1:
+     * 输入：heights = [2,1,5,6,2,3]
+     * 输出：10
+     * 解释：最大的矩形为图中红色区域，面积为 10
+     * 示例 2：
+     * 输入： heights = [2,4]
+     * 输出： 4
+     * 解题思路：
+     * 1. 用单调栈()分别计算出左右下一个比当前位置小的索引
+     * 2. 循环遍历去最大值
+     *
+     * @param heights
+     * @return
+     */
+    public int largestRectangleArea(int[] heights) {
+        int ans = 0;
+        int[] left = new int[heights.length];
+        int[] right = new int[heights.length];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[i] <= heights[stack.peek()]) {
+                stack.pop();
+            }
+            // 相当于插入一个-1哨兵
+            left[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
+        }
+
+        stack.clear();
+        for (int i = heights.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && heights[i] <= heights[stack.peek()]) {
+                stack.pop();
+            }
+            // 相当于插入一个heights.length哨兵
+            right[i] = stack.isEmpty() ? heights.length : stack.peek();
+            stack.push(i);
+        }
+
+        for (int i = 0; i < heights.length; i++) {
+            ans = Math.max(ans, heights[i] * (right[i] - left[i] - 1));
+        }
+        return ans;
+    }
+
+    @Test
+    public void testLargestRectangleArea() {
+        Assert.assertEquals(10, largestRectangleArea(new int[]{2, 1, 5, 6, 2, 3}));
+        Assert.assertEquals(4, largestRectangleArea(new int[]{2, 4}));
+    }
 }
