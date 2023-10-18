@@ -277,6 +277,14 @@ public class SortPractise {
         res.forEach(item -> log.info("Subset: " + String.join(", ", item)));
     }
 
+    /**
+     * 标准子集
+     *
+     * @param data
+     * @param res
+     * @param track
+     * @param start
+     */
     public void subset(List<String> data, List<List<String>> res, List<String> track, int start) {
         res.add(new ArrayList<>(track));
 
@@ -296,6 +304,15 @@ public class SortPractise {
         res.forEach(item -> log.info("Subset: " + String.join(", ", item)));
     }
 
+    /**
+     * 标准组合
+     *
+     * @param data
+     * @param res
+     * @param track
+     * @param k
+     * @param start
+     */
     public void combine(List<String> data, List<List<String>> res, List<String> track, int k, int start) {
         if (k == track.size()) {
             res.add(new ArrayList<>(track));
@@ -317,6 +334,13 @@ public class SortPractise {
         res.forEach(item -> log.info("Subset: " + String.join(", ", item)));
     }
 
+    /**
+     * 标准排列
+     *
+     * @param data
+     * @param res
+     * @param track
+     */
     public void arrange(List<String> data, List<List<String>> res, List<String> track) {
         if (data.size() == track.size()) {
             res.add(new ArrayList<>(track));

@@ -1,7 +1,6 @@
 package com.learn.backtrack;
 
 import com.google.common.collect.Sets;
-import com.learn.Utils.Utils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.SetUtils;
 import org.assertj.core.util.Lists;
@@ -143,7 +142,8 @@ public class BackTrackSolution {
      * 示例 3：
      * 输入：digits = "2"
      * 输出：["a","b","c"]
-     *
+     * 解题思路：
+     * 1.就是普通组合的变种
      * @param digits
      * @return
      */
@@ -543,21 +543,52 @@ public class BackTrackSolution {
      * 131. 分割回文串
      * https://leetcode.cn/problems/palindrome-partitioning/?envType=study-plan-v2&envId=top-100-liked
      * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
-     *
+     * <p>
      * 回文串 是正着读和反着读都一样的字符串。
-
      * 示例 1：
-     *
+     * <p>
      * 输入：s = "aab"
      * 输出：[["a","a","b"],["aa","b"]]
      * 示例 2：
-     *
+     * 解题思路：
+     * 1.dp存储回文状态
+     * 1.1 dp[i][j] = charAt(i) == charAt(j) && dp[i+1][j-1] (i < j)
+     * 1.2 dp[i][j] = ture (i >= j)
+     * 2.进行标准排列变形
      * 输入：s = "a"
+     *
      * @param s
      * @return
      */
     public List<List<String>> partition(String s) {
-        return Lists.newArrayList();
+        List<List<String>> res = Lists.newArrayList();
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dp[i], true);
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                dp[i][j] = s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
+            }
+        }
+
+        backTrack(s, res, n, dp, 0, new ArrayList<>());
+        return res;
+    }
+
+    public void backTrack(String s, List<List<String>> res, int n, boolean[][] dp, int i, List<String> track) {
+        if (i == n) {
+            res.add(new ArrayList<>(track));
+            return;
+        }
+        for (int j = i; j < n; j++) {
+            if (dp[i][j]) {
+                track.add(s.substring(i, j + 1));
+                backTrack(s, res, n, dp, j + 1, track);
+                track.remove(track.size() - 1);
+            }
+        }
     }
 
     @Test
@@ -569,5 +600,79 @@ public class BackTrackSolution {
         List<List<String>> list2 = new ArrayList<>();
         list2.add(Lists.newArrayList("a"));
         Assert.assertEquals(true, CollectionUtils.isEqualCollection(partition("a"), list2));
+    }
+
+    /**
+     * 51. N 皇后
+     * https://leetcode.cn/problems/n-queens/description/?envType=study-plan-v2&envId=top-100-liked
+     * 按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。
+     * <p>
+     * n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+     * <p>
+     * 给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。
+     * <p>
+     * 每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * <p>
+     * 输入：n = 4
+     * 输出：[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+     * 解释：如上图所示，4 皇后问题存在两个不同的解法。
+     * 示例 2：
+     * <p>
+     * 输入：n = 1
+     * 输出：[["Q"]]
+     *
+     * @param n
+     * @return
+     */
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> res = new ArrayList<>();
+        int[] queue = new int[n];
+        Set<Integer> cols = new HashSet<>();
+        Set<Integer> d1 = new HashSet<>();
+        Set<Integer> d2 = new HashSet<>();
+        backTrack(res, 0, n, queue, cols, d1, d2);
+        return res;
+    }
+
+    void backTrack(List<List<String>> res, int row, int n, int[] queue, Set<Integer> cols, Set<Integer> d1, Set<Integer> d2) {
+        if (row == n) {
+            res.add(generate(queue, n));
+        }
+        for (int i = 0; i < n; i++) {
+            int dia1 = row - i;
+            int dia2 = row + i;
+            if (!cols.contains(i) && !d1.contains(dia1) && !d2.contains(dia2)) {
+                cols.add(i);
+                d1.add(dia1);
+                d2.add(dia2);
+                queue[row] = i;
+                backTrack(res, row + 1, n, queue, cols, d1, d2);
+                cols.remove(i);
+                d1.remove(dia1);
+                d2.remove(dia2);
+                queue[row] = -1;
+            }
+        }
+    }
+
+    List<String> generate(int[] queue, int n) {
+        List<String> res = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            char[] ch = new char[n];
+            Arrays.fill(ch, '.');
+            ch[queue[i]] = 'Q';
+            res.add(new String(ch));
+        }
+        return res;
+    }
+
+    @Test
+    public void testSolveNQueens() {
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(solveNQueens(4), Lists.newArrayList(Lists.newArrayList(".Q..", "...Q", "Q...", "..Q."), Lists.newArrayList("..Q.", "Q...", "...Q", ".Q.."))));
     }
 }

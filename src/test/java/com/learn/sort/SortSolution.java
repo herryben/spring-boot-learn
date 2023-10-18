@@ -27,6 +27,7 @@ public class SortSolution {
      * 解题思路：
      * 二分查找左边界
      * 查找区间[1, max]
+     * 因为是求最小速度，所以是leftBound
      * @param piles
      * @param h
      * @return
@@ -119,6 +120,13 @@ public class SortSolution {
         return low;
     }
 
+    /**
+     * 就是简单模拟
+     *
+     * @param weights
+     * @param cap
+     * @return
+     */
     public int needDays(int[] weights, int cap) {
         int needDays = 1, current = 0;
         for (int weight : weights) {
@@ -318,5 +326,300 @@ public class SortSolution {
         Assert.assertEquals(2, mySqrt(8));
         Assert.assertEquals(2, mySqrt(5));
         Assert.assertEquals(3, mySqrt(9));
+    }
+
+    /**
+     * 35. 搜索插入位置
+     * https://leetcode.cn/problems/search-insert-position/?envType=study-plan-v2&envId=top-100-liked
+     * 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+     * <p>
+     * 请必须使用时间复杂度为 O(log n) 的算法。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: nums = [1,3,5,6], target = 5
+     * 输出: 2
+     * 示例 2:
+     * <p>
+     * 输入: nums = [1,3,5,6], target = 2
+     * 输出: 1
+     * 示例 3:
+     * <p>
+     * 输入: nums = [1,3,5,6], target = 7
+     * 输出: 4
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int searchInsert(int[] nums, int target) {
+        int left = 0, right = nums.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] > target) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    @Test
+    public void testSearchInsert() {
+        Assert.assertEquals(1, searchInsert(new int[]{1, 3}, 2));
+        Assert.assertEquals(2, searchInsert(new int[]{1, 3, 5, 6}, 5));
+        Assert.assertEquals(1, searchInsert(new int[]{1, 3, 5, 6}, 2));
+        Assert.assertEquals(4, searchInsert(new int[]{1, 3, 5, 6}, 7));
+    }
+
+    /**
+     * 4. 搜索二维矩阵
+     * 给你一个满足下述两条属性的 m x n 整数矩阵：
+     * <p>
+     * 每行中的整数从左到右按非严格递增顺序排列。
+     * 每行的第一个整数大于前一行的最后一个整数。
+     * 给你一个整数 target ，如果 target 在矩阵中，返回 true ；否则，返回 false 。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * <p>
+     * 输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+     * 输出：true
+     * 示例 2：
+     * <p>
+     * <p>
+     * 输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
+     * 输出：false
+     * 解题思路：搜索二叉树
+     *
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int x = 0;
+        int y = matrix[0].length - 1;
+        while (0 <= x && x < matrix.length && 0 <= y && y < matrix[0].length) {
+            if (matrix[x][y] == target) {
+                return true;
+            } else if (matrix[x][y] > target) {
+                y--;
+            } else {
+                x++;
+            }
+        }
+        return false;
+    }
+
+    @Test
+    public void testSearchMatrix() {
+        Assert.assertEquals(true, searchMatrix(new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 3));
+        Assert.assertEquals(false, searchMatrix(new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 13));
+    }
+
+    public boolean searchMatrixBinary(int[][] matrix, int target) {
+        int n = matrix.length, m = matrix[0].length;
+        int left = 0, right = n * m - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int num = matrix[mid / m][mid % m];
+            if (num == target) {
+                return true;
+            } else if (num < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return false;
+    }
+
+    @Test
+    public void testSearchMatrixBinary() {
+        Assert.assertEquals(false, searchMatrixBinary(new int[][]{{1, 1}}, 2));
+        Assert.assertEquals(true, searchMatrixBinary(new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 3));
+        Assert.assertEquals(false, searchMatrixBinary(new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 13));
+    }
+
+    /**
+     * 34. 在排序数组中查找元素的第一个和最后一个位置
+     * https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/?envType=study-plan-v2&envId=top-100-liked
+     * 给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+     * <p>
+     * 如果数组中不存在目标值 target，返回 [-1, -1]。
+     * <p>
+     * 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [5,7,7,8,8,10], target = 8
+     * 输出：[3,4]
+     * 示例 2：
+     * <p>
+     * 输入：nums = [5,7,7,8,8,10], target = 6
+     * 输出：[-1,-1]
+     * 示例 3：
+     * <p>
+     * 输入：nums = [], target = 0
+     * 输出：[-1,-1]
+     * 解题思路：
+     * 1. 2次rightBound查找
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] searchRange(int[] nums, int target) {
+        if (nums.length == 0) {
+            return new int[]{-1, -1};
+        }
+        int low = rightBound(nums, target - 1);
+        int hi = rightBound(nums, target);
+        return low == hi ? new int[]{-1, -1} : new int[]{low, hi - 1};
+    }
+
+    public int rightBound(int[] nums, int target) {
+        int left = 0, right = nums.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > target) {
+                right = mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] == target) {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    @Test
+    public void testSearchRange() {
+        Assert.assertEquals(true, Arrays.equals(new int[]{3, 4}, searchRange(new int[]{5, 7, 7, 8, 8, 10}, 8)));
+        Assert.assertEquals(true, Arrays.equals(new int[]{-1, -1}, searchRange(new int[]{5, 7, 7, 8, 8, 10}, 6)));
+        Assert.assertEquals(true, Arrays.equals(new int[]{-1, -1}, searchRange(new int[]{}, 0)));
+    }
+
+    /**
+     * 33. 搜索旋转排序数组
+     * https://leetcode.cn/problems/search-in-rotated-sorted-array/?envType=study-plan-v2&envId=top-100-liked
+     * 整数数组 nums 按升序排列，数组中的值 互不相同 。
+     * <p>
+     * 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
+     * <p>
+     * 给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
+     * <p>
+     * 你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+     * 示例 1：
+     * <p>
+     * 输入：nums = [4,5,6,7,0,1,2], target = 0
+     * 输出：4
+     * 示例 2：
+     * <p>
+     * 输入：nums = [4,5,6,7,0,1,2], target = 3
+     * 输出：-1
+     * 示例 3：
+     * <p>
+     * 输入：nums = [1], target = 0
+     * 输出：-1
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        int left = 0, right = nums.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[left] <= nums[mid]) {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Test
+    public void testSearch() {
+        Assert.assertEquals(4, search(new int[]{4, 5, 6, 7, 0, 1, 2}, 0));
+        Assert.assertEquals(-1, search(new int[]{4, 5, 6, 7, 0, 1, 2}, 3));
+        Assert.assertEquals(-1, search(new int[]{1}, 0));
+    }
+
+    /**
+     * 153. 寻找旋转排序数组中的最小值
+     * https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/description/?envType=study-plan-v2&envId=top-100-liked
+     * 已知一个长度为 n 的数组，预先按照升序排列，经由 1 到 n 次 旋转 后，得到输入数组。例如，原数组 nums = [0,1,2,4,5,6,7] 在变化后可能得到：
+     * 若旋转 4 次，则可以得到 [4,5,6,7,0,1,2]
+     * 若旋转 7 次，则可以得到 [0,1,2,4,5,6,7]
+     * 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
+     * <p>
+     * 给你一个元素值 互不相同 的数组 nums ，它原来是一个升序排列的数组，并按上述情形进行了多次旋转。请你找出并返回数组中的 最小元素 。
+     * <p>
+     * 你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [3,4,5,1,2]
+     * 输出：1
+     * 解释：原数组为 [1,2,3,4,5] ，旋转 3 次得到输入数组。
+     * 示例 2：
+     * <p>
+     * 输入：nums = [4,5,6,7,0,1,2]
+     * 输出：0
+     * 解释：原数组为 [0,1,2,4,5,6,7] ，旋转 4 次得到输入数组。
+     * 示例 3：
+     * <p>
+     * 输入：nums = [11,13,15,17]
+     * 输出：11
+     * 解释：原数组为 [11,13,15,17] ，旋转 4 次得到输入数组。
+     * 解题思路：官方题解
+     * 1.当mid < high时，说明[mid, high]时递增序列，最小值一定在左半部分，mid有可能是最小值
+     * 2.当mid > high时，说明[left, mid]先升后降，最小值一定在右半部分
+     * 3.由于数组不包含重复元素，并且只要当前的区间长度不为1，mid和high不会重合
+     *
+     * @param nums
+     * @return
+     */
+    public int findMin(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < nums[right]) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return nums[left];
+    }
+
+    @Test
+    public void testFindMin() {
+        Assert.assertEquals(1, findMin(new int[]{3, 4, 5, 1, 2}));
+        Assert.assertEquals(0, findMin(new int[]{4, 5, 6, 7, 0, 1, 2}));
+        Assert.assertEquals(11, findMin(new int[]{11, 13, 15, 17}));
     }
 }

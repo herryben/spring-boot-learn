@@ -20,7 +20,9 @@ public class StackSolution {
      * 示例 3:
      *  输入: temperatures = [30,60,90]
      *  输出: [1,1,0]
-     *
+     * 解题思路：
+     * 1.单调栈
+     *  1.1 维持从栈底到栈顶元素单调递增
      * @param temperatures
      * @return
      */
@@ -169,6 +171,7 @@ public class StackSolution {
                         isVisited[sb.charAt(sb.length() - 1) - 'a'] = false;
                         sb.deleteCharAt(sb.length() - 1);
                     } else {
+                        // 字符以后没有了，所以不弹出
                         break;
                     }
                 }
@@ -351,6 +354,7 @@ public class StackSolution {
      *  输入：height = [4,2,0,3,2,5]
      *  输出：9
      * 解题思路：同时维护左右边最大值 + 双指针向中间缩小
+     * TODO 可以实现下单调栈法
      * @param height
      * @return
      */
@@ -362,6 +366,8 @@ public class StackSolution {
             leftMax = Math.max(leftMax, height[left]);
             rightMax = Math.max(rightMax, height[right]);
             // 小的那个索引向前走
+            // 如果 height[left]<height[right]，则必有leftMax<rightMax，此时height[left]是低洼处，容量是左右两边低的那个
+            // 算完了再往前走，找下一个低洼处
             if (leftMax < rightMax) {
                 ans += leftMax - height[left];
                 left++;
@@ -466,5 +472,83 @@ public class StackSolution {
         Assert.assertEquals(true, isValid("()"));
         Assert.assertEquals(true, isValid("()[]{}"));
         Assert.assertEquals(false, isValid("(]"));
+    }
+
+    /**
+     * 394. 字符串解码
+     * https://leetcode.cn/problems/decode-string/description/?envType=study-plan-v2&envId=top-100-liked
+     * 给定一个经过编码的字符串，返回它解码后的字符串。
+     * <p>
+     * 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+     * <p>
+     * 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+     * <p>
+     * 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：s = "3[a]2[bc]"
+     * 输出："aaabcbc"
+     * 示例 2：
+     * <p>
+     * 输入：s = "3[a2[c]]"
+     * 输出："accaccacc"
+     * 示例 3：
+     * <p>
+     * 输入：s = "2[abc]3[cd]ef"
+     * 输出："abcabccdcdcdef"
+     * 示例 4：
+     * <p>
+     * 输入：s = "abc3[cd]xyz"
+     * 输出："abccdcdcdxyz"
+     * 解题思路：
+     * 1.用2个栈保存结果
+     * 1.1 multiStack保存积累的乘数结果
+     * 1.2 resStack保存执行出的字符结果，每次新生成的结果都append到后面
+     * 2.分4种case处理：
+     * 2.1 [说明是新token的开始，之前的乘数、结果都压入栈
+     * 2.2 ]说明token结束，乘数取出计算出当前出结果，append到res
+     * 2.3 数字，压入到乘数结果中
+     * 2.4 单个字符，压入到字符结果中
+     *
+     * @param s
+     * @return
+     */
+    public String decodeString(String s) {
+        StringBuilder res = new StringBuilder();
+        Deque<Integer> multiStack = new LinkedList<>();
+        Deque<StringBuilder> resStack = new LinkedList<>();
+        int multi = 0;
+        for (char ch : s.toCharArray()) {
+            if (ch == '[') {
+                multiStack.push(multi);
+                resStack.push(res);
+                multi = 0;
+                res = new StringBuilder();
+            } else if (ch == ']') {
+                StringBuilder tmp = new StringBuilder();
+                int curMulti = multiStack.pop();
+                for (int i = 0; i < curMulti; i++) {
+                    tmp.append(res);
+                }
+                res = resStack.pop().append(tmp);
+            } else if (Character.isDigit(ch)) {
+                multi = multi * 10 + Integer.parseInt(String.valueOf(ch));
+            } else {
+                res.append(ch);
+            }
+        }
+        return res.toString();
+    }
+
+    @Test
+    public void testDecodeString() {
+        Assert.assertEquals("abcbcabcbc", decodeString("2[a2[bc]]"));
+        Assert.assertEquals("aaabcbc", decodeString("3[a]2[bc]"));
+        Assert.assertEquals("accaccacc", decodeString("3[a2[c]]"));
+        Assert.assertEquals("abcabccdcdcdef", decodeString("2[abc]3[cd]ef"));
+        Assert.assertEquals("abccdcdcdxyz", decodeString("abc3[cd]xyz"));
     }
 }

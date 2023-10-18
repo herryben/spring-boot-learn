@@ -82,4 +82,47 @@ public class ArraySolution {
         Assert.assertEquals(4, findDuplicate(new int[]{100, 4, 200, 1, 3, 2}));
         Assert.assertEquals(9, findDuplicate(new int[]{0, 3, 7, 2, 5, 8, 4, 6, 0, 1}));
     }
+
+    /**
+     * 53. 最大子数组和
+     * https://leetcode.cn/problems/maximum-subarray/?envType=study-plan-v2&envId=top-100-liked
+     * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+     * <p>
+     * 子数组 是数组中的一个连续部分。
+     * 示例 1：
+     * <p>
+     * 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+     * 输出：6
+     * 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+     * 示例 2：
+     * <p>
+     * 输入：nums = [1]
+     * 输出：1
+     * 示例 3：
+     * <p>
+     * 输入：nums = [5,4,-1,7,8]
+     * 输出：23
+     * <p>
+     * 解题思路：
+     * 1. kadane算法标准流程
+     *
+     * @param nums
+     * @return
+     */
+    public int maxSubArray(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int cur = 0;
+        for (int num : nums) {
+            cur = num + Math.max(cur, 0);
+            max = Math.max(max, cur);
+        }
+        return max;
+    }
+
+    @Test
+    public void testMaxSubArray() {
+        Assert.assertEquals(6, maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+        Assert.assertEquals(1, maxSubArray(new int[]{1}));
+        Assert.assertEquals(23, maxSubArray(new int[]{5, 4, -1, 7, 8}));
+    }
 }
