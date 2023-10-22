@@ -1,6 +1,6 @@
 package com.learn.tree;
 
-import com.learn.Utils.Utils;
+import com.learn.utils.Utils;
 import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;

@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.tree;
 
 import org.junit.Assert;
 import org.junit.Test;
