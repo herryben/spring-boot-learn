@@ -1,11 +1,10 @@
-package com.learn.Utils;
+package com.learn.utils;
 
 import com.learn.linked.ListNode;
 import com.learn.tree.TreeNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.ibatis.reflection.ArrayUtil;
 
 import java.util.Arrays;
 import java.util.LinkedList;

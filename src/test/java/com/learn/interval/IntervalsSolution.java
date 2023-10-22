@@ -1,6 +1,6 @@
 package com.learn.interval;
 
-import com.learn.Utils.Utils;
+import com.learn.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;

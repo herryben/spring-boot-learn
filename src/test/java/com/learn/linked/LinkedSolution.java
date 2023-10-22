@@ -1,6 +1,6 @@
 package com.learn.linked;
 
-import com.learn.Utils.Utils;
+import com.learn.utils.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 
