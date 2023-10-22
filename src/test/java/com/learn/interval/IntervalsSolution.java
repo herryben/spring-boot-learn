@@ -1,4 +1,4 @@
-package com.learn;
+package com.learn.interval;
 
 import com.learn.Utils.Utils;
 import lombok.extern.slf4j.Slf4j;
