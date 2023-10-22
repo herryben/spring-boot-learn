@@ -65,7 +65,42 @@ public class GreedySolution {
 
     @Test
     public void testGetMinWithinTarget() {
-        Assert.assertEquals("2499", getMinWithinTarget(new char[] {'1', '2', '4', '9'}, "2533"));
-        Assert.assertEquals("9199", getMinWithinTarget(new char[] {'1', '9'}, "9911"));
+        Assert.assertEquals("2499", getMinWithinTarget(new char[]{'1', '2', '4', '9'}, "2533"));
+        Assert.assertEquals("9199", getMinWithinTarget(new char[]{'1', '9'}, "9911"));
+    }
+
+    /**
+     * 解题思路：
+     * 1. 标准全排列模板+剪枝
+     *
+     * @param data
+     * @param target
+     * @return
+     */
+    int ans = Integer.MIN_VALUE;
+
+    public String getMinWithinTargetBackTrack(char[] data, String target) {
+        ans = Integer.MIN_VALUE;
+        backTack(data, Integer.parseInt(target), 0);
+        return String.valueOf(ans);
+    }
+
+    public void backTack(char[] data, int target, int sum) {
+        if (sum >= target) {
+            return;
+        }
+        ans = Math.max(ans, sum);
+        // 就是普通的全排列
+        for (char datum : data) {
+            sum = sum * 10 + (datum - '0');
+            backTack(data, target, sum);
+            sum /= 10;
+        }
+    }
+
+    @Test
+    public void testGetMinWithinTargetBackTack() {
+        Assert.assertEquals("2499", getMinWithinTargetBackTrack(new char[]{'1', '2', '4', '9'}, "2533"));
+        Assert.assertEquals("9199", getMinWithinTargetBackTrack(new char[]{'1', '9'}, "9911"));
     }
 }
