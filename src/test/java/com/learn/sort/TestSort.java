@@ -452,6 +452,7 @@ public class TestSort {
                 low = mid + 1;
             }
         }
+        // 因为datas[mid] == target时low = mid + 1，所以low多走了一步
         return low - 1;
     }
 }
