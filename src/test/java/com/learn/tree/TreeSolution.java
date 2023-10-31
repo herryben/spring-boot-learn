@@ -646,13 +646,15 @@ public class TreeSolution {
         }
         dfsAfter(root.left, list);
         dfsAfter(root.right, list);
-        list.add(root.val);
+        if (!list.contains(root.val)) {
+            list.add(root.val);
+        }
     }
 
     @Test
     public void testDfsAfter() {
         List<Integer> list = new ArrayList<>();
-        TreeNode root = new TreeNode(1);
+        TreeNode node1 = new TreeNode(1);
         TreeNode node2 = new TreeNode(2);
         TreeNode node3 = new TreeNode(3);
         TreeNode node4 = new TreeNode(4);
@@ -660,15 +662,21 @@ public class TreeSolution {
         TreeNode node6 = new TreeNode(6);
         TreeNode node7 = new TreeNode(7);
         TreeNode node8 = new TreeNode(8);
+        TreeNode node9 = new TreeNode(9);
 
-        root.left = node2;
-        root.right = node3;
-        node2.left = node4;
-        node3.left = node5;
-        node3.right = node6;
-        node6.left = node7;
-        node6.right = node8;
-        dfsAfter(root, list);
+        node1.left = node8;
+        node1.right = node3;
+        node2.left = node3;
+        node2.right = node5;
+        node8.left = node9;
+        node3.right = node4;
+        node5.left = node4;
+        node5.right = node6;
+        node9.right = node7;
+        node4.left = node7;
+        node4.right = node6;
+        dfsAfter(node1, list);
+        dfsAfter(node2, list);
         log.info("res= {}", list.stream().map(String::valueOf).collect(Collectors.joining(", ")));
     }
 }
