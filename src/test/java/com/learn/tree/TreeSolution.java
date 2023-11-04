@@ -628,8 +628,8 @@ public class TreeSolution {
 
     @Test
     public void testMaxPathSum() {
-//        Assert.assertEquals(6, maxPathSum(Utils.buildBinaryTree(new Integer[]{1, 2, 3})));
-//        Assert.assertEquals(42, maxPathSum(Utils.buildBinaryTree(new Integer[]{-10, 9, 20, null, null, 15, 7})));
+        Assert.assertEquals(6, maxPathSum(Utils.buildBinaryTree(new Integer[]{1, 2, 3})));
+        Assert.assertEquals(42, maxPathSum(Utils.buildBinaryTree(new Integer[]{-10, 9, 20, null, null, 15, 7})));
         Assert.assertEquals(-3, maxPathSum(Utils.buildBinaryTree(new Integer[]{-3})));
     }
 }
