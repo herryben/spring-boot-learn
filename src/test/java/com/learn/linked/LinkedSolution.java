@@ -1007,7 +1007,7 @@ public class LinkedSolution {
      *              2. for循环奇数剩下的right - left
      *              3. 头插法 + 穿针引线法
      *              3.1 穿针引线 3步
-     *              ① cur.next = next;
+     *              ① cur.next = next.next;
      *              ② next.next = pre.next
      *              ③ pre.next = next
      * @return
