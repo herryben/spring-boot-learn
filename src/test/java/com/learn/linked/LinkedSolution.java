@@ -198,6 +198,7 @@ public class LinkedSolution {
      *
      * 输入：head = []
      * 输出：[]
+     * 解题思路：倒插法
      * @param head
      * @return
      */
@@ -215,9 +216,38 @@ public class LinkedSolution {
 
     @Test
     public void testReverseList() {
-        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{1,2,3,4,5})), new int[]{5,4,3,2,1}));
-        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{1,2})), new int[]{2,1}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5})), new int[]{5, 4, 3, 2, 1}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{1, 2})), new int[]{2, 1}));
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList(Utils.buildLinkedList(new int[]{})), new int[]{}));
+    }
+
+    /**
+     * 解题思路：
+     * 1. 记录pre. cur next
+     * 2. cur.next
+     * 3. head.next = null
+     * 4. return pre
+     *
+     * @param head
+     * @return
+     */
+    public ListNode reverseList2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode pre = head;
+        for (ListNode cur = pre.next, next = cur.next; cur != null; pre = cur, cur = next, next = next != null ? next.next : null) {
+            cur.next = pre;
+        }
+        head.next = null;
+        return pre;
+    }
+
+    @Test
+    public void testReverseList2() {
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList2(Utils.buildLinkedList(new int[]{1, 2, 3, 4, 5})), new int[]{5, 4, 3, 2, 1}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList2(Utils.buildLinkedList(new int[]{1, 2})), new int[]{2, 1}));
+        Assert.assertEquals(true, Utils.isLinkedListArrayEqual(reverseList2(Utils.buildLinkedList(new int[]{})), new int[]{}));
     }
 
     /**
