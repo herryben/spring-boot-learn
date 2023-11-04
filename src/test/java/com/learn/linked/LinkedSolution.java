@@ -655,7 +655,7 @@ public class LinkedSolution {
         }
         ListNode dummy = new ListNode();
         dummy.next = head;
-        for(ListNode pre = dummy, cur = pre.next, next = cur.next; next != null; pre = cur, cur = cur.next, next = cur != null ? cur.next : null) {
+        for (ListNode pre = dummy, cur = pre.next, next = cur.next; next != null/*这里是next,因为next是最后一个需要操作的对象next.next=*/; pre = cur, cur = cur.next/*这里开始需要迭代cur，因为关系已经更新过了*/, next = cur != null ? cur.next : null) {
             pre.next = cur.next;
             cur.next = next.next;
             next.next = cur;
