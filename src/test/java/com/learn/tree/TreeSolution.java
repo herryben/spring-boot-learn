@@ -1,18 +1,21 @@
 package com.learn.tree;
 
 import com.learn.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author herryhaorui@didiglobal.com
  * @desc
  * @date 2023/7/9 1:57 下午
  */
+@Slf4j
 public class TreeSolution {
     @Test
     public void testUtils() {
@@ -631,5 +634,49 @@ public class TreeSolution {
         Assert.assertEquals(6, maxPathSum(Utils.buildBinaryTree(new Integer[]{1, 2, 3})));
         Assert.assertEquals(42, maxPathSum(Utils.buildBinaryTree(new Integer[]{-10, 9, 20, null, null, 15, 7})));
         Assert.assertEquals(-3, maxPathSum(Utils.buildBinaryTree(new Integer[]{-3})));
+    }
+
+    /**
+     * 后加节点的dfs
+     * 模拟擎天柱api、info层级渲染
+     */
+    public void dfsAfter(TreeNode root, List<Integer> list) {
+        if (root == null) {
+            return;
+        }
+        dfsAfter(root.left, list);
+        dfsAfter(root.right, list);
+        if (!list.contains(root.val)) {
+            list.add(root.val);
+        }
+    }
+
+    @Test
+    public void testDfsAfter() {
+        List<Integer> list = new ArrayList<>();
+        TreeNode node1 = new TreeNode(1);
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node4 = new TreeNode(4);
+        TreeNode node5 = new TreeNode(5);
+        TreeNode node6 = new TreeNode(6);
+        TreeNode node7 = new TreeNode(7);
+        TreeNode node8 = new TreeNode(8);
+        TreeNode node9 = new TreeNode(9);
+
+        node1.left = node8;
+        node1.right = node3;
+        node2.left = node3;
+        node2.right = node5;
+        node8.left = node9;
+        node3.right = node4;
+        node5.left = node4;
+        node5.right = node6;
+        node9.right = node7;
+        node4.left = node7;
+        node4.right = node6;
+        dfsAfter(node1, list);
+        dfsAfter(node2, list);
+        log.info("res= {}", list.stream().map(String::valueOf).collect(Collectors.joining(", ")));
     }
 }

@@ -494,7 +494,7 @@ public class DepthFirstSearchSolution {
 
     /**
      * 解题思路：
-     * 1.1 dsf 全局变量转化为局部变量
+     * 1.1 bsf 全局变量转化为局部变量
      *
      * @param numCourses
      * @param prerequisites
