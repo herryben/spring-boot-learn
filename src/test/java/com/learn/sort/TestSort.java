@@ -1,6 +1,7 @@
 package com.learn.sort;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -395,6 +396,18 @@ public class TestSort {
         for (int i = 0; i < 20; i++) {
             log.info("leftBound i={} index={}", i, leftBound(data, i));
         }
+        Assert.assertEquals(0, leftBound(data, 0));
+        Assert.assertEquals(0, leftBound(data, 1));
+        Assert.assertEquals(1, leftBound(data, 2));
+        Assert.assertEquals(2, leftBound(data, 3));
+        Assert.assertEquals(3, leftBound(data, 4));
+        Assert.assertEquals(3, leftBound(data, 5));
+        Assert.assertEquals(7, leftBound(data, 6));
+        Assert.assertEquals(7, leftBound(data, 7));
+        Assert.assertEquals(7, leftBound(data, 8));
+        Assert.assertEquals(8, leftBound(data, 9));
+        Assert.assertEquals(9, leftBound(data, 10));
+        Assert.assertEquals(9, leftBound(data, 11));
     }
 
     /**
@@ -427,6 +440,18 @@ public class TestSort {
         for (int i = 0; i < 20; i++) {
             log.info("rightBound i={} index={}", i, rightBound(data, i));
         }
+        Assert.assertEquals(-1, rightBound(data, 0));
+        Assert.assertEquals(0, rightBound(data, 1));
+        Assert.assertEquals(1, rightBound(data, 2));
+        Assert.assertEquals(2, rightBound(data, 3));
+        Assert.assertEquals(2, rightBound(data, 4));
+        Assert.assertEquals(6, rightBound(data, 5));
+        Assert.assertEquals(6, rightBound(data, 6));
+        Assert.assertEquals(6, rightBound(data, 7));
+        Assert.assertEquals(7, rightBound(data, 8));
+        Assert.assertEquals(8, rightBound(data, 9));
+        Assert.assertEquals(8, rightBound(data, 10));
+        Assert.assertEquals(8, rightBound(data, 11));
     }
 
     /**
