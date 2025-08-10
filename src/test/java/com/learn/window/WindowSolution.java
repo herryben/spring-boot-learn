@@ -32,10 +32,16 @@ public class WindowSolution {
             // 判断窗口左侧是否需要收缩
             while (valid == need.size()) {
                 // d是将移出窗口的字符
-                char d = str.charAt(left);
+                char del = str.charAt(left);
                 // 左移窗口
                 left++;
                 // 进行窗口内的一些列更新
+                if (need.containsKey(del)) {
+                    if (need.get(del).equals(window.get(del))) {
+                        valid--;
+                    }
+                    window.compute(del, (key, val) -> --val);
+                }
             }
         }
     }
