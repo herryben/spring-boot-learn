@@ -543,14 +543,14 @@ public class SortSolution {
             int mid = left + (right - left) / 2;
             if (nums[mid] == target) {
                 return mid;
-            } else if (nums[left] <= nums[mid]) {
-                if (nums[left] <= target && target < nums[mid]) {
+            } else if (nums[left] <= nums[mid]) { // 左半部分是递增序列
+                if (nums[left] <= target && target < nums[mid]) { // 目标在左半部分
                     right = mid;
                 } else {
                     left = mid + 1;
                 }
-            } else {
-                if (nums[mid] < target && target <= nums[right]) {
+            } else { // 右半部分是递增序列
+                if (nums[mid] < target && target <= nums[right]) { // 目标在右半部分
                     left = mid + 1;
                 } else {
                     right = mid;
