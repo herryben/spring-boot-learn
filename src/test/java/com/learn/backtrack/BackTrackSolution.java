@@ -82,6 +82,7 @@ public class BackTrackSolution {
      * 1. 从后向前第一个降式逆置就是升式,所以要找到从后向前的第一个升式
      * 2. 又要让这个逆置后的升式尽可能地小，所以要找升式前一个数的第一大的数，并交换
      * 3. 把交换后的降式逆置为升式
+     * 举例：12 4321 => 13 4221 => 131 1224
      * @param nums
      */
     public int[] nextPermutation(int[] nums) {
