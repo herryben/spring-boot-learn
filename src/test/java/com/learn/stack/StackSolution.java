@@ -106,7 +106,8 @@ public class StackSolution {
      *  解释：nums1 中每个值的下一个更大元素如下所述：
      *  - 2 ，用加粗斜体标识，nums2 = [1,2,3,4]。下一个更大元素是 3 。
      *  - 4 ，用加粗斜体标识，nums2 = [1,2,3,4]。不存在下一个更大元素，所以答案是 -1 。
-     *
+     * 解题思路：
+     * 其中nums1 是 nums2 的子集 + 单调栈
      * @param nums1
      * @param nums2
      * @return
