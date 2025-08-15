@@ -568,7 +568,7 @@ public class StackSolution {
      * 解题思路：
      * 1. 用单调栈()分别计算出左右下一个比当前位置小的索引
      * 2. 循环遍历去最大值
-     *
+     * 3. 左右2边方2个哨兵 兜底最小值的case
      * @param heights
      * @return
      */
