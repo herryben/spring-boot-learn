@@ -249,11 +249,24 @@ public class ArraySolution {
      * 返回容器可以储存的最大水量。
      * <p>
      * 说明：你不能倾斜容器。
+     * 解题思路：双指针法
+     * 一句话概括：我们left++和right--都是为了尝试取到更多的水，如果短的板不动的话，取到的水永远不会比上次多。
      */
     public int maxArea(int[] height) {
-        return 0;
+        int ans = Integer.MIN_VALUE;
+        int left = 0, right = height.length - 1;
+        while (left < right) {
+            ans = Math.max(ans, Math.min(height[left], height[right]) * (right - left));
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return ans;
     }
 
+    @Test
     public void testMaxArea() {
         Assert.assertEquals(49, maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
         Assert.assertEquals(1, maxArea(new int[]{1, 1}));
