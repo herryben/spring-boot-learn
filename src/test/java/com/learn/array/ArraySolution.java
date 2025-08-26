@@ -1,7 +1,12 @@
 package com.learn.array;
 
+import com.learn.utils.Utils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ArraySolution {
     /**
@@ -124,5 +129,133 @@ public class ArraySolution {
         Assert.assertEquals(6, maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
         Assert.assertEquals(1, maxSubArray(new int[]{1}));
         Assert.assertEquals(23, maxSubArray(new int[]{5, 4, -1, 7, 8}));
+    }
+
+    /**
+     * 16. 最接近的三数之和
+     * https://leetcode.cn/problems/3sum-closest/solutions/301382/zui-jie-jin-de-san-shu-zhi-he-by-leetcode-solution/
+     * 给你一个长度为 n 的整数数组 nums 和 一个目标值 target。请你从 nums 中选出三个整数，使它们的和与 target 最接近。
+     * <p>
+     * 返回这三个数的和。
+     * <p>
+     * 假定每组输入只存在恰好一个解。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [-1,2,1,-4], target = 1
+     * 输出：2
+     * 解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2)。
+     * 示例 2：
+     * <p>
+     * 输入：nums = [0,0,0], target = 1
+     * 输出：0
+     * 解释：与 target 最接近的和是 0（0 + 0 + 0 = 0）。
+     * 解题思路：排序+双指针
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int threeSumClosest(int[] nums, int target) {
+        // write your code here.
+        Arrays.sort(nums);
+        int left = 0, right = 0, sum = 0;
+        int ans = 0, diff = Integer.MAX_VALUE;
+        while (right < nums.length) {
+            int current = nums[right];
+            right++;
+            sum = sum + current;
+            if (right - left == 3) {
+                if (sum == target) {
+                    return sum;
+                }
+                if (diff > Math.abs(sum - target)) {
+                    ans = sum;
+                    diff = Math.min(diff, Math.abs(sum - target));
+                }
+            }
+            while (right - left > 2) {
+                sum -= nums[left];
+                left++;
+            }
+        }
+
+        return ans;
+    }
+
+    @Test
+    public void testThreeSumClosest() {
+        Assert.assertEquals(-2, threeSumClosest(new int[]{4, 0, 5, -5, 3, 3, 0, -4, -5}, -2));
+        Assert.assertEquals(2, threeSumClosest(new int[]{-1, 2, 1, -4}, 1));
+        Assert.assertEquals(0, threeSumClosest(new int[]{0, 0, 0}, 0));
+    }
+
+    /**
+     * 15. 三数之和
+     * https://leetcode.cn/problems/3sum/submissions/441931731/
+     * 给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请你返回所有和为 0 且不重复的三元组。
+     * <p>
+     * 注意：答案中不可以包含重复的三元组。
+     * <p>
+     * <p>
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：nums = [-1,0,1,2,-1,-4]
+     * 输出：[[-1,-1,2],[-1,0,1]]
+     * 解释：
+     * nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。
+     * nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。
+     * nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
+     * 不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。
+     * 注意，输出的顺序和三元组的顺序并不重要。
+     * 示例 2：
+     * <p>
+     * 输入：nums = [0,1,1]
+     * 输出：[]
+     * 解释：唯一可能的三元组和不为 0 。
+     * 示例 3：
+     * <p>
+     * 输入：nums = [0,0,0]
+     * 输出：[[0,0,0]]
+     * 解释：唯一可能的三元组和为 0 。
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        return ans;
+    }
+
+    @Test
+    public void testThreeSum() {
+        Assert.assertEquals(true, Utils.isEqualArray(new int[][]{{-1, -1, 2}, {-1, 0, 1}}, Utils.convertToArray(threeSum(new int[]{-1, 0, 1, 2, -1, -4}))));
+        Assert.assertEquals(true, Utils.isEqualArray(new int[][]{}, Utils.convertToArray(threeSum(new int[]{0, 1, 1}))));
+        Assert.assertEquals(true, Utils.isEqualArray(new int[][]{{0, 0, 0}}, Utils.convertToArray(threeSum(new int[]{0, 0, 0}))));
+    }
+
+    /**
+     * 11. 盛最多水的容器
+     * https://leetcode.cn/problems/container-with-most-water/description/
+     * 给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。
+     * <p>
+     * 找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+     * <p>
+     * 返回容器可以储存的最大水量。
+     * <p>
+     * 说明：你不能倾斜容器。
+     */
+    public int maxArea(int[] height) {
+        return 0;
+    }
+
+    public void testMaxArea() {
+        Assert.assertEquals(49, maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
+        Assert.assertEquals(1, maxArea(new int[]{1, 1}));
     }
 }
