@@ -161,24 +161,22 @@ public class ArraySolution {
     public int threeSumClosest(int[] nums, int target) {
         // write your code here.
         Arrays.sort(nums);
-        int left = 0, right = 0, sum = 0;
-        int ans = 0, diff = Integer.MAX_VALUE;
-        while (right < nums.length) {
-            int current = nums[right];
-            right++;
-            sum = sum + current;
-            if (right - left == 3) {
+        int ans = nums[0] + nums[1] + nums[2];
+        for (int i = 0; i < nums.length - 2; i++) {
+            int left = i + 1, right = nums.length - 1;
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
                 if (sum == target) {
-                    return sum;
+                    return target;
+                } else if (sum > target) {
+                    right--;
+                } else {
+                    left++;
                 }
-                if (diff > Math.abs(sum - target)) {
+
+                if (Math.abs(sum - target) < Math.abs(ans - target)) {
                     ans = sum;
-                    diff = Math.min(diff, Math.abs(sum - target));
                 }
-            }
-            while (right - left > 2) {
-                sum -= nums[left];
-                left++;
             }
         }
 
