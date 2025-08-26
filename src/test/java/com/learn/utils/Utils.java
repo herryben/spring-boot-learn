@@ -3,6 +3,7 @@ package com.learn.utils;
 import com.learn.linked.ListNode;
 import com.learn.tree.TreeNode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 
 import java.util.Arrays;
@@ -18,7 +19,18 @@ import java.util.Queue;
 @Slf4j
 public class Utils {
     public static int[][] convertToArray(List<List<Integer>> list) {
-        return list.stream().map(innerList -> innerList.stream().mapToInt(num -> num)).toArray(int[][]::new);
+        if (CollectionUtils.isEmpty(list)) {
+            return new int[][]{};
+        }
+        int[][] res = new int[list.size()][list.get(0).size()];
+        for (int i = 0; i < list.size(); i++) {
+            int[] innerArr = new int[list.get(i).size()];
+            for (int j = 0; j < list.get(i).size(); j++) {
+                innerArr[j] = list.get(i).get(j);
+            }
+            res[i] = innerArr;
+        }
+        return res;
     }
 
 
