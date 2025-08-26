@@ -914,7 +914,10 @@ public class DpSolution {
      * enention -> exention (将 'n' 替换为 'x')
      * exention -> exection (将 'n' 替换为 'c')
      * exection -> execution (插入 'u')
-     *
+     * 解题思路：dp[i][j] = s1[0..i] s2[0..j]的最小编辑距离
+     * dp[i-1][j] 对应删除操作 s1 abb s2 a 此时bb需要删除，所以i需要停留在上一个状态
+     * dp[i][j-1] 对应插入操作 s1 a s2 abb 此时bb需要插入，所以j需要停留在上一个状态
+     * dp[i-1][j-1] 对应替换操作 s1 ab s2 ac 此时c提换b，所以需要i j都留在上一个状态
      * @param word1
      * @param word2
      * @return
@@ -924,11 +927,11 @@ public class DpSolution {
         int n = word2.length();
         int[][] dp = new int[m + 1][n + 1];
         for (int i = 0; i <= m; i++) {
-            dp[i][0] = i;
+            dp[i][0] = i; // 删除i个字符
         }
 
         for (int i = 0; i <= n; i++) {
-            dp[0][i] = i;
+            dp[0][i] = i; // 插入i个字符
         }
 
         for (int i = 1; i <= m; i++) {
