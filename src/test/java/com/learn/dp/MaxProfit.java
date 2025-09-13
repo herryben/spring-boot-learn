@@ -45,7 +45,74 @@ public class MaxProfit {
     }
 
     /**
-     * TODO 123. 买卖股票的最佳时机 III
+     * 解题思路：buy和sell都代表操作之后手里的钱
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfitii(int[] prices) {
+        int buy = Integer.MIN_VALUE, sell = 0;
+        for (int price : prices) {
+            buy = Math.max(buy, 0 - price);
+            sell = Math.max(sell, buy + price);
+        }
+        return sell;
+    }
+
+    @Test
+    public void testMaxProfitii() {
+        Assert.assertEquals(5, maxProfitii(new int[]{7, 1, 5, 3, 6, 4}));
+        Assert.assertEquals(0, maxProfitii(new int[]{7, 6, 4, 3, 1}));
+    }
+
+    /**
+     * 122. 买卖股票的最佳时机 II
+     * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/
+     * 给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。
+     * <p>
+     * 在每一天，你可以决定是否购买和/或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。
+     * <p>
+     * 返回 你能获得的 最大 利润 。
+     * 示例 1：
+     * <p>
+     * 输入：prices = [7,1,5,3,6,4]
+     * 输出：7
+     * 解释：在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。
+     * 随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3 。
+     * 总利润为 4 + 3 = 7 。
+     * 示例 2：
+     * <p>
+     * 输入：prices = [1,2,3,4,5]
+     * 输出：4
+     * 解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。
+     * 总利润为 4 。
+     * 示例 3：
+     * <p>
+     * 输入：prices = [7,6,4,3,1]
+     * 输出：0
+     * 解释：在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 0 。
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit2(int[] prices) {
+        int buy = Integer.MIN_VALUE, sell = 0;
+        for (int price : prices) {
+            buy = Math.max(buy, sell - price);
+            sell = Math.max(sell, buy + price);
+        }
+        return sell;
+    }
+
+    @Test
+    public void testMaxProfit2() {
+        Assert.assertEquals(7, maxProfit2(new int[]{7, 1, 5, 3, 6, 4}));
+        Assert.assertEquals(4, maxProfit2(new int[]{1, 2, 3, 4, 5}));
+        Assert.assertEquals(0, maxProfit2(new int[]{7, 6, 4, 3, 1}));
+    }
+
+    /**
+     * 123. 买卖股票的最佳时机 III
      * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/
      * 给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
      * <p>
@@ -79,7 +146,14 @@ public class MaxProfit {
      * @return
      */
     public int maxProfit3(int[] prices) {
-        return 0;
+        int buy1 = Integer.MIN_VALUE, buy2 = Integer.MIN_VALUE, sell1 = 0, sell2 = 0;
+        for (int price : prices) {
+            buy1 = Math.max(buy1, 0 - price);
+            sell1 = Math.max(sell1, buy1 + price);
+            buy2 = Math.max(buy2, sell1 - price);
+            sell2 = Math.max(sell2, buy2 + price);
+        }
+        return sell2;
     }
 
     @Test
@@ -90,46 +164,7 @@ public class MaxProfit {
     }
 
     /**
-     * TODO 给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。
-     * <p>
-     * 在每一天，你可以决定是否购买和/或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。
-     * <p>
-     * 返回 你能获得的 最大 利润 。
-     * 示例 1：
-     * <p>
-     * 输入：prices = [7,1,5,3,6,4]
-     * 输出：7
-     * 解释：在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。
-     * 随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3 。
-     * 总利润为 4 + 3 = 7 。
-     * 示例 2：
-     * <p>
-     * 输入：prices = [1,2,3,4,5]
-     * 输出：4
-     * 解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。
-     * 总利润为 4 。
-     * 示例 3：
-     * <p>
-     * 输入：prices = [7,6,4,3,1]
-     * 输出：0
-     * 解释：在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 0 。
-     *
-     * @param prices
-     * @return
-     */
-    public int maxProfit2(int[] prices) {
-        return 0;
-    }
-
-    @Test
-    public void testMaxProfit2() {
-        Assert.assertEquals(7, maxProfit2(new int[]{7, 1, 5, 3, 6, 4}));
-        Assert.assertEquals(4, maxProfit2(new int[]{1, 2, 3, 4, 5}));
-        Assert.assertEquals(0, maxProfit2(new int[]{7, 6, 4, 3, 1}));
-    }
-
-    /**
-     * TODO 188. 买卖股票的最佳时机 IV
+     * 188. 买卖股票的最佳时机 IV
      * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/
      * 给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格，和一个整型 k 。
      * <p>
@@ -151,14 +186,14 @@ public class MaxProfit {
      * @param prices
      * @return
      */
-    public int maxProfit4(int[] prices) {
+    public int maxProfit4(int k, int[] prices) {
         return 0;
     }
 
     @Test
     public void testMaxProfit4() {
-        Assert.assertEquals(2, maxProfit4(new int[]{2, 4, 1}));
-        Assert.assertEquals(7, maxProfit4(new int[]{3, 2, 6, 5, 0, 3}));
+        Assert.assertEquals(2, maxProfit4(2, new int[]{2, 4, 1}));
+        Assert.assertEquals(7, maxProfit4(2, new int[]{3, 2, 6, 5, 0, 3}));
     }
 
     /**
