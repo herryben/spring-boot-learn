@@ -82,13 +82,16 @@ public class HouseRobber {
     }
 
     public int rob(int[] nums, int start, int end) {
-       int dpi = 0, dp1 = nums[start], dp2 = 0;
-        for (int i = start + 1; i <= end; i++) {
+        int dpi = 0, dp1 = 0, dp2 = 0, ans = 0;
+        for (int i = start; i <= end; i++) {
             dpi = Math.max(dp1, dp2 + nums[i]);
+            ans = Math.max(ans, dpi);
+
+            // 先记录前前一个
             dp2 = dp1;
             dp1 = dpi;
         }
-        return dpi;
+        return ans;
     }
 
     @Test
