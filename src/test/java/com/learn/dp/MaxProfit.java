@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class MaxProfit {
     /**
-     * TODO 121. 买卖股票的最佳时机
+     * 121. 买卖股票的最佳时机
      * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/
      * 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
      * <p>
@@ -23,12 +23,19 @@ public class MaxProfit {
      * 输入：prices = [7,6,4,3,1]
      * 输出：0
      * 解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
+     * 解题思路：就是普通贪心+模拟
+     * 相当于维护了一个长度的 从小到大的单调栈
      *
      * @param prices
      * @return
      */
     public int maxProfit(int[] prices) {
-        return 0;
+        int ans = 0, cur = prices[0];
+        for (int price : prices) {
+            ans = Math.max(ans, price - cur);
+            cur = Math.min(cur, price);
+        }
+        return ans;
     }
 
     @Test
