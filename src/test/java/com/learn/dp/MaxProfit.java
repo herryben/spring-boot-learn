@@ -3,6 +3,8 @@ package com.learn.dp;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class MaxProfit {
     /**
      * 121. 买卖股票的最佳时机
@@ -187,7 +189,18 @@ public class MaxProfit {
      * @return
      */
     public int maxProfit4(int k, int[] prices) {
-        return 0;
+        k = Math.min(k, prices.length / 2);
+        int[] buy = new int[k + 1];
+        int[] sell = new int[k + 1];
+        Arrays.fill(buy, Integer.MIN_VALUE);
+        for (int price : prices) {
+            for (int i = 1; i <= k; i++) {
+                buy[i] = Math.max(buy[i], sell[i - 1] - price);
+                sell[i] = Math.max(sell[i], buy[i] + price);
+            }
+        }
+
+        return sell[k];
     }
 
     @Test
@@ -197,7 +210,7 @@ public class MaxProfit {
     }
 
     /**
-     * TODO 309. 最佳买卖股票时机含冷冻期
+     * 309. 最佳买卖股票时机含冷冻期
      * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/
      * 给定一个整数数组prices，其中第  prices[i] 表示第 i 天的股票价格 。​
      * <p>
@@ -219,7 +232,13 @@ public class MaxProfit {
      * @return
      */
     public int maxProfit5(int[] prices) {
-        return 0;
+        int buy = Integer.MIN_VALUE, sell = 0, sellPre = 0;
+        for (int price : prices) {
+            buy = Math.max(buy, sellPre - price);
+            sellPre = sell;
+            sell = Math.max(sell, buy + price);
+        }
+        return sell;
     }
 
     @Test
@@ -229,7 +248,7 @@ public class MaxProfit {
     }
 
     /**
-     * TODO 714. 买卖股票的最佳时机含手续费
+     * 714. 买卖股票的最佳时机含手续费
      * https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
      * 给定一个整数数组 prices，其中 prices[i]表示第 i 天的股票价格 ；整数 fee 代表了交易股票的手续费用。
      * <p>
@@ -257,12 +276,17 @@ public class MaxProfit {
      * @return
      */
     public int maxProfit6(int[] prices, int fee) {
-        return 0;
+        int buy = Integer.MIN_VALUE, sell = 0;
+        for (int price : prices) {
+            buy = Math.max(buy, sell - price - fee);
+            sell = Math.max(sell, buy + price);
+        }
+        return sell;
     }
 
     @Test
     public void testMaxProfit6() {
         Assert.assertEquals(8, maxProfit6(new int[]{1, 3, 2, 8, 4, 9}, 2));
-        Assert.assertEquals(6, maxProfit6(new int[]{1, 3, 7, 5, 10, 3}, 8));
+        Assert.assertEquals(6, maxProfit6(new int[]{1, 3, 7, 5, 10, 3}, 3));
     }
 }
