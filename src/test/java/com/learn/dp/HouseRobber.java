@@ -3,6 +3,8 @@ package com.learn.dp;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class HouseRobber {
     /**
      * 198. 打家劫舍
@@ -102,7 +104,7 @@ public class HouseRobber {
     }
 
     /**
-     * TODO 2560. 打家劫舍 IV
+     * 2560. 打家劫舍 IV
      * https://leetcode.cn/problems/house-robber-iv/
      * 沿街有一排连续的房屋。每间房屋内都藏有一定的现金。现在有一位小偷计划从这些房屋中窃取现金。
      * <p>
@@ -130,18 +132,42 @@ public class HouseRobber {
      * 输入：nums = [2,7,9,3,1], k = 2
      * 输出：2
      * 解释：共有 7 种窃取方式。窃取能力最小的情况所对应的方式是窃取下标 0 和 4 处的房屋。返回 max(nums[0], nums[4]) = 2 。
-     *
+     * 解题思路：leftBound + 贪心
+     * 其实和2594题的思路是一样的，取一个数然后验证这个数是不是可行
+     * 这里验证的过程中需要得到最长不连续子序列，那么对于奇数长度的连续序列，就应该从第一个开始取；而偶数长度的连续序列，从第一个和第二个开始取都一样，所以这里遇到第一个的然后丢弃第二个是合理的
+     * 就解释一下能抢则抢的正确性
      * @param nums
      * @param k
      * @return
      */
     public int minCapability(int[] nums, int k) {
-        return 0;
+        int left = Arrays.stream(nums).min().getAsInt();
+        int right = Arrays.stream(nums).max().getAsInt() + 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (check(nums, k, mid)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    public boolean check(int[] nums, int k, int mid) {
+        int cnt = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= mid) {
+                cnt++;
+                i++;
+            }
+        }
+        return cnt >= k;
     }
 
     @Test
     public void testMinCapability() {
         Assert.assertEquals(5, minCapability(new int[]{2, 3, 5, 9}, 2));
-        Assert.assertEquals(5, minCapability(new int[]{2, 7, 9, 3, 1}, 2));
+        Assert.assertEquals(2, minCapability(new int[]{2, 7, 9, 3, 1}, 2));
     }
 }
