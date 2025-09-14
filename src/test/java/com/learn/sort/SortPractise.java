@@ -124,7 +124,7 @@ public class SortPractise {
                 j--;
             }
             data[i] = data[j];
-            while (i < j && data[j] < pivot) {
+            while (i < j && data[i] < pivot) {
                 i++;
             }
             data[j] = data[i];
