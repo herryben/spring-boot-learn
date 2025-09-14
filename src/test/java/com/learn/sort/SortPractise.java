@@ -273,7 +273,7 @@ public class SortPractise {
         List<String> data = Lists.newArrayList("a", "b", "c");
         List<List<String>> res = new ArrayList<>();
         List<String> track = new LinkedList<>();
-        subset(data, res, track, 0);
+        subset(data, track, res, 0);
         res.forEach(item -> log.info("Subset: " + String.join(", ", item)));
     }
 
@@ -285,14 +285,15 @@ public class SortPractise {
      * @param track
      * @param start
      */
-    public void subset(List<String> data, List<List<String>> res, List<String> track, int start) {
+    public void subset(List<String> data, List<String> track, List<List<String>> res, int start) {
         res.add(new ArrayList<>(track));
 
         for (int i = start; i < data.size(); i++) {
             track.add(data.get(i));
-            subset(data, res, track, i + 1);
+            subset(data, track, res, i + 1);
             track.remove(track.size() - 1);
         }
+
     }
 
     @Test
