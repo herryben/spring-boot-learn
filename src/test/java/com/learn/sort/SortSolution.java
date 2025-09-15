@@ -398,10 +398,14 @@ public class SortSolution {
      * 示例 2：
      * <p>
      * <p>
-     * 输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
+     * 输入：matrix = [
+     * [1,3,5,7],
+     * [10,11,16,20],
+     * [23,30,34,60]
+     * ], target = 13
      * 输出：false
      * 解题思路：搜索二叉树
-     *
+     * 从右上角开始，往左下角搜索
      * @param matrix
      * @param target
      * @return
@@ -413,8 +417,10 @@ public class SortSolution {
             if (matrix[x][y] == target) {
                 return true;
             } else if (matrix[x][y] > target) {
+                // 数字大了就回去点
                 y--;
             } else {
+                // 数字笑了就往下一行
                 x++;
             }
         }
