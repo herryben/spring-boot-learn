@@ -549,6 +549,7 @@ public class WindowSolution {
      * 输入：nums = [1], k = 1
      * 输出：[1]
      * 解题思路：单调队列标准模板
+     * 维持队列单调递减 eg [4 3 2 1]
      * @param nums
      * @param k
      * @return
