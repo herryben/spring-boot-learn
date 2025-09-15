@@ -548,7 +548,7 @@ public class WindowSolution {
      * 示例 2：
      * 输入：nums = [1], k = 1
      * 输出：[1]
-     *
+     * 解题思路：单调队列标准模板
      * @param nums
      * @param k
      * @return
