@@ -160,7 +160,7 @@ public class StackSolution {
             freq[ch - 'a']++;
         }
         for (char ch : s.toCharArray()) {
-            // 当前字符没有在单调队列中出现过
+            // 当前字符没有在单调栈中出现过
             if (!isVisited[ch - 'a']) {
                 // 栈非空且栈顶元素大于当前元素则弹出
                 // sb[0]是栈底 sb[len]是栈顶 维护栈底到栈顶的单调递增
