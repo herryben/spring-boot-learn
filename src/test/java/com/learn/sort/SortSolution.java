@@ -540,7 +540,7 @@ public class SortSolution {
      * <p>
      * 输入：nums = [1], target = 0
      * 输出：-1
-     *
+     * 解题思路：通过判断left和mid判断哪个区间是有序区间
      * @param nums
      * @param target
      * @return
