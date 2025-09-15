@@ -27,6 +27,15 @@ public class WindowSolution {
             char ch = str.charAt(right);
             // 右移窗口
             right++;
+            if (need.containsKey(ch)) {
+                // 说明目标字符串需要当前字符
+                window.compute(ch, (key, val) -> val == null ? 1 : ++val);
+                if (window.get(ch).equals(need.get(ch))) {
+                    // 如果窗口的该字符数符合了需要的字符字符数，则更新合法数
+                    valid++;
+                }
+            }
+
             // 进行窗口内的一系列更新
             valid++;
             // 判断窗口左侧是否需要收缩
