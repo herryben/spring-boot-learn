@@ -22,7 +22,7 @@ public class StackSolution {
      *  输出: [1,1,0]
      * 解题思路：
      * 1.单调栈
-     *  1.1 维持从栈底到栈顶元素单调递增
+     *  1.1 维持从栈顶到栈底元素单调递增
      * @param temperatures
      * @return
      */
