@@ -351,7 +351,8 @@ public class SortSolution {
      * <p>
      * 输入: nums = [1,3,5,6], target = 7
      * 输出: 4
-     *
+     * nums 为 无重复元素 的 升序 排列数组
+     * 解题思路：因为是找最大，所以用的是upperBound，又因为无重复元素，所以找到时直接返回
      * @param nums
      * @param target
      * @return
