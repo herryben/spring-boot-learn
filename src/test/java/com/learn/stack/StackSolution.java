@@ -355,7 +355,6 @@ public class StackSolution {
      *  输入：height = [4,2,0,3,2,5]
      *  输出：9
      * 解题思路：同时维护左右边最大值 + 双指针向中间缩小
-     * TODO 可以实现下单调栈法
      * @param height
      * @return
      */
@@ -411,6 +410,40 @@ public class StackSolution {
     public void testTrapDp() {
         Assert.assertEquals(6, trapDp(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
         Assert.assertEquals(9, trapDp(new int[]{4, 2, 0, 3, 2, 5}));
+    }
+
+    /**
+     * 解题思路: 使用单调栈法 维护栈顶到栈底严格单调递增
+     * 横着一层一层算面积
+     * 面积 长 = 当前索引到栈顶元素长度 当前索引 - 当前栈顶元素下标 - 1
+     * 面积 宽 = min(当前索引, 栈顶元素) - 上一个栈顶元素
+     *
+     * @param height
+     * @return
+     */
+    public int trapStack(int[] height) {
+        int ans = 0;
+        Deque<Integer> stack = new LinkedList<>();
+        for (int i = 0; i < height.length; i++) {
+            while (!stack.isEmpty() && height[i] >= height[stack.peekFirst()]) {
+                int lastIndex = stack.pop();
+                if (stack.isEmpty()) {
+                    break;
+                }
+
+                int h = Math.min(height[stack.peekFirst()], height[i]) - height[lastIndex];
+                int w = i - stack.peekFirst() - 1;
+                ans += h * w;
+            }
+            stack.push(i);
+        }
+        return ans;
+    }
+
+    @Test
+    public void testTrapStack() {
+        Assert.assertEquals(6, trapStack(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
+        Assert.assertEquals(9, trapStack(new int[]{4, 2, 0, 3, 2, 5}));
     }
 
     /**
