@@ -898,17 +898,6 @@ public class LinkedSolution {
         Assert.assertEquals(true, Utils.isLinkedListArrayEqual(sortList(Utils.buildLinkedList(new int[]{-1, 5, 3, 4, 0})), new int[]{-1, 0, 3, 4, 5}));
     }
 
-    public static ListNode reverse(ListNode head) {
-        ListNode dummy = new ListNode();
-        for (ListNode cur = head, next = cur.next;
-             cur != null; cur = next, next = next != null ?
-                next.next : null) {
-            cur.next = dummy.next;
-            dummy.next = cur;
-        }
-        return dummy.next;
-    }
-
     /**
      * 143. 重排链表
      * https://leetcode.cn/problems/reorder-list/
@@ -970,6 +959,18 @@ public class LinkedSolution {
             }
         }
 
+        return dummy.next;
+    }
+
+
+    public static ListNode reverse(ListNode head) {
+        ListNode dummy = new ListNode();
+        for (ListNode cur = head, next = cur.next;
+             cur != null; cur = next, next = next != null ?
+                next.next : null) {
+            cur.next = dummy.next;
+            dummy.next = cur;
+        }
         return dummy.next;
     }
 
