@@ -599,23 +599,24 @@ public class StackSolution {
      * 输入： heights = [2,4]
      * 输出： 4
      * 解题思路：
-     * 1. 用单调栈()分别计算出左右下一个比当前位置小的索引
-     * 2. 循环遍历去最大值
+     * 1. 用单调栈分别计算出上一个/下一个比当前位置小的索引
+     * 2. 循环遍历取最大值
      * 3. 左右2边方2个哨兵 兜底最小值的case
+     *  当只有一个元素时， pre[0] = -1 next[0] = 1 => next[0](1) - pre[0](-1) - 1 = 1
      * @param heights
      * @return
      */
     public int largestRectangleArea(int[] heights) {
         int ans = 0;
-        int[] left = new int[heights.length];
-        int[] right = new int[heights.length];
+        int[] pre = new int[heights.length];
+        int[] next = new int[heights.length];
         Deque<Integer> stack = new ArrayDeque<>();
         for (int i = 0; i < heights.length; i++) {
             while (!stack.isEmpty() && heights[i] <= heights[stack.peek()]) {
                 stack.pop();
             }
             // 相当于插入一个-1哨兵
-            left[i] = stack.isEmpty() ? -1 : stack.peek();
+            pre[i] = stack.isEmpty() ? -1 : stack.peek();
             stack.push(i);
         }
 
@@ -625,12 +626,12 @@ public class StackSolution {
                 stack.pop();
             }
             // 相当于插入一个heights.length哨兵
-            right[i] = stack.isEmpty() ? heights.length : stack.peek();
+            next[i] = stack.isEmpty() ? heights.length : stack.peek();
             stack.push(i);
         }
 
         for (int i = 0; i < heights.length; i++) {
-            ans = Math.max(ans, heights[i] * (right[i] - left[i] - 1));
+            ans = Math.max(ans, heights[i] * (next[i] - pre[i] - 1));
         }
         return ans;
     }
