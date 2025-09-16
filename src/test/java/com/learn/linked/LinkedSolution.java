@@ -769,7 +769,7 @@ public class LinkedSolution {
             }
         }
 
-        // 特殊边界值：如果所有元素都重复，此时dummy == pre，要把pre.next置为null
+        // 特殊边界值：如果所有元素都重复，此时dummy == pre，要把pre.next置为null，此时没有做任何操作 相当与还是原来的数组
         pre.next = null;
         return dummy.next;
     }
