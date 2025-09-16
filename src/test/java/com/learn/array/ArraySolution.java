@@ -44,7 +44,7 @@ public class ArraySolution {
             // 相遇时不一定在相遇点
         } while (slow != fast);
 
-        int pt1 = slow;
+        int pt1 = fast;
         int pt2 = nums[0];
         while (pt1 != pt2) {
             pt1 = nums[pt1];
