@@ -272,11 +272,9 @@ public class LinkedSolution {
         ListNode dummy = new ListNode();
         dummy.next = head;
         for (ListNode pre = dummy, end = head; end != null; end = pre.next) {
-            // end开始就是区间的第一个，所以从1开始
             for (int i = 1; i < k && end != null; i++) {
                 end = end.next;
             }
-            // 不够就break
             if (end == null) {
                 break;
             }
@@ -296,16 +294,12 @@ public class LinkedSolution {
      */
     ListNode reverse(ListNode pre, ListNode start, ListNode end, ListNode after) {
         ListNode dummy = new ListNode();
-        for (ListNode cur = start, next = cur.next; cur != after/*这里是 after，因为只有after才可能等于null*/; cur = next, next = next == null ? null : next.next) {
+        for (ListNode cur = start, next = cur.next; cur != after; cur = next, next = next != null ? next.next : null) {
             cur.next = dummy.next;
             dummy.next = cur;
         }
-        // 头变成了尾，尾变成了头
-        // 记录了区间的前一个和后一个，用前一个和后一个把反转的链表连上
         pre.next = end;
         start.next = after;
-        dummy.next = null;
-        // 返回尾
         return start;
     }
 
@@ -459,6 +453,13 @@ public class LinkedSolution {
      * 解题思路：
      * 所以，我们可以让p1遍历完链表A之后开始遍历链表B，让p2遍历完链表B之后开始遍历链表A，这样相当于「逻辑上」两条链表接在了一起。
      * 如果这样进行拼接，就可以让p1和p2同时进入公共部分，也就是同时到达相交节点c1：
+     * 关于第二种解法发表下我的见解，统一长度说白了就是为了两个链表向右对齐，打个比方listA长度为5，listB长度为6，不好比较，那就把前面补充成null（先这样想）
+     * listA=[null,4,1,8,4,5] listB=[5,6,1,8,4,5]
+     * 那这样长度就一样了，我们就能同时从开头移动A和B进行比较。
+     * 那回到正常的思路，想A和B长度一样，长度就都设置为A+B呗。那就往B最左边补充A长度（5）个null，A最左边补充B长度（6）个null。那就变成
+     * listA=[null,null,null,null,null,null,4,1,8,4,5] listB=[null,null,null,null,null,5,6,1,8,4,5]
+     * 这样长度一样，好比较了吧，不过都是null，链表怎么移动啊，你就把A里面的6个null换成B的数据，B里面的null换成A的数据呗，反正都是要白白移动的，相交点在最后面，这样补全是为了我们好操作链表。
+     * 那这样理解的话这题就没问题了。代码是官方第二种解法的代码。
      * @param headA
      * @param headB
      * @return
