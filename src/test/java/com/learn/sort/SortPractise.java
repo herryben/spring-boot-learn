@@ -6,9 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
@@ -306,7 +304,7 @@ public class SortPractise {
     }
 
     /**
-     * 标准组合
+     * 标准组合模板
      *
      * @param data
      * @param res
@@ -329,9 +327,10 @@ public class SortPractise {
     @Test
     public void testArrange() {
         List<String> data = Lists.newArrayList("a", "b", "c");
-        List<List<String>> res = new ArrayList<>();
-        List<String> track = new LinkedList<>();
-        arrange(data, res, track);
+        Set<String> res = new HashSet<>();
+        StringBuilder path = new StringBuilder();
+        boolean[] visited = new boolean[data.size()];
+        arrange(data, res, path, visited);
         res.forEach(item -> log.info("Subset: " + String.join(", ", item)));
     }
 
@@ -342,17 +341,19 @@ public class SortPractise {
      * @param res
      * @param track
      */
-    public void arrange(List<String> data, List<List<String>> res, List<String> track) {
-        if (data.size() == track.size()) {
-            res.add(new ArrayList<>(track));
+    public void arrange(List<String> data, Set<String> res, StringBuilder path, boolean[] visited) {
+        if (data.size() == path.length()) {
+            res.add(path.toString());
         }
         for (int i = 0; i < data.size(); i++) {
-            if (track.contains(data.get(i))) {
+            if (visited[i]) {
                 continue;
             }
-            track.add(data.get(i));
-            arrange(data, res, track);
-            track.remove(track.size() - 1);
+            visited[i] = true;
+            path.append(data.get(i));
+            arrange(data, res, path, visited);
+            path.deleteCharAt(path.length() - 1);
+            visited[i] = false;
         }
     }
 }
