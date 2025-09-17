@@ -24,27 +24,29 @@ public class BackTrackSolution {
      * @return
      */
     public String[] permutation(String s) {
-        List<String> res = new ArrayList<>();
-        Set<Character> visited = new HashSet<>();
-        permutationBackTrack(s, 0, new StringBuilder(), visited, res);
+        boolean[] visited = new boolean[s.length()];
+        Set<String> res = new HashSet<>();
+        StringBuilder path = new StringBuilder();
+        permutationBackTrack(s, 0, path, visited, res);
         return res.toArray(new String[0]);
     }
 
-    public void permutationBackTrack(String s, int level, StringBuilder path, Set<Character> visited, List<String> res) {
+    public void permutationBackTrack(String s, int level, StringBuilder path, boolean[] visited, Set<String> res) {
         if (s.length() == level) {
-            if (path.length() != 0) {
-                res.add(path.toString());
-            }
+            res.add(path.toString());
             return;
         }
 
         for (int i = 0; i < s.length(); i++) {
-            if (!visited.contains(s.charAt(i))) {
-                visited.add(s.charAt(i));
-                permutationBackTrack(s, level + 1, path.append(s.charAt(i)), visited, res);
-                visited.remove(s.charAt(i));
-                path.deleteCharAt(path.length() - 1);
+            if (visited[i]) {
+                continue;
             }
+
+            visited[i] = true;
+            path.append(s.charAt(i));
+            permutationBackTrack(s, level + 1, path, visited, res);
+            path.deleteCharAt(path.length() - 1);
+            visited[i] = false;
         }
     }
 
@@ -126,7 +128,7 @@ public class BackTrackSolution {
     @Test
     public void testPermutation() {
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("aba", "aab", "baa"), Sets.newHashSet(permutation("aab"))));
-        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(), Sets.newHashSet(permutation(""))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(""), Sets.newHashSet(permutation(""))));
         Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("abc", "acb", "bac", "bca", "cab", "cba"), Sets.newHashSet(permutation("abc"))));
     }
 
