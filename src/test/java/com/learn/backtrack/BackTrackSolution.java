@@ -23,16 +23,16 @@ public class BackTrackSolution {
      * @param s
      * @return
      */
-    public String[] permutation(String s) {
-        boolean[] visited = new boolean[s.length()];
+    public String[] goodsOrder(String goods) {
+        boolean[] visited = new boolean[goods.length()];
         Set<String> res = new HashSet<>();
         StringBuilder path = new StringBuilder();
-        permutationBackTrack(s, 0, path, visited, res);
+        permutationBackTrack(goods, path, visited, res);
         return res.toArray(new String[0]);
     }
 
-    public void permutationBackTrack(String s, int level, StringBuilder path, boolean[] visited, Set<String> res) {
-        if (s.length() == level) {
+    public void permutationBackTrack(String s, StringBuilder path, boolean[] visited, Set<String> res) {
+        if (s.length() == path.length()) {
             res.add(path.toString());
             return;
         }
@@ -44,10 +44,17 @@ public class BackTrackSolution {
 
             visited[i] = true;
             path.append(s.charAt(i));
-            permutationBackTrack(s, level + 1, path, visited, res);
+            permutationBackTrack(s, path, visited, res);
             path.deleteCharAt(path.length() - 1);
             visited[i] = false;
         }
+    }
+
+    @Test
+    public void testGoodsOrder() {
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("aba", "aab", "baa"), Sets.newHashSet(goodsOrder("aab"))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(""), Sets.newHashSet(goodsOrder(""))));
+        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("abc", "acb", "bac", "bca", "cab", "cba"), Sets.newHashSet(goodsOrder("abc"))));
     }
 
     /**
@@ -124,13 +131,6 @@ public class BackTrackSolution {
     }
 
     public static final String[] keyboard = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-
-    @Test
-    public void testPermutation() {
-        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("aba", "aab", "baa"), Sets.newHashSet(permutation("aab"))));
-        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet(""), Sets.newHashSet(permutation(""))));
-        Assert.assertEquals(true, SetUtils.isEqualSet(Sets.newHashSet("abc", "acb", "bac", "bca", "cab", "cba"), Sets.newHashSet(permutation("abc"))));
-    }
 
     /**
      * 17. 电话号码的字母组合
