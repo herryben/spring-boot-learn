@@ -515,7 +515,7 @@ public class BackTrackSolution {
      * 输入：nums = [1], target = 1
      * 输出：1
      * 解题思路：
-     * 1.
+     * 1. 普通的dfs搜索
      * @param nums
      * @param target
      * @return
