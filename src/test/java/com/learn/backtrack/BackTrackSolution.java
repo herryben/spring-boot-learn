@@ -607,6 +607,81 @@ public class BackTrackSolution {
     }
 
     /**
+     * LCR 087. 复原 IP 地址
+     * https://leetcode.cn/problems/0on3uN/
+     * 给定一个只包含数字的字符串 s ，用以表示一个 IP 地址，返回所有可能从 s 获得的 有效 IP 地址 。你可以按任何顺序返回答案。
+     * <p>
+     * 有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
+     * <p>
+     * 例如："0.1.2.201" 和 "192.168.1.1" 是 有效 IP 地址，但是 "0.011.255.245"、"192.168.1.312" 和 "192.168@1.1" 是 无效 IP 地址。
+     * <p>
+     * <p>
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：s = "25525511135"
+     * 输出：["255.255.11.135","255.255.111.35"]
+     * 示例 2：
+     * <p>
+     * 输入：s = "0000"
+     * 输出：["0.0.0.0"]
+     * 示例 3：
+     * <p>
+     * 输入：s = "1111"
+     * 输出：["1.1.1.1"]
+     * 示例 4：
+     * <p>
+     * 输入：s = "010010"
+     * 输出：["0.10.0.10","0.100.1.0"]
+     * 示例 5：
+     * <p>
+     * 输入：s = "10203040"
+     * 输出：["10.20.30.40","102.0.30.40","10.203.0.40"]
+     * 解题思路：按规则回溯
+     *
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses(String s) {
+        List<String> res = new ArrayList<>();
+        List<String> ip = new ArrayList<>();
+        if (s.length() < 4 || s.length() > 12) {
+            return res;
+        }
+
+        backtrack(s, res, ip, 0);
+        return res;
+    }
+
+    public void backtrack(String s, List<String> res, List<String> ip, int idx) {
+        if (idx == s.length()) {
+            if (ip.size() == 4) {
+                res.add(String.join(".", ip));
+            }
+            return;
+        }
+
+        for (int i = idx; i < s.length(); i++) {
+            String tmp = s.substring(idx, i + 1);
+            if (tmp.length() > 1 && tmp.startsWith("0") || tmp.length() >= 4 || Integer.parseInt(tmp) > 255) {
+                return;
+            }
+            ip.add(tmp);
+            backtrack(s, res, ip, i + 1);
+            ip.remove(ip.size() - 1);
+        }
+    }
+
+    @Test
+    public void TestRestoreIpAddresses() {
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses("25525511135"), Lists.newArrayList("255.255.11.135", "255.255.111.35")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses("0000"), Lists.newArrayList("0.0.0.0")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses("1111"), Lists.newArrayList("1.1.1.1")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses("010010"), Lists.newArrayList("0.10.0.10", "0.100.1.0")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses("10203040"), Lists.newArrayList("10.20.30.40", "102.0.30.40", "10.203.0.40")));
+    }
+
+    /**
      * 51. N 皇后
      * https://leetcode.cn/problems/n-queens/description/?envType=study-plan-v2&envId=top-100-liked
      * 按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。
