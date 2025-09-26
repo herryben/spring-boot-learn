@@ -682,6 +682,54 @@ public class BackTrackSolution {
     }
 
     /**
+     * 隔板法
+     * 把给定的字符串分成四段，我们需要三个隔板，枚举三个隔板所有可能的位置就行，注意本题其实 s的长度不能大于12，大于12的话肯定有一段大于255，所以可以通过
+     *
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses2(String s) {
+        List<String> res = new ArrayList<>();
+        if (s.length() < 4 || s.length() > 12) {
+            return res;
+        }
+        for (int i = 1; i <= s.length() - 3; i++) {
+            for (int j = i + 1; j <= s.length() - 2; j++) {
+                for (int k = j + 1; k <= s.length() - 1; k++) {
+                    if (check(s, i, j, k)) {
+                        String sb = s.substring(0, i) + "." +
+                                s.substring(i, j) + "." +
+                                s.substring(j, k) + "." +
+                                s.substring(k);
+                        res.add(sb);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    public boolean check(String s, int i, int j, int k) {
+        return valid(s.substring(0, i))
+                && valid(s.substring(i, j))
+                && valid(s.substring(j, k))
+                && valid(s.substring(k));
+    }
+
+    public boolean valid(String num) {
+        return (num.length() <= 1 || !num.startsWith("0")) && Integer.parseInt(num) <= 255;
+    }
+
+    @Test
+    public void TestRestoreIpAddresses2() {
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses2("25525511135"), Lists.newArrayList("255.255.11.135", "255.255.111.35")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses2("0000"), Lists.newArrayList("0.0.0.0")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses2("1111"), Lists.newArrayList("1.1.1.1")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses2("010010"), Lists.newArrayList("0.10.0.10", "0.100.1.0")));
+        Assert.assertEquals(true, CollectionUtils.isEqualCollection(restoreIpAddresses2("10203040"), Lists.newArrayList("10.20.30.40", "102.0.30.40", "10.203.0.40")));
+    }
+
+    /**
      * 51. N 皇后
      * https://leetcode.cn/problems/n-queens/description/?envType=study-plan-v2&envId=top-100-liked
      * 按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。
