@@ -143,7 +143,7 @@ public class TreeSolution {
      * <p>
      * 输入：root = [1,2]
      * 输出：1
-     *
+     * 解题思路:左面最大 + 右面最大
      * @param root
      * @return
      */
