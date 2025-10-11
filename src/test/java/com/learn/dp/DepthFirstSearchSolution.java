@@ -427,6 +427,7 @@ public class DepthFirstSearchSolution {
                     return;
                 }
             } else if (visit[cur] == 1) {
+                // DFS遍历，当访问到正在访问的元素( status=1 )时，则存在环
                 valid = false;
                 return;
             }
