@@ -241,21 +241,25 @@ public class BackTrackSolution {
      */
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = Lists.newArrayList();
-        permute(nums, res, new LinkedList<>());
+        boolean[] visited = new boolean[nums.length];
+        permute(nums, res, visited, new LinkedList<>());
         return res;
     }
 
-    public void permute(int[] nums, List<List<Integer>> res, List<Integer> track) {
-        if(track.size() == nums.length) {
+    public void permute(int[] nums, List<List<Integer>> res, boolean[] visited, List<Integer> track) {
+        if (track.size() == nums.length) {
             res.add(new ArrayList<>(track));
         }
         for (int i = 0; i < nums.length; i++) {
-            if (track.contains(nums[i])) {
+            if (visited[i]) {
                 continue;
             }
+
+            visited[i] = true;
             track.add(nums[i]);
-            permute(nums, res, track);
+            permute(nums, res, visited, track);
             track.remove(track.size() - 1);
+            visited[i] = false;
         }
     }
 
