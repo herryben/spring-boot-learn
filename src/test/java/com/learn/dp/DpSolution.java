@@ -918,6 +918,7 @@ public class DpSolution {
      * dp[i-1][j] 对应删除操作 s1 abb s2 a 此时bb需要删除，所以i需要停留在上一个状态
      * dp[i][j-1] 对应插入操作 s1 a s2 abb 此时bb需要插入，所以j需要停留在上一个状态
      * dp[i-1][j-1] 对应替换操作 s1 ab s2 ac 此时c提换b，所以需要i j都留在上一个状态
+     * 总结概括就是：谁多谁退，都多都退
      * @param word1
      * @param word2
      * @return
