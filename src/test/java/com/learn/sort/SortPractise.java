@@ -33,6 +33,7 @@ public class SortPractise {
         for (int i = 0; i < datas.length; i++) {
             for (int j = 0; j < datas.length - i - 1; j++) {
                 if (datas[j] > datas[j + 1]) {
+                    // 体积大的浮上去
                     int tmp = datas[j];
                     datas[j] = datas[j + 1];
                     datas[j + 1] = tmp;
