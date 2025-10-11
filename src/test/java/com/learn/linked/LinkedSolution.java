@@ -1039,9 +1039,9 @@ public class LinkedSolution {
      *              2. for循环奇数剩下的right - left
      *              3. 头插法 + 穿针引线法
      *              3.1 穿针引线 3步
-     *              ① cur.next = next.next;
-     *              ② next.next = pre.next
-     *              ③ pre.next = next
+     *              ① cur.next = next.next; 2->4
+     *              ② next.next = pre.next 3->2
+     *              ③ pre.next = next 1->3
      * @return
      */
     public ListNode reverseBetween(ListNode head, int left, int right) {
