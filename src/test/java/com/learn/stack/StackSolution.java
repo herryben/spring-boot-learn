@@ -613,6 +613,7 @@ public class StackSolution {
         int[] next = new int[heights.length];
         Deque<Integer> stack = new ArrayDeque<>();
         for (int i = 0; i < heights.length; i++) {
+            // 保持栈顶到栈底单调递减
             while (!stack.isEmpty() && heights[i] <= heights[stack.peek()]) {
                 stack.pop();
             }
@@ -623,6 +624,7 @@ public class StackSolution {
 
         stack.clear();
         for (int i = heights.length - 1; i >= 0; i--) {
+            // 保持栈顶到栈底单调递减
             while (!stack.isEmpty() && heights[i] <= heights[stack.peek()]) {
                 stack.pop();
             }
