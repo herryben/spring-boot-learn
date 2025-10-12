@@ -418,6 +418,7 @@ public class StackSolution {
      * 横着一层一层算面积
      * 面积 长 = 当前索引到栈顶元素长度 当前索引 - 当前栈顶元素下标 - 1
      * 面积 宽 = min(当前索引, 栈顶元素) - 上一个栈顶元素
+     * https://www.bilibili.com/video/BV1VN411J7S7/?vd_source=fd99fac0c39056616435dffbc4a754d4
      *
      * @param height
      * @return
