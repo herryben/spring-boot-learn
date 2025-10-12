@@ -4,9 +4,7 @@ import com.learn.utils.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ArraySolution {
     /**
@@ -59,7 +57,7 @@ public class ArraySolution {
     }
 
     /**
-     * TODO 128. 最长连续序列
+     * 128. 最长连续序列
      * https://leetcode.cn/problems/longest-consecutive-sequence/?envType=study-plan-v2&envId=top-100-liked
      * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
      * <p>
@@ -74,18 +72,53 @@ public class ArraySolution {
      * <p>
      * 输入：nums = [0,3,7,2,5,8,4,6,0,1]
      * 输出：9
+     * 解题思路：官方题解
+     * 题解说的比较复杂，不太容易懂，简单来说就是每个数都判断一次这个数是不是连续序列的开头那个数。
+     * <p>
+     * 怎么判断呢，就是用哈希表查找这个数前面一个数是否存在，即num-1在序列中是否存在。存在那这个数肯定不是开头，直接跳过。
+     * 因此只需要对每个开头的数进行循环，直到这个序列不再连续，因此复杂度是O(n)。
+     * 以题解中的序列举例:
+     * [100，4，200，1，3，4，2]
+     * 去重后的哈希序列为：
+     * [100，4，200，1，3，2]
+     * 按照上面逻辑进行判断：
+     * 元素100是开头,因为没有99，且以100开头的序列长度为1
+     * 元素4不是开头，因为有3存在，过，
+     * 元素200是开头，因为没有199，且以200开头的序列长度为1
+     * 元素1是开头，因为没有0，且以1开头的序列长度为4，因为依次累加，2，3，4都存在。
+     * 元素3不是开头，因为2存在，过，
+     * 元素2不是开头，因为1存在，过。
+     * 完
      *
      * @param nums
      * @return
      */
     public int longestConsecutive(int[] nums) {
-        return 0;
+        int maxStreak = 0;
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+
+        for (int num : nums) {
+            if (!set.contains(num - 1)) {
+                // num本身算1个
+                int currentStreak = 1;
+                for (int curNum = num; set.contains(curNum + 1); curNum++) {
+                    currentStreak++;
+                }
+
+                maxStreak = Math.max(maxStreak, currentStreak);
+            }
+        }
+
+        return maxStreak;
     }
 
     @Test
     public void testLongestConsecutive() {
-        Assert.assertEquals(4, findDuplicate(new int[]{100, 4, 200, 1, 3, 2}));
-        Assert.assertEquals(9, findDuplicate(new int[]{0, 3, 7, 2, 5, 8, 4, 6, 0, 1}));
+        Assert.assertEquals(4, longestConsecutive(new int[]{100, 4, 200, 1, 3, 2}));
+        Assert.assertEquals(9, longestConsecutive(new int[]{0, 3, 7, 2, 5, 8, 4, 6, 0, 1}));
     }
 
     /**
