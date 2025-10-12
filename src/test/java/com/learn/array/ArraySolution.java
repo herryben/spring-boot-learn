@@ -100,7 +100,7 @@ public class ArraySolution {
             set.add(num);
         }
 
-        for (int num : nums) {
+        for (int num : set) {
             if (!set.contains(num - 1)) {
                 // num本身算1个
                 int currentStreak = 1;
