@@ -562,7 +562,7 @@ public class BackTrackSolution {
      * 1.dp存储回文状态
      * 1.1 dp[i][j] = charAt(i) == charAt(j) && dp[i+1][j-1] (i < j)
      * 1.2 dp[i][j] = ture (i >= j)
-     * 2.进行标准排列变形
+     * 2.进行标准组合变形
      * 输入：s = "a"
      *
      * @param s
@@ -642,7 +642,7 @@ public class BackTrackSolution {
      * 输入：s = "10203040"
      * 输出：["10.20.30.40","102.0.30.40","10.203.0.40"]
      * 解题思路：按规则回溯
-     *
+     * 标准组合变形
      * @param s
      * @return
      */
