@@ -56,6 +56,13 @@ public class MaxMin {
         return left;
     }
 
+    /**
+     * https://leetcode.cn/problems/minimize-maximum-of-array/solutions/1895244/liang-chong-zuo-fa-er-fen-da-an-fen-lei-qhee6/
+     *
+     * @param nums
+     * @param limit
+     * @return
+     */
     public boolean checkMin(int[] nums, int limit) {
         long extra = 0;
         for (int i = nums.length - 1; i > 0; i--) {
