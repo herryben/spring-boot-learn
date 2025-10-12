@@ -302,8 +302,8 @@ public class StackSolution {
      * 输出：0
      * 解题思路：
      * 1. 找到最大、最小值
-     * 2. 找到从左到右第一个比最大值小的数
-     * 3. 找到从右到左第一个比最小值大的数
+     * 2. 找到从左到右上一个比最大值小的数
+     * 3. 找到从右到左上一个比最小值大的数
      * @param nums
      * @return
      */
@@ -335,6 +335,7 @@ public class StackSolution {
 
     @Test
     public void testFndUnsortedSubarray() {
+        Assert.assertEquals(2, findUnsortedSubarray(new int[]{2, 4, 6, 8, 10, 9, 15}));
         Assert.assertEquals(4, findUnsortedSubarray(new int[]{1, 3, 2, 2, 2}));
         Assert.assertEquals(0, findUnsortedSubarray(new int[]{1, 2, 3, 3, 3}));
         Assert.assertEquals(2, findUnsortedSubarray(new int[]{2, 1}));
