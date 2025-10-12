@@ -153,6 +153,10 @@ public class TreeSolution {
         return ans;
     }
 
+    /**
+     * @param root
+     * @return 返回单个方向的最大长度
+     */
     public int depth(TreeNode root) {
         if (root == null) {
             return 0;
@@ -160,7 +164,7 @@ public class TreeSolution {
         int maxL = depth(root.left);
         int maxR = depth(root.right);
         ans = Math.max(ans, maxL + maxR);
-        return Math.max(maxL, maxR) + 1;
+        return Math.max(maxL, maxR) + 1; // 例如左右子树都是0 最后要加上root到左右子树的1
     }
 
     @Test
