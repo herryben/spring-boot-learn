@@ -622,6 +622,12 @@ public class TreeSolution {
         return maxSum;
     }
 
+    /**
+     * 返回的是单边（左子树或者右子树）的最大路径和
+     *
+     * @param root
+     * @return
+     */
     public int dfs(TreeNode root) {
         if (root == null) {
             return 0;
