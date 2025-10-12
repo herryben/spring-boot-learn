@@ -336,6 +336,7 @@ public class ArraySolution {
 
     /**
      * 80. 删除有序数组中的重复项 II
+     * https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/description/
      * 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使得出现次数超过两次的元素只出现两次 ，返回删除后数组的新长度。
      * <p>
      * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
@@ -349,6 +350,9 @@ public class ArraySolution {
      * 输入：nums = [0,0,1,1,1,1,2,3,3]
      * 输出：7, nums = [0,0,1,1,2,3,3]
      * 解释：函数应返回新长度 length = 7, 并且原数组的前七个元素被修改为 0, 0, 1, 1, 2, 3, 3。不需要考虑数组中超出新长度后面的元素。
+     * 解题思路：
+     * https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/solutions/3060042/yong-zhan-si-kao-yuan-di-shi-xian-python-zw8l/
+     * 核心思路：用一个栈记录去重后的元素，如果当前元素等于栈顶下方那个数（倒数第二个数），那么不能入栈（否则会有三个一样的数），反之可以入栈。
      *
      * @param nums
      * @return
